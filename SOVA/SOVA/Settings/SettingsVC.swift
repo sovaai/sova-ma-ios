@@ -14,7 +14,20 @@ class SettingsVC: UIViewController{
         parent.present(SettingsVC(), animated: true)
     }
     
-    private var model = ["Лисенок", "Волк", "Пес"]
+    private var model : [Assitant] {
+        get{
+            return Assitant.assistantsId.compactMap{Assitant.get(by: $0)}
+        }
+    }
+    
+    private var selectedAssistant = IndexPath(){
+        didSet{
+            let oldCell = self.tableView.cellForRow(at: oldValue)
+            oldCell?.accessoryType = .none
+            let newCell = self.tableView.cellForRow(at: self.selectedAssistant)
+            newCell?.accessoryType = .checkmark
+        }
+    }
     
     private var cellId = "SettingsCell"
     
@@ -63,9 +76,10 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
         guard indexPath.section == 1 else {
             guard indexPath.row < self.model.count  else {
                 cell.textLabel?.text = "Подключить еще".localized
+                cell.accessoryType = .disclosureIndicator
                 return cell
             }
-            cell.textLabel?.text = self.model[indexPath.row]
+            cell.textLabel?.text = self.model[indexPath.row].name
             return cell
         }
         
@@ -74,8 +88,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
         guard indexPath.row != 0 else {
             cell.accessoryType = .disclosureIndicator
             cell.accessibilityLabel = Language.userValue
-            cell.detailTextLabel?.text = Language.userValue
-            cell.accessibilityHint = Language.userValue
+        
             return cell
         }
         
@@ -89,6 +102,36 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
         }
         
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.section == 0{
+            guard indexPath.row < self.model.count else { AssistantVC.show(with: nil, in: self.navigationController!); return }
+            let cell = tableView.cellForRow(at: indexPath)
+            cell?.accessoryType = .checkmark
+        }else{
+            //Остальное функционал
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        guard indexPath.section == 0 else { return false}
+        return indexPath.row < self.model.count
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let deleteAction = UIContextualAction(style: .destructive, title: "Delete".localized) { (_, _, _) in
+            self.model[indexPath.row].delete()
+            self.tableView.reloadData()
+        }
+        
+        let editAction = UIContextualAction(style: .normal, title: "Edit".localized) { (_, _, _) in
+            AssistantVC.show(with: self.model[indexPath.row], in: self.navigationController!)
+        }
+        
+        let swipeAction = UISwipeActionsConfiguration(actions: [deleteAction,editAction])
+        
+        return swipeAction
     }
 }
 
