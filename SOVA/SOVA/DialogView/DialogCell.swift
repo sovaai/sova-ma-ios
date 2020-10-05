@@ -31,6 +31,7 @@ extension DialogViewController{
         
         private var leftConstraint: NSLayoutConstraint!
         private var rightConstraint: NSLayoutConstraint!
+        private var topConstrint: NSLayoutConstraint!
         
         private var rightLabelConstrint: NSLayoutConstraint!
         private var leftLabelContraint: NSLayoutConstraint!
@@ -49,7 +50,8 @@ extension DialogViewController{
         override init(frame: CGRect) {
             super.init(frame: frame)
             self.contentView.addSubview(messageBackground)
-            self.messageBackground.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8).isActive = true
+            self.topConstrint = self.messageBackground.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8)
+            self.topConstrint.isActive = true
             self.messageBackground.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: 0).isActive = true
             self.leftConstraint = self.messageBackground.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16)
             self.rightConstraint = self.messageBackground.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -16)
@@ -75,8 +77,10 @@ extension DialogViewController{
         }
         
 
-        func configure(with message: Message){
+        func configure(with message: Message, and indent: CGFloat){
             self.sender = message.sender
+            
+            self.topConstrint.constant = indent
             
             self.messageBackground.backgroundColor = self.sender.backgroundColor
             self.bottomLine.backgroundColor = self.sender.backgroundColor

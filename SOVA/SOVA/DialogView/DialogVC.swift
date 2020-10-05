@@ -32,7 +32,7 @@ class DialogViewController: UIViewController{
         df.doesRelativeDateFormatting = true
         return df
     }
-  
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -114,13 +114,21 @@ extension DialogViewController: UICollectionViewDelegate, UICollectionViewDataSo
             return cell
         }
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "dialogCell", for: indexPath) as? DialogCell else { return UICollectionViewCell() }
-        let message = self.messageList[indexPath.section].messages[indexPath.row]
-        cell.configure(with: message)
+        let messages = self.messageList[indexPath.section].messages
+        let message = messages[indexPath.row]
+        let indent: CGFloat
+        if indexPath.row >= messages.count - 1{
+            indent = 8
+        }else{
+            let beforeMessageSender = self.messageList[indexPath.section].messages[indexPath.row + 1].sender
+            indent = beforeMessageSender == message.sender ? 8 : 24
+        }
+        cell.configure(with: message, and: indent)
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-
+        
         return CGSize(width: self.view.frame.width, height: 44)
     }
     
