@@ -55,17 +55,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "2B875DA2-DC19-4D6D-BDBC-D38653FA0252"
+            uuid = "12311A2D-D7A6-4422-B692-A2713C8DF840"
             shouldBeEnabled = "Yes"
-            condition = "(beforeMessageSender == message.sender ? 8 : 24) == 24"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "SOVA/DialogView/DialogVC.swift"
+            filePath = "SOVA/Settings/SettingsVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "124"
-            endingLineNumber = "124"
-            landmarkName = "collectionView(_:cellForItemAt:)"
+            startingLineNumber = "18"
+            endingLineNumber = "18"
+            landmarkName = "show(in:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

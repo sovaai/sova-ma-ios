@@ -11,7 +11,11 @@ import UIKit
 class SettingsVC: UIViewController{
     
     static func show(in parent: UIViewController){
-        parent.present(SettingsVC(), animated: true)
+        guard let vc = parent as? UINavigationController else {
+            parent.present(SettingsVC(), animated: true)
+            return
+        }
+        vc.pushViewController(SettingsVC(), animated: true)
     }
     
     private var model : [Assitant] {
@@ -37,7 +41,7 @@ class SettingsVC: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = "Настройки"
+        self.view.backgroundColor = .white
         
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: self.cellId)
         self.tableView.delegate = self
