@@ -35,6 +35,8 @@ extension DialogViewController{
         private var rightLabelConstrint: NSLayoutConstraint!
         private var leftLabelContraint: NSLayoutConstraint!
         
+        private var bottomLine = UIView()
+            
         private var sender: WhosMessage = .user{
             didSet{
                 self.leftLabelContraint.constant = self.sender == .user ? 16 : 0
@@ -47,23 +49,29 @@ extension DialogViewController{
         override init(frame: CGRect) {
             super.init(frame: frame)
             self.contentView.addSubview(messageBackground)
-            self.messageBackground.addSubview(self.messageLabel)
-            
             self.messageBackground.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8).isActive = true
             self.messageBackground.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: 0).isActive = true
             self.leftConstraint = self.messageBackground.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16)
-            self.leftConstraint.isActive = true
             self.rightConstraint = self.messageBackground.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -16)
-            self.rightConstraint.isActive = false
             self.messageBackground.widthAnchor.constraint(lessThanOrEqualToConstant: 257).isActive = true
+            self.leftConstraint.isActive = true
+            self.rightConstraint.isActive = false
             
-            
-            self.rightLabelConstrint = self.messageLabel.rightAnchor.constraint(lessThanOrEqualTo: messageBackground.rightAnchor, constant: 0)
+            self.messageBackground.addSubview(self.bottomLine)
+            self.bottomLine.translatesAutoresizingMaskIntoConstraints = false
+            self.bottomLine.bottomAnchor.constraint(equalTo: self.messageBackground.bottomAnchor).isActive = true
+            self.bottomLine.heightAnchor.constraint(equalToConstant: 17).isActive = true
+            self.rightLabelConstrint = self.bottomLine.rightAnchor.constraint(equalTo: self.messageBackground.rightAnchor)
+            self.leftLabelContraint = self.bottomLine.leftAnchor.constraint(equalTo: self.messageBackground.leftAnchor)
             self.rightLabelConstrint.isActive = true
-            self.messageLabel.topAnchor.constraint(equalTo: messageBackground.topAnchor, constant: 16).isActive = true
-            self.messageLabel.bottomAnchor.constraint(equalTo: messageBackground.bottomAnchor, constant: 0).isActive = true
-            self.leftLabelContraint = self.messageLabel.leftAnchor.constraint(equalTo: messageBackground.leftAnchor, constant: 0)
             self.leftLabelContraint.isActive = true
+            
+            self.messageBackground.addSubview(self.messageLabel)
+            self.messageLabel.rightAnchor.constraint(lessThanOrEqualTo: messageBackground.rightAnchor, constant: -16) .isActive = true
+            self.messageLabel.topAnchor.constraint(equalTo: messageBackground.topAnchor, constant: 16).isActive = true
+            self.messageLabel.bottomAnchor.constraint(equalTo: messageBackground.bottomAnchor, constant: -16).isActive = true
+            self.messageLabel.leftAnchor.constraint(equalTo: messageBackground.leftAnchor, constant: 16).isActive = true
+            
         }
         
 
@@ -71,7 +79,8 @@ extension DialogViewController{
             self.sender = message.sender
             
             self.messageBackground.backgroundColor = self.sender.backgroundColor
-            self.messageLabel.backgroundColor = self.sender.backgroundColor
+            self.bottomLine.backgroundColor = self.sender.backgroundColor
+            
             self.messageLabel.textColor = self.sender.messageColor
             self.messageLabel.text = message.title
             

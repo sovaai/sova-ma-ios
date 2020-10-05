@@ -21,7 +21,7 @@ class DialogViewController: UIViewController{
     }()
     //    private var tableView = UITableView(frame: .zero, style: .grouped)
     
-    private var messageList = Assitant.currentAssistants.messageList
+    private var messageList = Array(Assitant.currentAssistants.messageList.reversed()).sorted{$0.date > $1.date}
     
     private var dateFormatter: DateFormatter {
         let df = DateFormatter()
@@ -29,7 +29,7 @@ class DialogViewController: UIViewController{
         df.doesRelativeDateFormatting = true
         return df
     }
-    
+  
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -46,11 +46,14 @@ class DialogViewController: UIViewController{
         self.collectionView.backgroundColor = .white
         
         self.collectionView.register(DialogCell.self, forCellWithReuseIdentifier: "dialogCell")
+        self.collectionView.register(SimpleCell.self, forCellWithReuseIdentifier: "header")
         
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
         
-        collectionView.transform = CGAffineTransform.init(rotationAngle: (-(CGFloat)(Double.pi)))
+        self.collectionView.transform = CGAffineTransform.init(rotationAngle: (-(CGFloat)(Double.pi)))
+        
+        self.collectionView.contentInset = UIEdgeInsets(top: 104, left: 0, bottom: 0, right: 0)
         
         let btn = UIButton()
         self.view.addSubview(btn)
@@ -77,10 +80,15 @@ extension DialogViewController: UICollectionViewDelegate, UICollectionViewDataSo
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.messageList[section].messages.count
+        return self.messageList[section].messages.count + 1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard self.messageList[indexPath.section].messages.count != indexPath.row else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "header", for: indexPath) as? SimpleCell  else { return UICollectionViewCell() }
+            cell.title = self.dateFormatter.string(from: self.messageList[indexPath.section].date)
+            return cell
+        }
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "dialogCell", for: indexPath) as? DialogCell else { return UICollectionViewCell() }
         let message = self.messageList[indexPath.section].messages[indexPath.row]
         cell.configure(with: message)
@@ -97,43 +105,42 @@ extension DialogViewController: UICollectionViewDelegate, UICollectionViewDataSo
     }
 }
 
-//extension DialogViewController: UITableViewDelegate{
-//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        let view = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 64))
-//        let label = UILabel()
-//        view.addSubview(label)
-//        label.translatesAutoresizingMaskIntoConstraints = false
-//        label.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-//        label.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-//        let date  = messageList[section].date
-//        label.attributedText = NSAttributedString(string: self.dateFormatter.string(from: date), attributes:
-//                                                    [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14),
-//                                                     NSAttributedString.Key.foregroundColor : UIColor(r: 21, g: 31, b: 73, a: 0.3)])
-//        return view
-//    }
-//
-//    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-//        return 64
-//    }
-//}
+extension DialogViewController{
+    class SimpleCell: UICollectionViewCell{
+        
+        private var label = UILabel()
+        
+        public var title: String = ""{
+            didSet{
+                self.label.text = self.title
+            }
+        }
+        
+        override init(frame: CGRect) {
+            super.init(frame: frame)
+            
+            self.heightAnchor.constraint(equalToConstant: 64).isActive = true
+            
+            self.addSubview(self.label)
+            self.label.translatesAutoresizingMaskIntoConstraints = false
+            self.label.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+            self.label.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+            self.label.textColor = UIColor(r: 21, g: 31, b: 73, a: 0.3)
+            self.label.font = UIFont.systemFont(ofSize: 12)
+        }
+        
+        required init?(coder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
+        override func layoutSubviews() {
+            super.layoutSubviews()
+            self.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
+        }
+    }
+}
 
-//extension DialogViewController: UITableViewDataSource{
 
-//    func numberOfSections(in tableView: UITableView) -> Int {
-//        return messageList.count
-//    }
-
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return messageList[section].messages.count
-//    }
-//
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        guard let cell = tableView.dequeueReusableCell(withIdentifier: "dialogCell") as? DialogCell else { return UITableViewCell() }
-//        let message = messageList[indexPath.section].messages[indexPath.row]
-//        cell.configure(with: message)
-//        return cell
-//    }
-//}
 
 
 
