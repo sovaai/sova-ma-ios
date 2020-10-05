@@ -19,7 +19,10 @@ class DialogViewController: UIViewController{
         cv.showsHorizontalScrollIndicator = false
         return cv
     }()
-    //    private var tableView = UITableView(frame: .zero, style: .grouped)
+    
+    private var settingsBtn = UIButton()
+    private var recordingBtn = UIButton()
+    private var keyboardBtn = UIButton()
     
     private var messageList = Array(Assitant.currentAssistants.messageList.reversed()).sorted{$0.date > $1.date}
     
@@ -53,13 +56,34 @@ class DialogViewController: UIViewController{
         
         self.collectionView.transform = CGAffineTransform.init(rotationAngle: (-(CGFloat)(Double.pi)))
         
-        self.collectionView.contentInset = UIEdgeInsets(top: 104, left: 0, bottom: 0, right: 0)
+        self.collectionView.contentInset = UIEdgeInsets(top: 124, left: 0, bottom: 0, right: 0)
         
-        let btn = UIButton()
-        self.view.addSubview(btn)
-        btn.frame = CGRect(x: 10, y: 10, width: 100, height: 100)
-        btn.backgroundColor = .green
-        btn.addTarget(self, action: #selector(self.action), for: .touchUpInside)
+        self.view.addSubview(self.recordingBtn)
+        self.recordingBtn.translatesAutoresizingMaskIntoConstraints = false
+        self.recordingBtn.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        self.recordingBtn.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -16).isActive = true
+        self.recordingBtn.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        self.recordingBtn.widthAnchor.constraint(equalTo: self.recordingBtn.heightAnchor).isActive = true
+        
+        self.recordingBtn.setImage(UIImage(named: "Menu/recordingbtn"), for: [])
+        
+        self.view.addSubview(self.settingsBtn)
+        self.settingsBtn.translatesAutoresizingMaskIntoConstraints = false
+        self.settingsBtn.rightAnchor.constraint(equalTo: self.recordingBtn.leftAnchor, constant: -32).isActive = true
+        self.settingsBtn.centerYAnchor.constraint(equalTo: self.recordingBtn.centerYAnchor).isActive = true
+        self.settingsBtn.heightAnchor.constraint(equalToConstant: 24).isActive = true
+        self.settingsBtn.widthAnchor.constraint(equalTo: self.settingsBtn.heightAnchor).isActive = true
+        
+        self.settingsBtn.setImage(UIImage(named: "Menu/settingsBtn"), for: [])
+        
+        self.view.addSubview(self.keyboardBtn)
+        self.keyboardBtn.translatesAutoresizingMaskIntoConstraints = false
+        self.keyboardBtn.centerYAnchor.constraint(equalTo: self.recordingBtn.centerYAnchor).isActive = true
+        self.keyboardBtn.leftAnchor.constraint(equalTo: self.recordingBtn.rightAnchor, constant: 32).isActive = true
+        self.keyboardBtn.heightAnchor.constraint(equalToConstant: 24).isActive = true
+        self.keyboardBtn.widthAnchor.constraint(equalTo: self.keyboardBtn.heightAnchor).isActive = true
+        
+        self.keyboardBtn.setImage(UIImage(named: "Menu/keyboardBtn"), for: [])
     }
     
     @objc func action(){
