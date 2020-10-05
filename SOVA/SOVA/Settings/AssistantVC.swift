@@ -30,6 +30,7 @@ class AssistantVC: UIViewController, SaveAssistant{
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.view.backgroundColor = .white
         self.title = self.model != nil ? "Редактирование асисента" : "Новый ассистент".localized
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Сохранить".localized, style: .plain, target: self, action: #selector(self.saveModel))
         

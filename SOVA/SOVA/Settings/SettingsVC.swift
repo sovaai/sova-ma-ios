@@ -43,6 +43,9 @@ class SettingsVC: UIViewController{
         
         self.view.backgroundColor = .white
         
+        self.title = "Настройки".localized
+        self.navigationController?.navigationBar.isHidden = false
+        
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: self.cellId)
         self.tableView.delegate = self
         self.tableView.dataSource = self
