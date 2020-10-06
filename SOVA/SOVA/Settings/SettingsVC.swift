@@ -78,13 +78,17 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .value1, reuseIdentifier: self.cellId)
-        
+        cell.selectionStyle = .none
         //Configure cell with bots
         guard indexPath.section == 1 else {
             guard indexPath.row < self.model.count  else {
                 cell.textLabel?.text = "Подключить еще".localized
                 cell.accessoryType = .disclosureIndicator
                 return cell
+            }
+            if DataManager.shared.currentAssistants.id == self.model[indexPath.row].id{
+                cell.accessoryType = .checkmark
+                self.selectedAssistant = indexPath
             }
             cell.textLabel?.text = self.model[indexPath.row].name
             return cell
@@ -114,8 +118,8 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0{
             guard indexPath.row < self.model.count else { AssistantVC.show(with: nil, in: self.navigationController!); return }
-            let cell = tableView.cellForRow(at: indexPath)
-            cell?.accessoryType = .checkmark
+            self.selectedAssistant = indexPath
+            DataManager.shared._currentAssistants = self.model[indexPath.row]
         }else{
             //Остальное функционал
         }

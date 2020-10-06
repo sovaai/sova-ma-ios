@@ -55,11 +55,10 @@ class DialogViewController: UIViewController{
         super.viewDidLoad()
         
         self.view.backgroundColor = .white
-        self.navigationController?.navigationBar.isHidden = true
         
         self.view.addSubview(self.collectionView)
         self.collectionView.translatesAutoresizingMaskIntoConstraints = false
-        self.collectionView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
+        self.collectionView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
         self.collectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
         self.collectionView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
         self.bottomCollectionView = self.collectionView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
@@ -120,6 +119,7 @@ class DialogViewController: UIViewController{
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.isHidden = true
         self.collectionView.scrollToItem(at: IndexPath(row: self.messageList.last?.messages.count ?? 0, section: self.messageList.count), at: .bottom, animated: true)
     }
     
@@ -127,10 +127,10 @@ class DialogViewController: UIViewController{
         super.viewDidLayoutSubviews()
         self.recordingBtn.layer.cornerRadius = 30
     }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+        
+    deinit {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.init("MessagesUpdate"), object: nil)
     }
     
     //MARK: Btn actions
@@ -138,7 +138,7 @@ class DialogViewController: UIViewController{
     @objc func keyboardAction(sender: Any){
         guard !(sender is UITapGestureRecognizer) else {
             self.textField.keyboardIsHide = true
-            self.collectionView.contentInset = UIEdgeInsets(top: 124, left: 0, bottom: 0, right: 0)
+            self.bottomCollectionView?.constant = 0
             self.textFieldBottomConstant?.constant = 0
             return
         }

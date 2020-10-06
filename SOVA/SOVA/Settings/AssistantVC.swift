@@ -74,11 +74,11 @@ class AssistantVC: UIViewController, SaveAssistant{
         let model = Assitant(name: name, url: url, token: token, wordActive: wordActive ?? false)
         
         model.save()
+        self.close()
     }
     
     func save(field: String, with key: String) {
         self.modelJson[key] = field
-        self.close()
     }
     
     func close(){

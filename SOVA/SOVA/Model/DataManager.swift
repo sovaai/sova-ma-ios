@@ -51,6 +51,7 @@ class DataManager{
             guard self._currentAssistants != nil else { self._currentAssistants = oldValue; return }
             UserDefaults.standard.setValue(self._currentAssistants?.id, forKey: "currentAssistantsId")
             self._messageList = nil
+            NotificationCenter.default.post(name: NSNotification.Name.init("MessagesUpdate"), object: nil, userInfo: nil)
         }
     }
     
@@ -89,7 +90,7 @@ class DataManager{
             ml = MessageList()
             ml.save()
             ml.messages.append(message)
-            self._messageList?.append(ml)
+            self._messageList?.insert(ml, at: 0)
         }
         ml.save()
         

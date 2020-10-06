@@ -50,10 +50,13 @@ class DialogTextField: UIView{
         
         self.textView.text = "Напишите сообщение…"
         self.textView.textColor = UIColor(r: 15, g: 31, b: 72, a: 0.2)
-        self.textView.font = UIFont.systemFont(ofSize: 14)
+        self.textView.font = UIFont.systemFont(ofSize: 16)
         self.textView.isEditable = true
+        self.textView.centerVertically()
         
         self.textView.delegate = self
+        
+        self.textView.autocapitalizationType = .sentences
         
         let line = UIView()
         self.addSubview(line)
@@ -87,16 +90,18 @@ extension DialogTextField: UITextViewDelegate{
         if textView.textColor == UIColor(r: 15, g: 31, b: 72, a: 0.2) {
             textView.text = nil
             textView.textColor = UIColor.black
-            return true
+            guard !text.isEmpty else { return true }
+            self.sendMessage.isHidden = false
         }else if range == NSRange(location: 0, length: 1) , text.isEmpty {
             textView.text = "Напишите сообщение…"
             textView.textColor = UIColor(r: 15, g: 31, b: 72, a: 0.2)
             self.sendMessage.isHidden = true
             return false
         }
-        
-        guard !text.isEmpty else { return true }
-        self.sendMessage.isHidden = false
         return true
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        textView.centerVertically()
     }
 }
