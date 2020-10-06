@@ -58,6 +58,11 @@ class SettingsVC: UIViewController{
         self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tableView.reloadData()
+    }
+    
     @objc func changeTheme(){
         
     }

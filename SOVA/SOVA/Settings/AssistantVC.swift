@@ -7,19 +7,13 @@
 
 import UIKit
 
-protocol SaveAssistant: class{
-    func save(field: String, with key: String)
-}
-
-class AssistantVC: UIViewController, SaveAssistant{
+class AssistantVC: UIViewController{
     
     private var tableView = UITableView(frame: .zero, style: .grouped)
     
     private var cellId = "AssistantCell"
     
     private var model: Assitant? = nil
-    
-    fileprivate var modelJson = [String: Any]()
     
     static func show(with model: Assitant?, in parent: UINavigationController){
         let instance = AssistantVC()
@@ -59,29 +53,34 @@ class AssistantVC: UIViewController, SaveAssistant{
     }
     
     @objc func saveModel(){
-        guard let name = (self.modelJson[AssistantStateField.name.rawValue] ?? self.model?.name as Any) as? String,
-              let urlStr = (self.modelJson[AssistantStateField.url.rawValue] ?? self.model?.url as Any) as? String,
-              let tokenStr = (self.modelJson[AssistantStateField.token.rawValue] ?? self.model?.token as Any) as? String,
-              let token = Int(tokenStr) else {
-//              let url = URL(string: urlStr) else {
-            //FIXME: ВЕРНУТЬ ПОСЛЕ ТЕСТА
-            self.showSimpleAlert(title: "Ошибка".localized, message: "Не все данные верны".localized)
-            return
+        var name: String = ""; var url: URL? = URL(string: ""); var token: Int = 0; var wordActive: Bool = false
+        for i in 0...3{
+            guard let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: i)) as? TextFieldCell else { continue }
+            cell.endEditing()
+            switch i {
+            case 0:
+                name = cell.value
+            case 1:
+                let urlStr = cell.value
+//                url = URL(string: urlStr)!
+                url = URL(string: "https://vk.com/feed")! //FIXME: ВЕРНУТЬ ПОСЛЕ ТЕСТА!
+            case 2:
+                token = Int(cell.value)!
+            case 3:
+                wordActive = false
+            default:
+                return
+            }
         }
-        let wordActive = (self.modelJson[AssistantStateField.name.rawValue] ?? self.model?.name as Any) as? Bool
         
-        let url = URL(string: "https://vk.com/feed")! //FIXME: ВЕРНУТЬ ПОСЛЕ ТЕСТА!
-        let model = Assitant(name: name, url: url, token: token, wordActive: wordActive ?? false)
+        let model = Assitant(name: name, url: url!, token: token, wordActive: wordActive)
         
         model.save()
         self.close()
     }
     
-    func save(field: String, with key: String) {
-        self.modelJson[key] = field
-    }
-    
     func close(){
+        self.navigationController?.popViewController(animated: true)
         self.dismiss(animated: true, completion: nil)
     }
 }
@@ -114,7 +113,6 @@ extension AssistantVC: UITableViewDataSource, UITableViewDelegate{
         }
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "TextFieldCell") as?  TextFieldCell
-        cell?.delegate = self
         cell?.configure(with: AssistantStateField.allCases[indexPath.section], model: self.model)
         
         return cell ?? UITableViewCell()
@@ -154,12 +152,10 @@ class TextFieldCell: UITableViewCell, UITextFieldDelegate{
     
     private var type: AssistantStateField!
     
-    weak var delegate: SaveAssistant? = nil
+    public var value: String = ""
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        //        self.textField.heightAnchor.constraint(equalToConstant: 44).isActive = true
         
         self.contentView.addSubview(self.textField)
         self.textField.translatesAutoresizingMaskIntoConstraints = false
@@ -187,16 +183,24 @@ class TextFieldCell: UITableViewCell, UITextFieldDelegate{
         }
     }
     
+    func endEditing(){
+        self.textField.resignFirstResponder()
+        self.value = self.textField.text ?? ""
+    }
+    
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         let isEmpty = textField.text?.isEmpty ?? false
         guard isEmpty else {
             self.backgroundColor = .clear
-            self.delegate?.save(field: textField.text!, with: self.type.rawValue)
             return true
         }
         self.backgroundColor = .red
         return !isEmpty
-        
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        self.value = string
+        return true
     }
     
     required init?(coder: NSCoder) {
