@@ -10,17 +10,40 @@ import UIKit
 
 struct MessageList: Codable{
     var id: String = UUID().uuidString
-    var assistantId: String
-    var date: Date
-    var messages: [Message]
+    var assistantId: String = DataManager.shared.currentAssistants.id
+    var date: Date = Date()
+    var messages: [Message] = []
+    
+    func save(){
+        let encoder = JSONEncoder()
+        guard let encoded = try? encoder.encode(self) else { return }
+        UserDefaults.standard.setValue(encoded, forKey: self.id)
+        NotificationCenter.default.post(name: NSNotification.Name.init("MessagesUpdate"), object: nil, userInfo: ["Id": self.id])
+        guard var assistant: Assitant = DataManager.shared.get(by: self.assistantId),
+              assistant.messageListId.contains(where: {$0 == self.id}) == false else { return }
+        assistant.messageListId.append(self.id)
+        assistant.save()
+    }
+    
 }
 
 struct Message: Codable {
     var id: String = UUID().uuidString
-    var assistantId: String
-    var date: Date
+    var assistantId: String = DataManager.shared.currentAssistants.id
+    
+    var date: Date = Date()
     var title: String
-    var sender: WhosMessage
+    var sender: WhosMessage = .user
+    
+    func save(){
+        let encoder = JSONEncoder()
+        guard let encoded = try? encoder.encode(self) else { return }
+        UserDefaults.standard.setValue(encoded, forKey: self.id)
+        guard var assistant: Assitant = DataManager.shared.get(by: self.assistantId),
+              assistant.messageListId.contains(where: {$0 == self.id}) == false else { return }
+        assistant.messageListId.append(self.id)
+        assistant.save()
+    }
 }
 
 enum WhosMessage: String, Codable{

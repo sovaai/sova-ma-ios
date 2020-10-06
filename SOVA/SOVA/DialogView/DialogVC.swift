@@ -42,7 +42,7 @@ class DialogViewController: UIViewController{
     private var recordingBtn = UIButton()
     private var keyboardBtn = UIButton()
     
-    private var messageList = Array(Assitant.currentAssistants.messageList.reversed()).sorted{$0.date > $1.date}
+    private var messageList = DataManager.shared.messageList //Array(DataManager.shared.currentAssistants.messageList.reversed()).sorted{$0.date > $1.date}
     
     private var dateFormatter: DateFormatter {
         let df = DateFormatter()
@@ -115,6 +115,7 @@ class DialogViewController: UIViewController{
             name: UIResponder.keyboardWillShowNotification,
             object: nil
         )
+        NotificationCenter.default.addObserver(self, selector: #selector(self.reloadData), name: NSNotification.Name.init("MessagesUpdate"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -125,6 +126,11 @@ class DialogViewController: UIViewController{
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         self.recordingBtn.layer.cornerRadius = 30
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
     }
     
     //MARK: Btn actions
@@ -153,6 +159,11 @@ class DialogViewController: UIViewController{
         
     }
     
+    @objc func reloadData(notification: Notification){
+        self.messageList = DataManager.shared.messageList
+        self.collectionView.reloadData()
+    }
+    
 }
 
 extension DialogViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
@@ -172,7 +183,7 @@ extension DialogViewController: UICollectionViewDelegate, UICollectionViewDataSo
         }
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "dialogCell", for: indexPath) as? DialogCell else { return UICollectionViewCell() }
         let messages = self.messageList[indexPath.section].messages
-        let message = messages[indexPath.row]
+        let message = messages[messages.count - indexPath.row - 1]
         let indent: CGFloat
         if indexPath.row >= messages.count - 1{
             indent = 8

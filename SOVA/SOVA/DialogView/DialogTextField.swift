@@ -68,9 +68,12 @@ class DialogTextField: UIView{
     }
     
     @objc func sendMesg(){
+        guard let text = self.textView.text else { return }
         self.textView.text = "Напишите сообщение…"
         self.textView.textColor = UIColor(r: 15, g: 31, b: 72, a: 0.2)
         self.sendMessage.isHidden = true
+        let message = Message(title: text)
+        DataManager.shared.saveNew(message)
     }
     
     required init?(coder: NSCoder) {

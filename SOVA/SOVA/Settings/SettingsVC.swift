@@ -20,7 +20,7 @@ class SettingsVC: UIViewController{
     
     private var model : [Assitant] {
         get{
-            return Assitant.assistantsId.compactMap{Assitant.get(by: $0)}
+            return DataManager.shared.assistantsId.compactMap{DataManager.shared.get(by: $0)}
         }
     }
     
