@@ -32,6 +32,8 @@ class DialogViewController: UIViewController{
         tf.isHidden = true
         let tapGest = UITapGestureRecognizer(target: self, action: #selector(self.keyboardAction(sender:)))
         self.view.addGestureRecognizer(tapGest)
+        self.view.layoutIfNeeded()
+        tf.centerVertically()
         return tf
     }()
     

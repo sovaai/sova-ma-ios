@@ -52,7 +52,6 @@ class DialogTextField: UIView{
         self.textView.textColor = UIColor(r: 15, g: 31, b: 72, a: 0.2)
         self.textView.font = UIFont.systemFont(ofSize: 16)
         self.textView.isEditable = true
-        self.textView.centerVertically()
         
         self.textView.delegate = self
         
@@ -70,6 +69,10 @@ class DialogTextField: UIView{
         
     }
     
+    func centerVertically(){
+        self.textView.centerVertically()
+    }
+        
     @objc func sendMesg(){
         guard let text = self.textView.text else { return }
         self.textView.text = "Напишите сообщение…"
@@ -104,4 +107,5 @@ extension DialogTextField: UITextViewDelegate{
     func textViewDidChange(_ textView: UITextView) {
         textView.centerVertically()
     }
+    
 }
