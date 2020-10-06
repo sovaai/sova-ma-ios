@@ -87,8 +87,7 @@ extension DialogViewController{
             
             self.messageLabel.textColor = self.sender.messageColor
             self.messageLabel.text = message.title
-            
-            self.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
+
         }
         
         required init?(coder: NSCoder) {

@@ -13,6 +13,7 @@
 		5C63AB7C2527834500814CF7 /* DialogVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C63AB7B2527834500814CF7 /* DialogVC.swift */; };
 		5C63AB7F2527851C00814CF7 /* DialogCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C63AB7E2527851C00814CF7 /* DialogCell.swift */; };
 		5C63AB82252787FD00814CF7 /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C63AB81252787FD00814CF7 /* UIView.swift */; };
+		5C86F17B252C7DEF0029CE50 /* DialogTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C86F17A252C7DEF0029CE50 /* DialogTextField.swift */; };
 		5C99C69625271C2A0056260F /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C99C69525271C2A0056260F /* SettingsVC.swift */; };
 		5C99C69A25271F7D0056260F /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C99C69925271F7D0056260F /* String.swift */; };
 		5C99C69E252721CD0056260F /* Cashes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C99C69D252721CD0056260F /* Cashes.swift */; };
@@ -32,6 +33,7 @@
 		5C63AB7B2527834500814CF7 /* DialogVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogVC.swift; sourceTree = "<group>"; };
 		5C63AB7E2527851C00814CF7 /* DialogCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogCell.swift; sourceTree = "<group>"; };
 		5C63AB81252787FD00814CF7 /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
+		5C86F17A252C7DEF0029CE50 /* DialogTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogTextField.swift; sourceTree = "<group>"; };
 		5C99C69525271C2A0056260F /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
 		5C99C69925271F7D0056260F /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		5C99C69D252721CD0056260F /* Cashes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cashes.swift; sourceTree = "<group>"; };
@@ -83,6 +85,7 @@
 			children = (
 				5C63AB7B2527834500814CF7 /* DialogVC.swift */,
 				5C63AB7E2527851C00814CF7 /* DialogCell.swift */,
+				5C86F17A252C7DEF0029CE50 /* DialogTextField.swift */,
 			);
 			path = DialogView;
 			sourceTree = "<group>";
@@ -214,6 +217,7 @@
 				5C63AB7C2527834500814CF7 /* DialogVC.swift in Sources */,
 				5C63AB7F2527851C00814CF7 /* DialogCell.swift in Sources */,
 				5C99C6A8252752CD0056260F /* ViewController.swift in Sources */,
+				5C86F17B252C7DEF0029CE50 /* DialogTextField.swift in Sources */,
 				5C99C69E252721CD0056260F /* Cashes.swift in Sources */,
 				5C99C69A25271F7D0056260F /* String.swift in Sources */,
 				5C34DAD6252B11B200501F8A /* Message.swift in Sources */,

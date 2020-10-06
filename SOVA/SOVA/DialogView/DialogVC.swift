@@ -20,6 +20,24 @@ class DialogViewController: UIViewController{
         return cv
     }()
     
+    private lazy var textField: DialogTextField = {
+        let tf = DialogTextField()
+        self.view.addSubview(tf)
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        tf.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
+        tf.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
+        tf.heightAnchor.constraint(greaterThanOrEqualToConstant: 50).isActive = true
+        self.textFieldBottomConstant =  tf.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0)
+        self.textFieldBottomConstant?.isActive = true
+        tf.isHidden = true
+        let tapGest = UITapGestureRecognizer(target: self, action: #selector(self.keyboardAction(sender:)))
+        self.view.addGestureRecognizer(tapGest)
+        return tf
+    }()
+    
+    private var textFieldBottomConstant: NSLayoutConstraint? = nil
+    private var bottomCollectionView: NSLayoutConstraint? = nil
+    
     private var settingsBtn = UIButton()
     private var recordingBtn = UIButton()
     private var keyboardBtn = UIButton()
@@ -44,7 +62,8 @@ class DialogViewController: UIViewController{
         self.collectionView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
         self.collectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
         self.collectionView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
-        self.collectionView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
+        self.bottomCollectionView = self.collectionView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+        self.bottomCollectionView?.isActive = true
         
         self.collectionView.backgroundColor = .white
         
@@ -66,6 +85,9 @@ class DialogViewController: UIViewController{
         self.recordingBtn.widthAnchor.constraint(equalTo: self.recordingBtn.heightAnchor).isActive = true
         
         self.recordingBtn.setImage(UIImage(named: "Menu/recordingbtn"), for: [])
+        self.recordingBtn.backgroundColor = .white
+        self.recordingBtn.layer.cornerRadius = 30
+        self.recordingBtn.shadowOptions()
         
         self.view.addSubview(self.settingsBtn)
         self.settingsBtn.translatesAutoresizingMaskIntoConstraints = false
@@ -85,16 +107,50 @@ class DialogViewController: UIViewController{
         self.keyboardBtn.widthAnchor.constraint(equalTo: self.keyboardBtn.heightAnchor).isActive = true
         
         self.keyboardBtn.setImage(UIImage(named: "Menu/keyboardBtn"), for: [])
-    }
-    
-
-    @objc func openSettings(){
-        SettingsVC.show(in: self.navigationController ?? self)
+        self.keyboardBtn.addTarget(self, action: #selector(self.keyboardAction(sender:)), for: .touchUpInside)
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillShow),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil
+        )
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.collectionView.scrollToItem(at: IndexPath(row: self.messageList.last?.messages.count ?? 0, section: self.messageList.count), at: .bottom, animated: true)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        self.recordingBtn.layer.cornerRadius = 30
+    }
+    
+    //MARK: Btn actions
+    
+    @objc func keyboardAction(sender: Any){
+        guard !(sender is UITapGestureRecognizer) else {
+            self.textField.keyboardIsHide = true
+            self.collectionView.contentInset = UIEdgeInsets(top: 124, left: 0, bottom: 0, right: 0)
+            self.textFieldBottomConstant?.constant = 0
+            return
+        }
+        guard sender is UIButton else { return }
+        self.textField.keyboardIsHide = false
+    }
+    
+    @objc func openSettings(){
+        SettingsVC.show(in: self.navigationController ?? self)
+    }
+    
+    @objc func keyboardWillShow(_ notification: Notification) {
+        guard let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else{ return }
+        let keyboardRectangle = keyboardFrame.cgRectValue
+        let keyboardHeight = keyboardRectangle.height
+        self.textFieldBottomConstant?.constant = -keyboardHeight
+        self.bottomCollectionView?.constant = -keyboardHeight
+        
     }
     
 }
