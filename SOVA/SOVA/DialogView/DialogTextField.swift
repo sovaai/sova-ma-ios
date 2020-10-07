@@ -93,7 +93,6 @@ extension DialogTextField: UITextViewDelegate{
         if textView.textColor == UIColor(r: 15, g: 31, b: 72, a: 0.2) {
             textView.text = nil
             textView.textColor = UIColor.black
-            guard !text.isEmpty else { return true }
             self.sendMessage.isHidden = false
         }else if range == NSRange(location: 0, length: 1) , text.isEmpty {
             textView.text = "Напишите сообщение…"
@@ -101,7 +100,9 @@ extension DialogTextField: UITextViewDelegate{
             self.sendMessage.isHidden = true
             return false
         }
-        return true
+        guard text == "\n" else { return true }
+        self.sendMesg()
+        return false
     }
     
     func textViewDidChange(_ textView: UITextView) {

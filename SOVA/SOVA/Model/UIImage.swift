@@ -5,4 +5,10 @@
 //  Created by Мурат Камалов on 07.10.2020.
 //
 
-import Foundation
+import UIKit
+
+extension UIImage{
+    var allowTinted: UIImage{
+        return self.withRenderingMode(.alwaysTemplate)
+    }
+}

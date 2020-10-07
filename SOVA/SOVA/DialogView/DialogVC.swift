@@ -41,10 +41,12 @@ class DialogViewController: UIViewController{
     private var bottomCollectionView: NSLayoutConstraint? = nil
     
     private var settingsBtn = UIButton()
-    private var recordingBtn = UIButton()
+    private var recordingBtn = AudioBtn()
     private var keyboardBtn = UIButton()
     
     private var messageList = DataManager.shared.messageList //Array(DataManager.shared.currentAssistants.messageList.reversed()).sorted{$0.date > $1.date}
+    
+    private var audioManager = AudioManager()
     
     private var dateFormatter: DateFormatter {
         let df = DateFormatter()
@@ -82,28 +84,26 @@ class DialogViewController: UIViewController{
         self.recordingBtn.translatesAutoresizingMaskIntoConstraints = false
         self.recordingBtn.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         self.recordingBtn.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -16).isActive = true
-        self.recordingBtn.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        self.recordingBtn.heightAnchor.constraint(equalToConstant: 94).isActive = true
         self.recordingBtn.widthAnchor.constraint(equalTo: self.recordingBtn.heightAnchor).isActive = true
         
-        self.recordingBtn.setImage(UIImage(named: "Menu/recordingbtn"), for: [])
-        self.recordingBtn.backgroundColor = .white
-        self.recordingBtn.layer.cornerRadius = 30
-        self.recordingBtn.shadowOptions()
+        self.recordingBtn.addTarget(self, action: #selector(self.recodingAction), for: .touchUpInside)
+        self.audioManager.delegate = self
         
         self.view.addSubview(self.settingsBtn)
         self.settingsBtn.translatesAutoresizingMaskIntoConstraints = false
-        self.settingsBtn.rightAnchor.constraint(equalTo: self.recordingBtn.leftAnchor, constant: -32).isActive = true
+        self.settingsBtn.rightAnchor.constraint(equalTo: self.recordingBtn.leftAnchor, constant: -15).isActive = true
         self.settingsBtn.centerYAnchor.constraint(equalTo: self.recordingBtn.centerYAnchor).isActive = true
         self.settingsBtn.heightAnchor.constraint(equalToConstant: 24).isActive = true
         self.settingsBtn.widthAnchor.constraint(equalTo: self.settingsBtn.heightAnchor).isActive = true
         
-        self.settingsBtn.setImage(UIImage(named: "Menu/settingsBtn"), for: [])
+        self.settingsBtn.setImage(UIImage(named: "Menu/settingsBtn"), for: .normal)
         self.settingsBtn.addTarget(self, action: #selector(self.openSettings), for: .touchUpInside)
         
         self.view.addSubview(self.keyboardBtn)
         self.keyboardBtn.translatesAutoresizingMaskIntoConstraints = false
         self.keyboardBtn.centerYAnchor.constraint(equalTo: self.recordingBtn.centerYAnchor).isActive = true
-        self.keyboardBtn.leftAnchor.constraint(equalTo: self.recordingBtn.rightAnchor, constant: 32).isActive = true
+        self.keyboardBtn.leftAnchor.constraint(equalTo: self.recordingBtn.rightAnchor, constant: 15).isActive = true
         self.keyboardBtn.heightAnchor.constraint(equalToConstant: 24).isActive = true
         self.keyboardBtn.widthAnchor.constraint(equalTo: self.keyboardBtn.heightAnchor).isActive = true
         
@@ -125,17 +125,16 @@ class DialogViewController: UIViewController{
         self.collectionView.scrollToItem(at: IndexPath(row: self.messageList.last?.messages.count ?? 0, section: self.messageList.count), at: .bottom, animated: true)
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        self.recordingBtn.layer.cornerRadius = 30
-    }
-        
     deinit {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.init("MessagesUpdate"), object: nil)
     }
     
     //MARK: Btn actions
+    
+    @objc func recodingAction(){
+        self.audioManager.isRecording = !self.audioManager.isRecording
+    }
     
     @objc func keyboardAction(sender: Any){
         guard !(sender is UITapGestureRecognizer) else {
@@ -205,6 +204,25 @@ extension DialogViewController: UICollectionViewDelegate, UICollectionViewDataSo
 }
 
 
-
+extension DialogViewController: AudioDelegate{
+    func audioErrorMessage(title: String) {
+        self.showSimpleAlert(title: title)
+    }
+    
+    func allowAlert() {
+        let alert = UIAlertController(title: "Разрешите доступ к микрофону".localized, message: nil, preferredStyle: .alert)
+        let openSettings = UIAlertAction(title: "Открыть настройки", style: .default) { (_) in
+            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:], completionHandler: nil)
+        }
+        let cancel = UIAlertAction(title: "Отмена".localized, style: .destructive)
+        alert.addAction(cancel)
+        alert.addAction(openSettings)
+        self.present(alert, animated: true)
+    }
+    
+    func recording(state: AudioState) {
+        self.recordingBtn.audioState(is: state)
+    }
+}
 
 
