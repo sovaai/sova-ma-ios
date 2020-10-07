@@ -20,11 +20,22 @@ extension AudioDelegate{
     }
 }
 
-class AudioManager{
-    private var recordingSession: AVAudioSession = AVAudioSession.sharedInstance()
+class AudioManager: NSObject{
+    private lazy var recordingSession: AVAudioSession = {
+       let session = AVAudioSession.sharedInstance()
+        do{
+            try session.setCategory(.playAndRecord)
+            try session.setActive(true)
+            try session.overrideOutputAudioPort(.speaker)
+        }catch{
+            self.delegate?.audioErrorMessage(title: "Ошибка доступа к AVAudioSession".localized)
+        }
+        return session
+    }()
+    
     private var audioRecorder: AVAudioRecorder!
     
-    private lazy var player: AVAudioPlayer = AVAudioPlayer()
+    private var player: AVAudioPlayer?
     
     public var isRecording: Bool = false {
         didSet{
@@ -36,17 +47,8 @@ class AudioManager{
         }
     }
     
-    public weak var delegate: AudioDelegate? = nil {
-        didSet
-        {
-            do{
-                try self.recordingSession.setCategory(.playAndRecord, mode: .default)
-                try self.recordingSession.setActive(true)
-            }catch{
-                self.delegate?.audioErrorMessage(title: "Ошибка доступа к AVAudioSession".localized)
-            }
-        }
-    }
+    public weak var delegate: AudioDelegate? = nil
+        
     
     private lazy var url: URL? = {
         let url = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first?.appendingPathComponent("userRecording.m4a")
@@ -95,7 +97,8 @@ class AudioManager{
         guard let url = self.url else { self.delegate?.audioErrorMessage(title: "Не удалось воспроизвести аудио по данному пути"); return}
         do {
             self.player = try AVAudioPlayer(contentsOf: url)
-            self.player.play()
+            self.player?.prepareToPlay()
+            self.player?.play()
         }catch{
             self.delegate?.audioErrorMessage(title: "Не удалось воспроизвести аудио по данному пути")
         }
@@ -106,3 +109,4 @@ enum AudioState{
     case start
     case stop
 }
+
