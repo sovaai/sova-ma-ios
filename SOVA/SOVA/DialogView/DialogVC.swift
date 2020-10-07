@@ -275,3 +275,30 @@ extension DialogViewController: AudioDelegate{
 }
 
 
+
+extension Dictionary{
+    var jsonData: Data? {
+        do {
+            return try JSONSerialization.data(withJSONObject: self )
+        } catch {
+            return nil
+        }
+    }
+}
+
+extension Data {
+    
+    var jsonDictionary: [String:Any]? {
+        guard self.count > 0 else { return [String:Any]() }
+        do {
+            return try JSONSerialization.jsonObject(with: self ) as? [String:Any]
+        } catch {
+            return nil
+        }
+    }
+}
+
+enum Result {
+    case Success( [String:Any]? )
+//    case Fail( ErrorAPICommand )
+}
