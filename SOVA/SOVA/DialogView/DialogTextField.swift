@@ -78,7 +78,7 @@ class DialogTextField: UIView{
         self.textView.text = "Напишите сообщение…"
         self.textView.textColor = UIColor(r: 15, g: 31, b: 72, a: 0.2)
         self.sendMessage.isHidden = true
-        let message = Message(title: text)
+        let message = Message(title: text, sender: DialogViewController.sender)
         DataManager.shared.saveNew(message)
     }
     

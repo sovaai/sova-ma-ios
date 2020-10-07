@@ -24,6 +24,8 @@ class AudioManager{
     private var recordingSession: AVAudioSession = AVAudioSession.sharedInstance()
     private var audioRecorder: AVAudioRecorder!
     
+    private lazy var player: AVAudioPlayer = AVAudioPlayer()
+    
     public var isRecording: Bool = false {
         didSet{
             if self.isRecording{
@@ -46,13 +48,18 @@ class AudioManager{
         }
     }
     
+    private lazy var url: URL? = {
+        let url = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first?.appendingPathComponent("userRecording.m4a")
+        return url
+    }()
+    
     private func startRecoding(){
         self.recordingSession.requestRecordPermission { [weak self] allowed in
             guard let self = self else { return }
             guard allowed else { self.delegate?.allowAlert(); return }
         }
         
-        guard let url = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first?.appendingPathComponent("userRecording.m4a") else {
+        guard let url = self.url else {
             self.delegate?.audioErrorMessage(title: "Не удается найти путь для записи".localized)
             return
         }
@@ -81,6 +88,16 @@ class AudioManager{
         guard succes else {
             self.delegate?.audioErrorMessage(title: "Не удалось коректно завершить запись".localized)
             return
+        }
+    }
+    
+    public func playAudio(){
+        guard let url = self.url else { self.delegate?.audioErrorMessage(title: "Не удалось воспроизвести аудио по данному пути"); return}
+        do {
+            self.player = try AVAudioPlayer(contentsOf: url)
+            self.player.play()
+        }catch{
+            self.delegate?.audioErrorMessage(title: "Не удалось воспроизвести аудио по данному пути")
         }
     }
 }

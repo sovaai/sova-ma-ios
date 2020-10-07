@@ -48,6 +48,52 @@ class DialogViewController: UIViewController{
     
     private var audioManager = AudioManager()
     
+    //-----------------------------------------------------------------------------------------------------------------------------
+    //MARK: TEST
+    //-----------------------------------------------------------------------------------------------------------------------------
+    
+    lazy var testSwitch: UISwitch = {
+        let sw = UISwitch()
+        self.view.addSubview(sw)
+        sw.translatesAutoresizingMaskIntoConstraints = false
+        sw.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 40).isActive = true
+        sw.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 10).isActive = true
+        sw.addTarget(self, action: #selector(self.selector), for: .allEvents)
+        return sw
+    }()
+    
+    lazy var playAudioBtn: UIButton = {
+        let btn = UIButton()
+        self.view.addSubview(btn)
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.topAnchor.constraint(equalTo: self.testSwitch.bottomAnchor, constant: 5).isActive = true
+        btn.leftAnchor.constraint(equalTo: self.testSwitch.leftAnchor).isActive = true
+        btn.heightAnchor.constraint(equalTo: self.testSwitch.heightAnchor).isActive = true
+        btn.widthAnchor.constraint(equalTo: self.testSwitch.widthAnchor).isActive = true
+        btn.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
+        btn.addTarget(self, action: #selector(self.playAudio), for: .touchUpInside)
+        btn.layer.cornerRadius = self.testSwitch.frame.height / 2
+        return btn
+    }()
+    
+    static var sender: WhosMessage = .user
+    
+    @objc func selector(){
+        guard DialogViewController.sender == .user else {
+            DialogViewController.sender = .user
+            return
+        }
+        DialogViewController.sender = .assistant
+    }
+    
+    @objc func playAudio(){
+        self.audioManager.playAudio()
+    }
+    
+    //-----------------------------------------------------------------------------------------------------------------------------
+    //MARK: TEST
+    //-----------------------------------------------------------------------------------------------------------------------------
+    
     private var dateFormatter: DateFormatter {
         let df = DateFormatter()
         df.dateStyle = .medium
@@ -117,6 +163,9 @@ class DialogViewController: UIViewController{
             object: nil
         )
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadData), name: NSNotification.Name.init("MessagesUpdate"), object: nil)
+        
+        self.testSwitch.isOn = true
+        self.playAudioBtn.setTitle("play", for: [])
     }
     
     override func viewWillAppear(_ animated: Bool) {
