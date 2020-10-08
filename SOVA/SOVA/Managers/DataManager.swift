@@ -31,8 +31,9 @@ class DataManager{
             }
             guard let assistantId = UserDefaults.standard.value(forKey: "currentAssistantsId") as? String else {
                 //поставить деолтного бота
-                let url = URL(string: "https://vk.com/feed")! //FIXME: ВЕРНУТЬ ПОСЛЕ ТЕСТА!
-                let model = Assitant(name: "name", url: url, token: 12345, wordActive: false)
+                let url = URL(string: "https://biz.nanosemantics.ru/api/bat/nkd/json/")!
+                let uuid = UUID(uuidString: "b03822f6-362d-478b-978b-bed603602d0e")!
+                let model = Assitant(name: "Лисенок".localized, url: url, uuid: uuid)
                 if self._assitantsId == nil {
                     self._assitantsId = []
                 }
