@@ -80,6 +80,12 @@ class DialogTextField: UIView{
         self.sendMessage.isHidden = true
         let message = Message(title: text, sender: DialogViewController.sender)
         DataManager.shared.saveNew(message)
+        NetworkManager.shared.sendMessage(cuid: DataManager.shared.currentAssistants.cuid.string, message: text) { (msg, error) in
+            guard error == nil else { return }
+            guard let messg = msg else { return }
+            let message = Message(title: messg, sender: .assistant)
+            DataManager.shared.saveNew(message)
+        }
     }
     
     required init?(coder: NSCoder) {

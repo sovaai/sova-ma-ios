@@ -94,8 +94,8 @@
             filePath = "SOVA/DialogView/DialogTextField.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "103"
-            endingLineNumber = "103"
+            startingLineNumber = "109"
+            endingLineNumber = "109"
             landmarkName = "textView(_:shouldChangeTextIn:replacementText:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -258,54 +258,6 @@
             endingLineNumber = "56"
             landmarkName = "initAssistant(uuid:cuid:context:url:completion:)"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "B745B321-56A4-4D23-B7C2-909D1ED45474"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SOVA/Networking/Service/NetworkRouter.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "27"
-            endingLineNumber = "27"
-            landmarkName = "request(_:mainURL:completion:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "B745B321-56A4-4D23-B7C2-909D1ED45474 - 28a79b14b0fb4ad6"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SOVA.Router.request(_: A, mainURL: Swift.Optional&lt;Foundation.URL&gt;, completion: (Swift.Optional&lt;Foundation.Data&gt;, Swift.Optional&lt;__C.NSURLResponse&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; ()) -&gt; ()"
-                  moduleName = "SOVA"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/muratkamalov/Desktop/ios/SOVA/SOVA/Networking/Service/NetworkRouter.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "27"
-                  endingLineNumber = "27"
-                  offsetFromSymbolStart = "442">
-               </Location>
-               <Location
-                  uuid = "B745B321-56A4-4D23-B7C2-909D1ED45474 - ea4ebd9b9ef6f4e7"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Optional&lt;Foundation.Data&gt;, Swift.Optional&lt;__C.NSURLResponse&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in SOVA.Router.request(_: A, mainURL: Swift.Optional&lt;Foundation.URL&gt;, completion: (Swift.Optional&lt;Foundation.Data&gt;, Swift.Optional&lt;__C.NSURLResponse&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; ()) -&gt; ()"
-                  moduleName = "SOVA"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/muratkamalov/Desktop/ios/SOVA/SOVA/Networking/Service/NetworkRouter.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "28"
-                  endingLineNumber = "28"
-                  offsetFromSymbolStart = "65">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

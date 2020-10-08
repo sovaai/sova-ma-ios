@@ -99,9 +99,9 @@ class DataManager{
     private func createDefaultAssistant(compition: @escaping () -> ()) {
         let url = URL(string: "https://biz.nanosemantics.ru/api/bat/nkd/json")!
         let uuid = UUID(uuidString: "b03822f6-362d-478b-978b-bed603602d0e")!
-        NetworkManager.shared.initAssistant(uuid: uuid.string, cuid: nil, context: nil, url: url) { [weak self] (cuid, error) in
+        NetworkManager.shared.initAssistant(uuid: uuid.string, cuid: nil, context: nil, url: url) { [weak self] (cuidString, error) in
             guard let self = self else { return }
-            guard let cuidStr =  cuid, let cuid = UUID(uuidString: cuidStr), error == nil else { fatalError() } //FIXME: Мы конкретно везде обосрались надо что - то делать
+            guard let cuidStr =  cuidString, let cuid = UUID(uuidString: cuidStr), error == nil else { fatalError() } //FIXME: Мы конкретно везде обосрались надо что - то делать
             let model = Assitant(name: "Лисенок".localized, url: url, uuid: uuid, cuid: cuid)
             
             model.save()

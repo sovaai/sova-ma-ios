@@ -59,6 +59,37 @@ struct NetworkManager{
             completion(cuid,nil)
         }
     }
+    
+    func sendMessage(cuid: String, message: String, context: [String: Any]? = nil, completion: @escaping (_ answer: String? ,_ error: String?)->()) {
+        self.router.request(.request(cuid: cuid, text: message, context: context)) { data, response, error in
+            
+            guard error == nil else { completion(nil, "Please check your network connection."); return }
+            
+            guard let response = response as? HTTPURLResponse else { return }
+            
+            let result = self.handleNetworkResponse(response)
+            
+            guard case .success = result else {
+                guard case .failure(let networkFailureError) = result else { return }
+                completion(nil, networkFailureError)
+                return
+            }
+            
+            guard let responseData = data else {
+                completion(nil, NetworkResponse.noData.rawValue)
+                return
+            }
+            
+            
+            guard let json = responseData.jsonDictionary,
+                  let resultDict = json["result"] as? [String: Any],
+                  let text = resultDict["text"] as? [String: Any],
+                  let value = text["value"] as? String else { completion(nil, "Server answer is wrong".localized); return }
+                //                        let apiResponse = try JSONDecoder().decode(MovieApiResponse.self, from: responseData)
+                //                        completion(apiResponse.movies,nil)
+            completion(value,nil)
+        }
+    }
 }
 
 enum NetworkResponse:String {

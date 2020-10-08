@@ -212,7 +212,9 @@ class DialogViewController: UIViewController{
     
     @objc func reloadData(notification: Notification){
         self.messageList = DataManager.shared.messageList
-        self.collectionView.reloadData()
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
     }
     
 }
