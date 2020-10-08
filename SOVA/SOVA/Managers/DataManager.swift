@@ -30,15 +30,16 @@ class DataManager{
                 return self._currentAssistants!
             }
             guard let assistantId = UserDefaults.standard.value(forKey: "currentAssistantsId") as? String else {
-                //поставить деолтного бота
-                let url = URL(string: "https://vk.com/feed")! //FIXME: ВЕРНУТЬ ПОСЛЕ ТЕСТА!
-                let model = Assitant(name: "name", url: url, token: 12345, wordActive: false)
-                if self._assitantsId == nil {
-                    self._assitantsId = []
+                //поставить дефолтного бота
+                let group = DispatchGroup()
+            
+                group.enter()
+                self.createDefaultAssistant{
+                    group.leave()
                 }
-                self._assitantsId?.append(model.id)
-                self._currentAssistants = model
-                model.save()
+                
+                group.wait()
+                
                 return self._currentAssistants!
             }
             self._currentAssistants = self.get(by: assistantId)
@@ -93,7 +94,27 @@ class DataManager{
             self._messageList?.insert(ml, at: 0)
         }
         ml.save()
-        
+    }
+    
+    private func createDefaultAssistant(compition: @escaping () -> ()) {
+        let url = URL(string: "https://biz.nanosemantics.ru/api/bat/nkd/json")!
+        let uuid = UUID(uuidString: "b03822f6-362d-478b-978b-bed603602d0e")!
+        NetworkManager.shared.initAssistant(uuid: uuid.string, cuid: nil, context: nil, url: url) { [weak self] (cuidString, error) in
+            guard let self = self else { return }
+            guard let cuidStr =  cuidString, let cuid = UUID(uuidString: cuidStr), error == nil else { fatalError() } //FIXME: Мы конкретно везде обосрались надо что - то делать
+            let model = Assitant(name: "Лисенок".localized, url: url, uuid: uuid, cuid: cuid)
+            
+            model.save()
+            
+            if self._assitantsId == nil {
+                self._assitantsId = []
+            }
+            self._assitantsId?.append(model.id)
+            
+            self._currentAssistants = model
+            
+            compition()
+        }
     }
     
     private init(){}

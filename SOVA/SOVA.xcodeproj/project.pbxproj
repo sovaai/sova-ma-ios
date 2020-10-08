@@ -24,6 +24,15 @@
 		5C99C6A125273AD70056260F /* AssistantVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C99C6A025273AD70056260F /* AssistantVC.swift */; };
 		5C99C6A5252744740056260F /* AssistantModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C99C6A4252744740056260F /* AssistantModel.swift */; };
 		5C99C6A8252752CD0056260F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C99C6A7252752CD0056260F /* ViewController.swift */; };
+		5CB7DB54252F00AB0016AEA7 /* EndPointType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB7DB53252F00AB0016AEA7 /* EndPointType.swift */; };
+		5CB7DB57252F011B0016AEA7 /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB7DB56252F011B0016AEA7 /* HTTPMethod.swift */; };
+		5CB7DB5A252F015E0016AEA7 /* HTTPTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB7DB59252F015E0016AEA7 /* HTTPTask.swift */; };
+		5CB7DB61252F02370016AEA7 /* ParameterEncoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB7DB60252F02370016AEA7 /* ParameterEncoding.swift */; };
+		5CB7DB64252F03B60016AEA7 /* URLParameterEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB7DB63252F03B60016AEA7 /* URLParameterEncoder.swift */; };
+		5CB7DB67252F06500016AEA7 /* JSONParameterEnoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB7DB66252F06500016AEA7 /* JSONParameterEnoding.swift */; };
+		5CB7DB6A252F07170016AEA7 /* NetworkRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB7DB69252F07170016AEA7 /* NetworkRouter.swift */; };
+		5CB7DB6D252F11C30016AEA7 /* AssistantEndPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB7DB6C252F11C30016AEA7 /* AssistantEndPoint.swift */; };
+		5CB7DB71252F138A0016AEA7 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB7DB70252F138A0016AEA7 /* NetworkManager.swift */; };
 		5CFBDEAD25262706005D8057 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CFBDEAC25262706005D8057 /* AppDelegate.swift */; };
 		5CFBDEAF25262706005D8057 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CFBDEAE25262706005D8057 /* SceneDelegate.swift */; };
 		5CFBDEB625262708005D8057 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5CFBDEB525262708005D8057 /* Assets.xcassets */; };
@@ -48,6 +57,15 @@
 		5C99C6A025273AD70056260F /* AssistantVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistantVC.swift; sourceTree = "<group>"; };
 		5C99C6A4252744740056260F /* AssistantModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistantModel.swift; sourceTree = "<group>"; };
 		5C99C6A7252752CD0056260F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		5CB7DB53252F00AB0016AEA7 /* EndPointType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndPointType.swift; sourceTree = "<group>"; };
+		5CB7DB56252F011B0016AEA7 /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
+		5CB7DB59252F015E0016AEA7 /* HTTPTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPTask.swift; sourceTree = "<group>"; };
+		5CB7DB60252F02370016AEA7 /* ParameterEncoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParameterEncoding.swift; sourceTree = "<group>"; };
+		5CB7DB63252F03B60016AEA7 /* URLParameterEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLParameterEncoder.swift; sourceTree = "<group>"; };
+		5CB7DB66252F06500016AEA7 /* JSONParameterEnoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONParameterEnoding.swift; sourceTree = "<group>"; };
+		5CB7DB69252F07170016AEA7 /* NetworkRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkRouter.swift; sourceTree = "<group>"; };
+		5CB7DB6C252F11C30016AEA7 /* AssistantEndPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistantEndPoint.swift; sourceTree = "<group>"; };
+		5CB7DB70252F138A0016AEA7 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		5CFBDEA925262706005D8057 /* SOVA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SOVA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CFBDEAC25262706005D8057 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5CFBDEAE25262706005D8057 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -72,6 +90,7 @@
 			children = (
 				5C4B3CFB252DA6E600BDDB35 /* AudioManager.swift */,
 				5C34DAD8252B149400501F8A /* DataManager.swift */,
+				5CB7DB70252F138A0016AEA7 /* NetworkManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -131,6 +150,37 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		5CB7DB52252EFA490016AEA7 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				5CB7DB6C252F11C30016AEA7 /* AssistantEndPoint.swift */,
+				5CB7DB5F252F02270016AEA7 /* Encoding */,
+				5CB7DB5C252F021A0016AEA7 /* Service */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		5CB7DB5C252F021A0016AEA7 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				5CB7DB53252F00AB0016AEA7 /* EndPointType.swift */,
+				5CB7DB56252F011B0016AEA7 /* HTTPMethod.swift */,
+				5CB7DB59252F015E0016AEA7 /* HTTPTask.swift */,
+				5CB7DB69252F07170016AEA7 /* NetworkRouter.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		5CB7DB5F252F02270016AEA7 /* Encoding */ = {
+			isa = PBXGroup;
+			children = (
+				5CB7DB60252F02370016AEA7 /* ParameterEncoding.swift */,
+				5CB7DB63252F03B60016AEA7 /* URLParameterEncoder.swift */,
+				5CB7DB66252F06500016AEA7 /* JSONParameterEnoding.swift */,
+			);
+			path = Encoding;
+			sourceTree = "<group>";
+		};
 		5CFBDEA025262706005D8057 = {
 			isa = PBXGroup;
 			children = (
@@ -154,6 +204,7 @@
 				5C63AB592527789F00814CF7 /* Settings */,
 				5C99C69C252721B90056260F /* Model */,
 				5C4B3D01252DC9C100BDDB35 /* Managers */,
+				5CB7DB52252EFA490016AEA7 /* Networking */,
 				5C99C69825271F700056260F /* Extensions */,
 				5C63AB5C25277E0C00814CF7 /* project */,
 			);
@@ -229,14 +280,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5CB7DB61252F02370016AEA7 /* ParameterEncoding.swift in Sources */,
 				5CFBDEAD25262706005D8057 /* AppDelegate.swift in Sources */,
 				5C34DAD3252B00BE00501F8A /* UIColor.swift in Sources */,
+				5CB7DB57252F011B0016AEA7 /* HTTPMethod.swift in Sources */,
 				5C99C6A5252744740056260F /* AssistantModel.swift in Sources */,
 				5C4B3CFC252DA6E600BDDB35 /* AudioManager.swift in Sources */,
 				5C86F17F252C99F80029CE50 /* Date.swift in Sources */,
 				5C34DAD9252B149400501F8A /* DataManager.swift in Sources */,
+				5CB7DB64252F03B60016AEA7 /* URLParameterEncoder.swift in Sources */,
 				5C63AB82252787FD00814CF7 /* UIView.swift in Sources */,
 				5C63AB7C2527834500814CF7 /* DialogVC.swift in Sources */,
+				5CB7DB54252F00AB0016AEA7 /* EndPointType.swift in Sources */,
 				5C63AB7F2527851C00814CF7 /* DialogCell.swift in Sources */,
 				5C99C6A8252752CD0056260F /* ViewController.swift in Sources */,
 				5C86F17B252C7DEF0029CE50 /* DialogTextField.swift in Sources */,
@@ -245,9 +300,14 @@
 				5C4B3D05252DD4F800BDDB35 /* AudioBtn.swift in Sources */,
 				5C34DAD6252B11B200501F8A /* Message.swift in Sources */,
 				5CFBDEAF25262706005D8057 /* SceneDelegate.swift in Sources */,
+				5CB7DB5A252F015E0016AEA7 /* HTTPTask.swift in Sources */,
+				5CB7DB6A252F07170016AEA7 /* NetworkRouter.swift in Sources */,
 				5C4B3CFF252DB50500BDDB35 /* UIImage.swift in Sources */,
+				5CB7DB6D252F11C30016AEA7 /* AssistantEndPoint.swift in Sources */,
+				5CB7DB71252F138A0016AEA7 /* NetworkManager.swift in Sources */,
 				5C99C69625271C2A0056260F /* SettingsVC.swift in Sources */,
 				5C99C6A125273AD70056260F /* AssistantVC.swift in Sources */,
+				5CB7DB67252F06500016AEA7 /* JSONParameterEnoding.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

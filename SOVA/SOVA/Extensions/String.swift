@@ -12,3 +12,9 @@ extension String{
         return NSLocalizedString(self, comment: "")
     }
 }
+
+extension UUID{
+    var string: String{
+        return self.uuidString.lowercased()
+    }
+}

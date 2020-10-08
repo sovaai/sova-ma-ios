@@ -9,12 +9,17 @@ import Foundation
 import UIKit
 
 struct Assitant: Codable{
-    var id: String = UUID().uuidString
+    var id: String = UUID().string
     var name: String
+    
+    var wordActive: Bool = false
+    var word: String? = nil
+    
     var url: URL
-    var token: Int
-    var wordActive: Bool
-    var word: String?
+    var uuid: UUID
+    var cuid: UUID
+    var euid: UUID? = nil
+//    var context: [String: Any]? = nil
     
     var messageListId: [String] = []
     

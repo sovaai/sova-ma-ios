@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 struct MessageList: Codable{
-    var id: String = UUID().uuidString
+    var id: String = UUID().string
     var assistantId: String = DataManager.shared.currentAssistants.id
     var date: Date = Date()
     var messages: [Message] = []
@@ -28,7 +28,7 @@ struct MessageList: Codable{
 }
 
 struct Message: Codable {
-    var id: String = UUID().uuidString
+    var id: String = UUID().string
     var assistantId: String = DataManager.shared.currentAssistants.id
     
     var date: Date = Date()

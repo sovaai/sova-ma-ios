@@ -178,6 +178,7 @@ class DialogViewController: UIViewController{
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.init("MessagesUpdate"), object: nil)
     }
+
     
     //MARK: Btn actions
     
@@ -211,7 +212,9 @@ class DialogViewController: UIViewController{
     
     @objc func reloadData(notification: Notification){
         self.messageList = DataManager.shared.messageList
-        self.collectionView.reloadData()
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
     }
     
 }
@@ -298,7 +301,3 @@ extension Data {
     }
 }
 
-enum Result {
-    case Success( [String:Any]? )
-//    case Fail( ErrorAPICommand )
-}

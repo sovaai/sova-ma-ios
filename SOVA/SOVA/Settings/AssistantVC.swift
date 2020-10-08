@@ -53,7 +53,7 @@ class AssistantVC: UIViewController{
     }
     
     @objc func saveModel(){
-        var name: String = ""; var url: URL? = URL(string: ""); var token: Int = 0; var wordActive: Bool = false
+        var name: String = ""; var urlString: String = ""; var token: String = ""
         for i in 0...3{
             guard let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: i)) as? TextFieldCell else { continue }
             cell.endEditing()
@@ -61,22 +61,28 @@ class AssistantVC: UIViewController{
             case 0:
                 name = cell.value
             case 1:
-                let urlStr = cell.value
-//                url = URL(string: urlStr)!
-                url = URL(string: "https://vk.com/feed")! //FIXME: ВЕРНУТЬ ПОСЛЕ ТЕСТА!
+                urlString = cell.value
             case 2:
-                token = Int(cell.value)!
-            case 3:
-                wordActive = false
+                token = cell.value
             default:
                 return
             }
         }
         
-        let model = Assitant(name: name, url: url!, token: token, wordActive: wordActive)
         
-        model.save()
-        self.close()
+        guard let url = URL(string: urlString) else {self.showSimpleAlert(title: "Неправильный адрес API URL".localized, message: "Проверьте введенные данные".localized); return}
+        guard let uuid = UUID(uuidString: token) else {self.showSimpleAlert(title: "Неправильный UUID".localized, message: "Проверьте введенные данные".localized); return  }
+        
+        NetworkManager.shared.initAssistant(uuid: uuid.string, cuid: nil, context: nil, url: url) { [weak self] (cuid, error) in
+            guard let self = self else { return }
+            guard let cuidStr =  cuid, let cuid = UUID(uuidString: cuidStr), error == nil else { self.showSimpleAlert(title: error); return }
+            let model = Assitant(name: name, url: url, uuid: uuid, cuid: cuid)
+            
+            model.save()
+            self.close()
+        }
+        
+       
     }
     
     func close(){
@@ -178,7 +184,7 @@ class TextFieldCell: UITableViewCell, UITextFieldDelegate{
         case .url:
             self.textField.text = model.url.absoluteString
         case .token:
-            self.textField.text = String(model.token)
+            self.textField.text = model.uuid.string
         default: return
         }
     }
@@ -189,10 +195,18 @@ class TextFieldCell: UITableViewCell, UITextFieldDelegate{
     }
     
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        guard let text = textField.text else {return true}
         let isEmpty = textField.text?.isEmpty ?? false
-        guard isEmpty else {
-            self.backgroundColor = .clear
-            return true
+        switch self.type {
+        case .url:
+            guard URL(string: text) == nil else { return false}
+        case .token:
+            guard UUID(uuidString: text) == nil else { return false }
+        default:
+            guard isEmpty else {
+                self.backgroundColor = .clear
+                return true
+            }
         }
         self.backgroundColor = .red
         return !isEmpty
