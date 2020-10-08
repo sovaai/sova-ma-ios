@@ -73,10 +73,16 @@ class AssistantVC: UIViewController{
         guard let url = URL(string: urlString) else {self.showSimpleAlert(title: "Неправильный адрес API URL".localized, message: "Проверьте введенные данные".localized); return}
         guard let uuid = UUID(uuidString: token) else {self.showSimpleAlert(title: "Неправильный UUID".localized, message: "Проверьте введенные данные".localized); return  }
         
-        let model = Assitant(name: name, url: url, uuid: uuid)
+        NetworkManager.shared.initAssistant(uuid: uuid.string, cuid: nil, context: nil, url: url) { [weak self] (cuid, error) in
+            guard let self = self else { return }
+            guard let cuidStr =  cuid, let cuid = UUID(uuidString: cuidStr), error == nil else { self.showSimpleAlert(title: error); return }
+            let model = Assitant(name: name, url: url, uuid: uuid, cuid: cuid)
+            
+            model.save()
+            self.close()
+        }
         
-        model.save()
-        self.close()
+       
     }
     
     func close(){
@@ -178,7 +184,7 @@ class TextFieldCell: UITableViewCell, UITextFieldDelegate{
         case .url:
             self.textField.text = model.url.absoluteString
         case .token:
-            self.textField.text = model.uuid.uuidString
+            self.textField.text = model.uuid.string
         default: return
         }
     }

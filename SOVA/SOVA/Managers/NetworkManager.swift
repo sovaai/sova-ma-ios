@@ -29,8 +29,9 @@ struct NetworkManager{
         }
     }
     
-    func getNewMovies(uuid: String, completion: @escaping (_ movie: [Assitant]?,_ error: String?)->()){
-        router.request(.initChat(uuid: "b03822f6-362d-478b-978b-bed603602d0e", cuid: nil, context: nil)) { data, response, error in
+    func initAssistant(uuid: String, cuid: String?, context: [String:Any]?, url: URL? = nil,
+                       completion: @escaping (_ cuid: String? ,_ error: String?)->()){
+        self.router.request(.initChat(uuid: uuid, cuid: cuid, context: context), mainURL: url) { data, response, error in
             
             guard error == nil else { completion(nil, "Please check your network connection."); return }
             
@@ -38,27 +39,24 @@ struct NetworkManager{
             
             let result = self.handleNetworkResponse(response)
             
-            switch result {
-            case .success:
-                guard let responseData = data else {
-                    completion(nil, NetworkResponse.noData.rawValue)
-                    return
-                }
-                do {
-                    print(responseData)
-                    let jsonData = try JSONSerialization.jsonObject(with: responseData, options: .mutableContainers)
-                    print(jsonData)
-                    //                        let apiResponse = try JSONDecoder().decode(MovieApiResponse.self, from: responseData)
-                    //                        completion(apiResponse.movies,nil)
-                    completion(nil,nil)
-                }catch {
-                    print(error)
-                    completion(nil, NetworkResponse.unableToDecode.rawValue)
-                }
-            case .failure(let networkFailureError):
+            guard case .success = result else {
+                guard case .failure(let networkFailureError) = result else { return }
                 completion(nil, networkFailureError)
+                return
             }
             
+            guard let responseData = data else {
+                completion(nil, NetworkResponse.noData.rawValue)
+                return
+            }
+            
+            
+            guard let json = responseData.jsonDictionary,
+                  let resultDict = json["result"] as? [String: Any],
+                  let cuid = resultDict["cuid"] as? String else { completion(nil, "Server answer is wrong".localized); return }
+                //                        let apiResponse = try JSONDecoder().decode(MovieApiResponse.self, from: responseData)
+                //                        completion(apiResponse.movies,nil)
+            completion(cuid,nil)
         }
     }
 }

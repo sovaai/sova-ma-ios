@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 struct Assitant: Codable{
-    var id: String = UUID().uuidString
+    var id: String = UUID().string
     var name: String
     
     var wordActive: Bool = false
@@ -17,7 +17,7 @@ struct Assitant: Codable{
     
     var url: URL
     var uuid: UUID
-    var cuid: UUID? = nil
+    var cuid: UUID
     var euid: UUID? = nil
 //    var context: [String: Any]? = nil
     

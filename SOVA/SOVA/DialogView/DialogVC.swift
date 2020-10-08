@@ -178,13 +178,7 @@ class DialogViewController: UIViewController{
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.init("MessagesUpdate"), object: nil)
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        NetworkManager.shared.getNewMovies(uuid: "") { (_, _) in
-            
-        }
-    }
+
     
     //MARK: Btn actions
     
