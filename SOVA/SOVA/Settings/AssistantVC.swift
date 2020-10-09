@@ -25,7 +25,7 @@ class AssistantVC: UIViewController{
         super.viewDidLoad()
         
         self.view.backgroundColor = .white
-        self.title = self.model != nil ? "Редактирование асисента" : "Новый ассистент".localized
+        self.title = self.model != nil ? "Редактирование асисента".localized : "Новый ассистент".localized
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Сохранить".localized, style: .plain, target: self, action: #selector(self.saveModel))
         
         self.view.addSubview(self.tableView)
@@ -78,7 +78,7 @@ class AssistantVC: UIViewController{
             guard let cuidStr =  cuid, let cuid = UUID(uuidString: cuidStr), error == nil else { self.showSimpleAlert(title: error); return }
             let model = Assitant(name: name, url: url, uuid: uuid, cuid: cuid)
             
-            model.save()
+            DataManager.shared.saveAssistant(model)
             self.close()
         }
         
@@ -143,7 +143,8 @@ extension AssistantVC: UITableViewDataSource, UITableViewDelegate{
         guard indexPath.section == 4 else { return }
         let alert = UIAlertController(title: "Подтвердение удаления".localized, message: "Нажмите на кнопку Удалить для пожтверждения удаления аккаунта".localized, preferredStyle: .alert)
         let delete = UIAlertAction(title: "Удалить".localized, style: .destructive) { (_) in
-            self.model?.delete()
+            guard let model = self.model else { return }
+            DataManager.shared.deleteAssistant(model)
             self.close()
         }
         let cancel = UIAlertAction(title: "Отменить".localized, style: .cancel)
@@ -202,9 +203,8 @@ class TextFieldCell: UITableViewCell, UITextFieldDelegate{
         alert.addAction(UIAlertAction(title: "Вставить".localized, style: .default, handler: { (_) in
             self.textField.text = UIPasteboard.general.string
         }))
-        DialogViewController.shared.present(alert, animated: true) {
-//            self.textField.resignFirstResponder()
-        }
+        alert.addAction(UIAlertAction(title: "Нет спасибо", style: .cancel, handler: nil))
+        DialogViewController.shared.present(alert, animated: true)
         return false
     }
     

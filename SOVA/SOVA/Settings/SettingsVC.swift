@@ -124,7 +124,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
         if indexPath.section == 0{
             guard indexPath.row < self.model.count else { AssistantVC.show(with: nil, in: self.navigationController!); return }
             self.selectedAssistant = indexPath
-            DataManager.shared._currentAssistants = self.model[indexPath.row]
+            DataManager.shared.checkAnotherAssistant(self.model[indexPath.row].id)
         }else{
             //Остальное функционал
         }
@@ -137,7 +137,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .destructive, title: "Delete".localized) { (_, _, _) in
-            self.model[indexPath.row].delete()
+            DataManager.shared.deleteAssistant(self.model[indexPath.row])
             self.tableView.reloadData()
         }
         

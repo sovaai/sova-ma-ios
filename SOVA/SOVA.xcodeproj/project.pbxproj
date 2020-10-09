@@ -33,6 +33,7 @@
 		5CB7DB6A252F07170016AEA7 /* NetworkRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB7DB69252F07170016AEA7 /* NetworkRouter.swift */; };
 		5CB7DB6D252F11C30016AEA7 /* AssistantEndPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB7DB6C252F11C30016AEA7 /* AssistantEndPoint.swift */; };
 		5CB7DB71252F138A0016AEA7 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB7DB70252F138A0016AEA7 /* NetworkManager.swift */; };
+		5CC7E01C25305ED000AED403 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC7E01B25305ED000AED403 /* Array.swift */; };
 		5CFBDEAD25262706005D8057 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CFBDEAC25262706005D8057 /* AppDelegate.swift */; };
 		5CFBDEAF25262706005D8057 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CFBDEAE25262706005D8057 /* SceneDelegate.swift */; };
 		5CFBDEB625262708005D8057 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5CFBDEB525262708005D8057 /* Assets.xcassets */; };
@@ -66,6 +67,7 @@
 		5CB7DB69252F07170016AEA7 /* NetworkRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkRouter.swift; sourceTree = "<group>"; };
 		5CB7DB6C252F11C30016AEA7 /* AssistantEndPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistantEndPoint.swift; sourceTree = "<group>"; };
 		5CB7DB70252F138A0016AEA7 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		5CC7E01B25305ED000AED403 /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 		5CFBDEA925262706005D8057 /* SOVA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SOVA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CFBDEAC25262706005D8057 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5CFBDEAE25262706005D8057 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 				5C63AB81252787FD00814CF7 /* UIView.swift */,
 				5C34DAD2252B00BE00501F8A /* UIColor.swift */,
 				5C86F17E252C99F70029CE50 /* Date.swift */,
+				5CC7E01B25305ED000AED403 /* Array.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -307,6 +310,7 @@
 				5CB7DB71252F138A0016AEA7 /* NetworkManager.swift in Sources */,
 				5C99C69625271C2A0056260F /* SettingsVC.swift in Sources */,
 				5C99C6A125273AD70056260F /* AssistantVC.swift in Sources */,
+				5CC7E01C25305ED000AED403 /* Array.swift in Sources */,
 				5CB7DB67252F06500016AEA7 /* JSONParameterEnoding.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
