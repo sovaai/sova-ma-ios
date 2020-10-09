@@ -86,8 +86,10 @@ class AssistantVC: UIViewController{
     }
     
     func close(){
-        self.navigationController?.popViewController(animated: true)
-        self.dismiss(animated: true, completion: nil)
+        DispatchQueue.main.async {
+            self.navigationController?.popViewController(animated: true)
+            self.dismiss(animated: true, completion: nil)
+        }
     }
 }
 
@@ -192,6 +194,18 @@ class TextFieldCell: UITableViewCell, UITextFieldDelegate{
     func endEditing(){
         self.textField.resignFirstResponder()
         self.value = self.textField.text ?? ""
+    }
+    
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        guard textField.text == "https://" || textField.text == "Введите токен".localized else { return true}
+        let alert = UIAlertController(title: "Вставить из буфера".localized, message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "Вставить".localized, style: .default, handler: { (_) in
+            self.textField.text = UIPasteboard.general.string
+        }))
+        DialogViewController.shared.present(alert, animated: true) {
+//            self.textField.resignFirstResponder()
+        }
+        return false
     }
     
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {

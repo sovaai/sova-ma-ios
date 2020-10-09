@@ -9,6 +9,8 @@ import UIKit
 
 class DialogViewController: UIViewController{
     
+    static var shared = DialogViewController()
+    
     private lazy var collectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
