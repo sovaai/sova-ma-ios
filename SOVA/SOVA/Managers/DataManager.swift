@@ -18,11 +18,7 @@ class DataManager{
         return self._assitantsId ?? []
     }
     
-    private var _assitantsId: [String]? = nil {
-        didSet{
-            print("что-то не то")
-        }
-    }
+    private var _assitantsId: [String]? = nil
     
     var currentAssistants: Assitant {
         get{
@@ -47,11 +43,7 @@ class DataManager{
         }
     }
     
-    private var _currentAssistants : Assitant? = nil {
-        didSet{
-            print("меняем")
-        }
-    }
+    private var _currentAssistants : Assitant? = nil
     
     var messageList: [MessageList] {
         get{
@@ -115,6 +107,7 @@ class DataManager{
     public func checkAnotherAssistant(_ id: String){
         guard self.currentAssistants.id != id else { return }
         UserDefaults.standard.setValue(id, forKey: "currentAssistantsId")
+        self._currentAssistants = nil
         self.reloadMessageList()
         NotificationCenter.default.post(name: NSNotification.Name.init("MessagesUpdate"), object: nil, userInfo: nil)
     }

@@ -14,3 +14,13 @@ extension Array where Element: Hashable {
         return Array(thisSet.symmetricDifference(otherSet))
     }
 }
+
+extension Dictionary{
+    var jsonData: Data? {
+        do {
+            return try JSONSerialization.data(withJSONObject: self )
+        } catch {
+            return nil
+        }
+    }
+}
