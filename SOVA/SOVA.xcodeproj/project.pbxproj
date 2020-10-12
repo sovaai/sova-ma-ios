@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		15C44558F30F76668B449D8C /* Pods_SOVA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 995C752847D11CCE22346F45 /* Pods_SOVA.framework */; };
 		5C34DAD3252B00BE00501F8A /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C34DAD2252B00BE00501F8A /* UIColor.swift */; };
 		5C34DAD6252B11B200501F8A /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C34DAD5252B11B200501F8A /* Message.swift */; };
 		5C34DAD9252B149400501F8A /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C34DAD8252B149400501F8A /* DataManager.swift */; };
@@ -16,6 +17,7 @@
 		5C63AB7C2527834500814CF7 /* DialogVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C63AB7B2527834500814CF7 /* DialogVC.swift */; };
 		5C63AB7F2527851C00814CF7 /* DialogCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C63AB7E2527851C00814CF7 /* DialogCell.swift */; };
 		5C63AB82252787FD00814CF7 /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C63AB81252787FD00814CF7 /* UIView.swift */; };
+		5C78C48125349A5A001BC8C1 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 5C78C48025349A5A001BC8C1 /* Podfile */; };
 		5C86F17B252C7DEF0029CE50 /* DialogTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C86F17A252C7DEF0029CE50 /* DialogTextField.swift */; };
 		5C86F17F252C99F80029CE50 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C86F17E252C99F70029CE50 /* Date.swift */; };
 		5C99C69625271C2A0056260F /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C99C69525271C2A0056260F /* SettingsVC.swift */; };
@@ -42,6 +44,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3EF602EF13118596AAC86D9C /* Pods-SOVA.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SOVA.release.xcconfig"; path = "Target Support Files/Pods-SOVA/Pods-SOVA.release.xcconfig"; sourceTree = "<group>"; };
+		4700C0592FB36A9E88D8177B /* Pods-SOVA.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SOVA.debug.xcconfig"; path = "Target Support Files/Pods-SOVA/Pods-SOVA.debug.xcconfig"; sourceTree = "<group>"; };
 		5C34DAD2252B00BE00501F8A /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		5C34DAD5252B11B200501F8A /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		5C34DAD8252B149400501F8A /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
@@ -51,6 +55,7 @@
 		5C63AB7B2527834500814CF7 /* DialogVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogVC.swift; sourceTree = "<group>"; };
 		5C63AB7E2527851C00814CF7 /* DialogCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogCell.swift; sourceTree = "<group>"; };
 		5C63AB81252787FD00814CF7 /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
+		5C78C48025349A5A001BC8C1 /* Podfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; };
 		5C86F17A252C7DEF0029CE50 /* DialogTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogTextField.swift; sourceTree = "<group>"; };
 		5C86F17E252C99F70029CE50 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		5C99C69525271C2A0056260F /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
@@ -76,6 +81,7 @@
 		5CFBDEB525262708005D8057 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5CFBDEB825262708005D8057 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5CFBDEBA25262708005D8057 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		995C752847D11CCE22346F45 /* Pods_SOVA.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SOVA.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +89,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				15C44558F30F76668B449D8C /* Pods_SOVA.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -190,8 +197,11 @@
 		5CFBDEA025262706005D8057 = {
 			isa = PBXGroup;
 			children = (
+				5C78C48025349A5A001BC8C1 /* Podfile */,
 				5CFBDEAB25262706005D8057 /* SOVA */,
 				5CFBDEAA25262706005D8057 /* Products */,
+				F9601DBB67CB90E3F7535AFA /* Pods */,
+				D3B32FD1491BADA3E146A302 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -217,6 +227,24 @@
 			path = SOVA;
 			sourceTree = "<group>";
 		};
+		D3B32FD1491BADA3E146A302 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				995C752847D11CCE22346F45 /* Pods_SOVA.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F9601DBB67CB90E3F7535AFA /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				4700C0592FB36A9E88D8177B /* Pods-SOVA.debug.xcconfig */,
+				3EF602EF13118596AAC86D9C /* Pods-SOVA.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -224,9 +252,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5CFBDEBD25262708005D8057 /* Build configuration list for PBXNativeTarget "SOVA" */;
 			buildPhases = (
+				2FBCCDFB528A835E1D240886 /* [CP] Check Pods Manifest.lock */,
 				5CFBDEA525262706005D8057 /* Sources */,
 				5CFBDEA625262706005D8057 /* Frameworks */,
 				5CFBDEA725262706005D8057 /* Resources */,
+				AC6424C0093E2AE40C80379B /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -274,12 +304,55 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5C78C48125349A5A001BC8C1 /* Podfile in Resources */,
 				5CFBDEB925262708005D8057 /* LaunchScreen.storyboard in Resources */,
 				5CFBDEB625262708005D8057 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2FBCCDFB528A835E1D240886 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SOVA-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AC6424C0093E2AE40C80379B /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SOVA/Pods-SOVA-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SOVA/Pods-SOVA-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SOVA/Pods-SOVA-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		5CFBDEA525262706005D8057 /* Sources */ = {
@@ -451,6 +524,7 @@
 		};
 		5CFBDEBE25262708005D8057 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4700C0592FB36A9E88D8177B /* Pods-SOVA.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -473,6 +547,7 @@
 		};
 		5CFBDEBF25262708005D8057 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3EF602EF13118596AAC86D9C /* Pods-SOVA.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
