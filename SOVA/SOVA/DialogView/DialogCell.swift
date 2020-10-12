@@ -37,6 +37,8 @@ extension DialogViewController{
         private var leftLabelContraint: NSLayoutConstraint!
         
         private var bottomLine = UIView()
+        
+        public var url: URL? = nil
             
         private var sender: WhosMessage = .user{
             didSet{
@@ -86,8 +88,19 @@ extension DialogViewController{
             self.bottomLine.backgroundColor = self.sender.backgroundColor
             
             self.messageLabel.textColor = self.sender.messageColor
-            self.messageLabel.text = message.title
+            self.messageLabel.text = message.title.html2String
 
+            guard let startIndex = message.title.range(of: "<a href=\"") else{ return }
+            var string = message.title[startIndex.upperBound...]
+            guard let endIndex = string.firstIndex(where: {$0 == "\""}) else { return }
+            string = string[...endIndex]
+            
+            while string.first != "h" {
+                string.removeFirst()
+            }
+            string.removeLast()
+            guard let url = URL(string: String(string)) else { return }
+            self.url = url
         }
         
         required init?(coder: NSCoder) {

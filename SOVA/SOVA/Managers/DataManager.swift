@@ -18,11 +18,7 @@ class DataManager{
         return self._assitantsId ?? []
     }
     
-    var _assitantsId: [String]? = nil {
-        didSet{
-            UserDefaults.standard.setValue(self._assitantsId, forKey: "assistantsIds")
-        }
-    }
+    private var _assitantsId: [String]? = nil
     
     var currentAssistants: Assitant {
         get{
@@ -47,14 +43,7 @@ class DataManager{
         }
     }
     
-    var _currentAssistants : Assitant? = nil {
-        didSet{
-            guard self._currentAssistants != nil else { self._currentAssistants = oldValue; return }
-            UserDefaults.standard.setValue(self._currentAssistants?.id, forKey: "currentAssistantsId")
-            self._messageList = nil
-            NotificationCenter.default.post(name: NSNotification.Name.init("MessagesUpdate"), object: nil, userInfo: nil)
-        }
-    }
+    private var _currentAssistants : Assitant? = nil
     
     var messageList: [MessageList] {
         get{
@@ -65,23 +54,23 @@ class DataManager{
         }
     }
     
-    var _messageList: [MessageList]? = nil
+    private var _messageList: [MessageList]? = nil
     
-    func get(by id: String) -> Assitant?{
+    public func get(by id: String) -> Assitant?{
         let decoder = JSONDecoder()
         guard let assitantData = UserDefaults.standard.object(forKey: id) as? Data,
               let assitant = try? decoder.decode(Assitant.self, from: assitantData) else { return nil }
         return assitant
     }
     
-    func get(by Id: String) -> MessageList?{
+    public func get(by Id: String) -> MessageList?{
         let decoder = JSONDecoder()
         guard let listData = UserDefaults.standard.object(forKey: Id) as? Data,
               let list = try? decoder.decode(MessageList.self, from: listData) else { return nil }
         return list
     }
     
-    func saveNew(_ message: Message){
+    public func saveNew(_ message: Message){
         var ml: MessageList
         if self.messageList.isEmpty == false, self.messageList[0].date.asInt == message.date.asInt {
             ml = self.messageList[0]
@@ -104,16 +93,68 @@ class DataManager{
             guard let cuidStr =  cuidString, let cuid = UUID(uuidString: cuidStr), error == nil else { fatalError() } //FIXME: Мы конкретно везде обосрались надо что - то делать
             let model = Assitant(name: "Лисенок".localized, url: url, uuid: uuid, cuid: cuid)
             
-            model.save()
-            
-            if self._assitantsId == nil {
-                self._assitantsId = []
-            }
-            self._assitantsId?.append(model.id)
-            
+            self.saveAssistant(model)
             self._currentAssistants = model
             
             compition()
+        }
+    }
+    
+    public func reloadAssistantsId(){
+        self._assitantsId = UserDefaults.standard.value(forKey: "assistantsIds") as? [String] ?? []
+    }
+    
+    public func checkAnotherAssistant(_ id: String){
+        guard self.currentAssistants.id != id else { return }
+        UserDefaults.standard.setValue(id, forKey: "currentAssistantsId")
+        self._currentAssistants = nil
+        self.reloadMessageList()
+        NotificationCenter.default.post(name: NSNotification.Name.init("MessagesUpdate"), object: nil, userInfo: nil)
+    }
+    
+    public func reloadMessageList(){
+        self._messageList = self.currentAssistants.messageListId.compactMap{self.get(by: $0)}
+        self._messageList?.sort{$0.date > $1.date}
+    }
+    
+    public func saveAssistant(_ assistant: Assitant){
+        assistant.save()
+        guard self.assistantsId.contains(where: {$0 == assistant.id}) == false else { return }
+        var array = self.assistantsId
+        array.append(assistant.id)
+        UserDefaults.standard.setValue(array, forKey: "assistantsIds")
+        UserDefaults.standard.setValue(assistant.id, forKey: "currentAssistantsId")
+        self.reloadAssistantsId()
+        self.checkAnotherAssistant(assistant.id)
+        NotificationCenter.default.post(name: NSNotification.Name.init("MessagesUpdate"), object: nil, userInfo: nil)
+    }
+    
+    public func deleteAssistant(_ assistant: Assitant){
+        defer {
+            NotificationCenter.default.post(name: NSNotification.Name.init("MessagesUpdate"), object: nil, userInfo: nil)
+        }
+        assistant.delete()
+        self._messageList = nil
+        for id in assistant.messageListId{
+            guard let mes: MessageList = self.get(by: id) else { continue }
+            mes.delete()
+        }
+        guard self.currentAssistants.id == assistant.id else { return }
+        UserDefaults.standard.removeObject(forKey: "currentAssistantsId")
+        self._currentAssistants = nil
+        guard let index = self.assistantsId.firstIndex(of: assistant.id) else { return }
+        var array = self.assistantsId
+        array.remove(at: index)
+        UserDefaults.standard.setValue(array, forKey: "assistantsIds")
+        self.reloadAssistantsId()
+        guard let lastId = array.last else { return }
+        self.checkAnotherAssistant(lastId)
+     }
+    
+    func deleteAll(){
+        for id in self.assistantsId  {
+            guard let assistant: Assitant = self.get(by: id) else { continue }
+            self.deleteAssistant(assistant)
         }
     }
     

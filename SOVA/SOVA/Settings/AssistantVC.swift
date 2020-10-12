@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol TextFieldCellDelegate: class{
+    func nextEditingFiled(type: AssistantStateField)
+}
+
 class AssistantVC: UIViewController{
     
     private var tableView = UITableView(frame: .zero, style: .grouped)
@@ -25,7 +29,7 @@ class AssistantVC: UIViewController{
         super.viewDidLoad()
         
         self.view.backgroundColor = .white
-        self.title = self.model != nil ? "Редактирование асисента" : "Новый ассистент".localized
+        self.title = self.model != nil ? "Редактирование асисента".localized : "Новый ассистент".localized
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Сохранить".localized, style: .plain, target: self, action: #selector(self.saveModel))
         
         self.view.addSubview(self.tableView)
@@ -40,6 +44,9 @@ class AssistantVC: UIViewController{
         
         self.tableView.allowsSelection = false
         
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.hideKeyboard))
+        self.view.addGestureRecognizer(tap)
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -50,6 +57,10 @@ class AssistantVC: UIViewController{
     
     @objc func activationWordOn(){
         
+    }
+    
+    @objc func hideKeyboard(){
+        self.view.endEditing(true)
     }
     
     @objc func saveModel(){
@@ -78,7 +89,7 @@ class AssistantVC: UIViewController{
             guard let cuidStr =  cuid, let cuid = UUID(uuidString: cuidStr), error == nil else { self.showSimpleAlert(title: error); return }
             let model = Assitant(name: name, url: url, uuid: uuid, cuid: cuid)
             
-            model.save()
+            DataManager.shared.saveAssistant(model)
             self.close()
         }
         
@@ -86,8 +97,10 @@ class AssistantVC: UIViewController{
     }
     
     func close(){
-        self.navigationController?.popViewController(animated: true)
-        self.dismiss(animated: true, completion: nil)
+        DispatchQueue.main.async {
+            self.navigationController?.popViewController(animated: true)
+            self.dismiss(animated: true, completion: nil)
+        }
     }
 }
 
@@ -119,6 +132,7 @@ extension AssistantVC: UITableViewDataSource, UITableViewDelegate{
         }
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "TextFieldCell") as?  TextFieldCell
+        cell?.delegate = self
         cell?.configure(with: AssistantStateField.allCases[indexPath.section], model: self.model)
         
         return cell ?? UITableViewCell()
@@ -141,7 +155,8 @@ extension AssistantVC: UITableViewDataSource, UITableViewDelegate{
         guard indexPath.section == 4 else { return }
         let alert = UIAlertController(title: "Подтвердение удаления".localized, message: "Нажмите на кнопку Удалить для пожтверждения удаления аккаунта".localized, preferredStyle: .alert)
         let delete = UIAlertAction(title: "Удалить".localized, style: .destructive) { (_) in
-            self.model?.delete()
+            guard let model = self.model else { return }
+            DataManager.shared.deleteAssistant(model)
             self.close()
         }
         let cancel = UIAlertAction(title: "Отменить".localized, style: .cancel)
@@ -151,14 +166,27 @@ extension AssistantVC: UITableViewDataSource, UITableViewDelegate{
     }
 }
 
+extension AssistantVC: TextFieldCellDelegate{
+    func nextEditingFiled(type: AssistantStateField) {
+        guard type.rawValue < 2 else { return }
+        let nextType = AssistantStateField.allCases[type.rawValue + 1]
+        let cell = self.tableView.visibleCells.first{ ($0 as? TextFieldCell)?.type == nextType } as? TextFieldCell
+        cell?.startEditing()
+    }
+}
+
 
 class TextFieldCell: UITableViewCell, UITextFieldDelegate{
     
     private var textField = UITextField()
     
-    private var type: AssistantStateField!
+    private(set) var type: AssistantStateField!
     
-    public var value: String = ""
+    private(set) var value: String = ""
+    
+    private var isAlreadyEdit: Bool = false
+    
+    fileprivate weak var delegate: TextFieldCellDelegate? = nil
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -174,7 +202,7 @@ class TextFieldCell: UITableViewCell, UITextFieldDelegate{
         self.textField.delegate = self
     }
     
-    func configure(with type: AssistantStateField, model:  Assitant?){
+    public func configure(with type: AssistantStateField, model:  Assitant?){
         self.type = type
         self.textField.keyboardType = type.keyboard
         guard let model = model else { self.textField.text = type.defaultValue; return}
@@ -189,19 +217,39 @@ class TextFieldCell: UITableViewCell, UITextFieldDelegate{
         }
     }
     
-    func endEditing(){
+    public func startEditing(){
+        self.textField.becomeFirstResponder()
+        self.textField.selectAll(nil)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            guard self.textField.text == "https://" || self.textField.text == "Введите токен".localized else { return }
+            let alert = UIAlertController(title: "Вставить из буфера".localized, message: nil, preferredStyle: .actionSheet)
+            alert.addAction(UIAlertAction(title: "Вставить".localized, style: .default, handler: { (_) in
+                self.textField.text = UIPasteboard.general.string
+                self.delegate?.nextEditingFiled(type: self.type)
+            }))
+            alert.addAction(UIAlertAction(title: "Нет спасибо", style: .cancel, handler: { (_) in
+                self.textField.selectAll(nil)
+            }))
+            self.isAlreadyEdit = true
+            DialogViewController.shared.present(alert, animated: true)
+            self.textField.resignFirstResponder()
+        }
+       
+    }
+    
+    public func endEditing(){
         self.textField.resignFirstResponder()
         self.value = self.textField.text ?? ""
     }
     
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         guard let text = textField.text else {return true}
-        let isEmpty = textField.text?.isEmpty ?? false
+        let isEmpty = textField.text?.isEmpty ?? true
         switch self.type {
         case .url:
-            guard URL(string: text) == nil else { return false}
+            guard URL(string: text) == nil else { return true}
         case .token:
-            guard UUID(uuidString: text) == nil else { return false }
+            guard UUID(uuidString: text) == nil else { return true }
         default:
             guard isEmpty else {
                 self.backgroundColor = .clear
@@ -209,12 +257,21 @@ class TextFieldCell: UITableViewCell, UITextFieldDelegate{
             }
         }
         self.backgroundColor = .red
-        return !isEmpty
+        return true
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        guard textField.text == "https://" || textField.text == "Введите токен".localized else { return  }
+        guard !self.isAlreadyEdit else { return }
+        self.startEditing()
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         self.value = string
-        return true
+        guard string == "\n" else { return true }
+        self.endEditing(true)
+        self.delegate?.nextEditingFiled(type: self.type)
+        return false
     }
     
     required init?(coder: NSCoder) {
@@ -227,8 +284,8 @@ enum AssistantState{
     case delete
 }
 
-enum AssistantStateField: String, CaseIterable {
-    case name
+enum AssistantStateField: Int, CaseIterable {
+    case name = 0
     case url
     case token
     case word

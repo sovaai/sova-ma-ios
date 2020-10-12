@@ -27,13 +27,9 @@ struct Assitant: Codable{
         let encoder = JSONEncoder()
         guard let encoded = try? encoder.encode(self) else { return }
         UserDefaults.standard.setValue(encoded, forKey: self.id)
-        guard DataManager.shared.assistantsId.contains(where: {$0 == self.id}) == false else { return }
-        //Никогда не будет nil т.к до этого обращаемся к assistants, который собирает потом _assitants
-        DataManager.shared._assitantsId?.append(self.id)
     }
     
     func delete(){
         UserDefaults.standard.removeObject(forKey: self.id)
     }
-    
 }

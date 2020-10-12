@@ -9,6 +9,8 @@ import UIKit
 
 class DialogViewController: UIViewController{
     
+    static var shared = DialogViewController()
+    
     private lazy var collectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
@@ -253,6 +255,12 @@ extension DialogViewController: UICollectionViewDelegate, UICollectionViewDataSo
         return CGSize(width: self.view.frame.width, height: 44)
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? DialogCell,
+              let url = cell.url else { return }
+        UIApplication.shared.open(url)
+    }
+    
 }
 
 
@@ -279,25 +287,7 @@ extension DialogViewController: AudioDelegate{
 
 
 
-extension Dictionary{
-    var jsonData: Data? {
-        do {
-            return try JSONSerialization.data(withJSONObject: self )
-        } catch {
-            return nil
-        }
-    }
-}
 
-extension Data {
-    
-    var jsonDictionary: [String:Any]? {
-        guard self.count > 0 else { return [String:Any]() }
-        do {
-            return try JSONSerialization.jsonObject(with: self ) as? [String:Any]
-        } catch {
-            return nil
-        }
-    }
-}
+
+
 

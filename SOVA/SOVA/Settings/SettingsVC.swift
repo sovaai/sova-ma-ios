@@ -124,9 +124,21 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
         if indexPath.section == 0{
             guard indexPath.row < self.model.count else { AssistantVC.show(with: nil, in: self.navigationController!); return }
             self.selectedAssistant = indexPath
-            DataManager.shared._currentAssistants = self.model[indexPath.row]
+            DataManager.shared.checkAnotherAssistant(self.model[indexPath.row].id)
         }else{
-            //Остальное функционал
+            switch UserSettings.allCases[indexPath.row] {
+            case .cashe:
+                let alert = UIAlertController(title: "Подтверждение удаления?".localized, message: "Вы уверены что хотите все удалить?", preferredStyle: .alert)
+                let delete = UIAlertAction(title: "Удалить все", style: .destructive) { (_) in
+                    DataManager.shared.deleteAll()
+                }
+                let cancel = UIAlertAction(title: "Неее, не надо", style: .cancel)
+                alert.addAction(cancel)
+                alert.addAction(delete)
+                self.present(alert, animated: true, completion: nil)
+            default:
+                break
+            }
         }
     }
     
@@ -137,7 +149,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .destructive, title: "Delete".localized) { (_, _, _) in
-            self.model[indexPath.row].delete()
+            DataManager.shared.deleteAssistant(self.model[indexPath.row])
             self.tableView.reloadData()
         }
         

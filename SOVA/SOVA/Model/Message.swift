@@ -25,6 +25,12 @@ struct MessageList: Codable{
         assistant.save()
     }
     
+    func delete(){
+        UserDefaults.standard.removeObject(forKey: self.id)
+        for messgae in self.messages {
+            messgae.delete()
+        }
+    }
 }
 
 struct Message: Codable {
@@ -43,6 +49,10 @@ struct Message: Codable {
               assistant.messageListId.contains(where: {$0 == self.id}) == false else { return }
         assistant.messageListId.append(self.id)
         assistant.save()
+    }
+    
+    func delete(){
+        UserDefaults.standard.removeObject(forKey: self.id)
     }
 }
 
