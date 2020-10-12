@@ -6,6 +6,7 @@
 //
 
 import AVFoundation
+import AVKit
 
 protocol AudioDelegate: class, AVAudioRecorderDelegate{
     func audioErrorMessage(title: String)
@@ -91,6 +92,35 @@ class AudioManager: NSObject{
             self.delegate?.audioErrorMessage(title: "Не удалось коректно завершить запись".localized)
             return
         }
+        do{
+            let data = try Data(contentsOf: self.url!)
+            ASR().recognize(data: data) { (text, error) in
+                guard error == nil, let text = text else { self.delegate?.audioErrorMessage(title: "Ошибка распозования текста".localized) ;return }
+                let message = Message(title: text, sender: DialogViewController.sender)
+                DataManager.shared.saveNew(message)
+                NetworkManager.shared.sendMessage(cuid: DataManager.shared.currentAssistants.cuid.string, message: text) { (msg, error) in
+                    guard error == nil else { return }
+                    guard let messg = msg else { return }
+                    let message = Message(title: messg, sender: .assistant)
+                    DataManager.shared.saveNew(message)
+                    TTS().getSpeech(text: messg) { (data) in
+                        guard let dataAudio = data, let url = self.saveSpeechFile(data: dataAudio) else{ return }
+                            let item = AVPlayerItem(url: url)
+                        do{
+                        self.player = try AVAudioPlayer(data: dataAudio)
+                        }catch{
+                            print(error)
+                        }
+                            self.player?.play()
+                //            deleteSpeechFile(url: url)
+                        
+
+                    }
+                }
+            }
+        }catch{
+            print(error)
+        }
     }
     
     public func playAudio(){
@@ -103,10 +133,25 @@ class AudioManager: NSObject{
             self.delegate?.audioErrorMessage(title: "Не удалось воспроизвести аудио по данному пути")
         }
     }
+    
+    private func saveSpeechFile(data: Data) -> URL? {
+        let url = self.getDocumentURL(file: "speech_\(Date().timeIntervalSince1970).wav")
+        do {
+            try data.write(to: url)
+        } catch {
+            // failed to write file – missing permissions?
+            return nil
+        }
+        return url
+    }
+    
+    func getDocumentURL(file: String) -> URL {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        return paths[0].appendingPathComponent(file)
+    }
 }
 
 enum AudioState{
     case start
     case stop
 }
-
