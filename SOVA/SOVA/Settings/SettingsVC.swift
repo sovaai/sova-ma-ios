@@ -136,6 +136,10 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                 alert.addAction(cancel)
                 alert.addAction(delete)
                 self.present(alert, animated: true, completion: nil)
+            case .support:
+                let email = "89196242960@mail.ru" //FIXME: какая почта? 
+                guard let url = URL(string: "mailto:\(email)") else { self.showSimpleAlert(title: "Упс, что-то пошло не так".localized); return}
+                    UIApplication.shared.open(url)
             case .aboutApp:
                 AboutVC.show(parent: self.navigationController!)
             default:
