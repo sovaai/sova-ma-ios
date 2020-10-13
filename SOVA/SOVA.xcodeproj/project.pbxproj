@@ -19,6 +19,7 @@
 		5C63AB82252787FD00814CF7 /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C63AB81252787FD00814CF7 /* UIView.swift */; };
 		5C6E4F382534A135008CCA3C /* ASR.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6E4F372534A135008CCA3C /* ASR.swift */; };
 		5C6E4F3B2534A142008CCA3C /* TTS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6E4F3A2534A142008CCA3C /* TTS.swift */; };
+		5C6E4F422535C718008CCA3C /* About.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6E4F412535C718008CCA3C /* About.swift */; };
 		5C78C48125349A5A001BC8C1 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 5C78C48025349A5A001BC8C1 /* Podfile */; };
 		5C86F17B252C7DEF0029CE50 /* DialogTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C86F17A252C7DEF0029CE50 /* DialogTextField.swift */; };
 		5C86F17F252C99F80029CE50 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C86F17E252C99F70029CE50 /* Date.swift */; };
@@ -59,6 +60,7 @@
 		5C63AB81252787FD00814CF7 /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 		5C6E4F372534A135008CCA3C /* ASR.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASR.swift; sourceTree = "<group>"; };
 		5C6E4F3A2534A142008CCA3C /* TTS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TTS.swift; sourceTree = "<group>"; };
+		5C6E4F412535C718008CCA3C /* About.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = About.swift; sourceTree = "<group>"; };
 		5C78C48025349A5A001BC8C1 /* Podfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; };
 		5C86F17A252C7DEF0029CE50 /* DialogTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogTextField.swift; sourceTree = "<group>"; };
 		5C86F17E252C99F70029CE50 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
@@ -117,6 +119,7 @@
 			children = (
 				5C99C69525271C2A0056260F /* SettingsVC.swift */,
 				5C99C6A025273AD70056260F /* AssistantVC.swift */,
+				5C6E4F412535C718008CCA3C /* About.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -377,6 +380,7 @@
 				5C63AB82252787FD00814CF7 /* UIView.swift in Sources */,
 				5C63AB7C2527834500814CF7 /* DialogVC.swift in Sources */,
 				5CB7DB54252F00AB0016AEA7 /* EndPointType.swift in Sources */,
+				5C6E4F422535C718008CCA3C /* About.swift in Sources */,
 				5C63AB7F2527851C00814CF7 /* DialogCell.swift in Sources */,
 				5C99C6A8252752CD0056260F /* ViewController.swift in Sources */,
 				5C86F17B252C7DEF0029CE50 /* DialogTextField.swift in Sources */,

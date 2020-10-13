@@ -136,6 +136,8 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                 alert.addAction(cancel)
                 alert.addAction(delete)
                 self.present(alert, animated: true, completion: nil)
+            case .aboutApp:
+                AboutVC.show(parent: self.navigationController!)
             default:
                 break
             }
