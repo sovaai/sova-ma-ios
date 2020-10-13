@@ -7,16 +7,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "E20B88A2-A9F7-497A-AEE2-C00B770765FE"
+            uuid = "7E27919A-71FF-4B11-9CE5-DF1AC2DB65A5"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "SOVA/Managers/AudioManager.swift"
+            filePath = "SOVA/Managers/TTS.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "112"
-            endingLineNumber = "112"
-            landmarkName = "finishRecording(is:)"
+            startingLineNumber = "75"
+            endingLineNumber = "75"
+            landmarkName = "getSpeech(text:_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

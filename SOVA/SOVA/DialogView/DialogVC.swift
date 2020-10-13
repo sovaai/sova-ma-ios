@@ -50,6 +50,10 @@ class DialogViewController: UIViewController{
     
     private var audioManager = AudioManager()
     
+    private var isSpeechRegonizing: Bool = false
+    
+    
+    private var animateComplition: (() -> ())? = nil
     //-----------------------------------------------------------------------------------------------------------------------------
     //MARK: TEST
     //-----------------------------------------------------------------------------------------------------------------------------
@@ -89,7 +93,7 @@ class DialogViewController: UIViewController{
     }
     
     @objc func playAudio(){
-        self.audioManager.playAudio()
+        self.audioManager.playSpeech(with: "Hellow")
     }
     
     //-----------------------------------------------------------------------------------------------------------------------------
@@ -120,6 +124,7 @@ class DialogViewController: UIViewController{
         
         self.collectionView.register(DialogCell.self, forCellWithReuseIdentifier: "dialogCell")
         self.collectionView.register(SimpleCell.self, forCellWithReuseIdentifier: "header")
+        self.collectionView.register(AnimationCell.self, forCellWithReuseIdentifier: "animationCell")
         
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
@@ -223,27 +228,35 @@ class DialogViewController: UIViewController{
 
 extension DialogViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return self.messageList.count
+        return self.messageList.count + (self.isSpeechRegonizing ? 1 : 0)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.messageList[section].messages.count + 1
+        guard section != 0 || !self.isSpeechRegonizing else { return 1}
+        return self.messageList[section - (self.isSpeechRegonizing ? 1 : 0)].messages.count + 1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard self.messageList[indexPath.section].messages.count != indexPath.row else {
+        guard indexPath.section != 0 || !self.isSpeechRegonizing else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "animationCell", for: indexPath) as? AnimationCell  else { return UICollectionViewCell() }
+            cell.startAnimate()
+            self.animateComplition = { cell.stopAnimate() }
+            return cell
+        }
+        let section = indexPath.section - (self.isSpeechRegonizing ? 1 : 0)
+        guard self.messageList[section].messages.count != indexPath.row else {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "header", for: indexPath) as? SimpleCell  else { return UICollectionViewCell() }
-            cell.title = self.dateFormatter.string(from: self.messageList[indexPath.section].date)
+            cell.title = self.dateFormatter.string(from: self.messageList[section].date)
             return cell
         }
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "dialogCell", for: indexPath) as? DialogCell else { return UICollectionViewCell() }
-        let messages = self.messageList[indexPath.section].messages
+        let messages = self.messageList[section].messages
         let message = messages[messages.count - indexPath.row - 1]
         let indent: CGFloat
         if indexPath.row >= messages.count - 1{
             indent = 8
         }else{
-            let beforeMessageSender = self.messageList[indexPath.section].messages[indexPath.row + 1].sender
+            let beforeMessageSender = self.messageList[section].messages[indexPath.row + 1].sender
             indent = beforeMessageSender == message.sender ? 8 : 24
         }
         cell.configure(with: message, and: indent)
@@ -282,6 +295,14 @@ extension DialogViewController: AudioDelegate{
     
     func recording(state: AudioState) {
         self.recordingBtn.audioState(is: state)
+    }
+    
+    func speechState(state: AudioState) {
+        DispatchQueue.main.async {
+            self.isSpeechRegonizing = state == .start
+            guard state == .stop else { return }
+            self.animateComplition?()
+        }
     }
 }
 

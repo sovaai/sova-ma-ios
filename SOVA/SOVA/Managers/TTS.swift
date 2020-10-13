@@ -52,6 +52,7 @@ class TTS {
         let response_code: Int
         let response: [Responce]
     }
+    
     // все остальные поля не нужны.
     // API плавающий, поля меняются, появляются/исчезают.
     // берем только то что нужно
@@ -66,25 +67,13 @@ class TTS {
             headers: [.authorization("Basic YW5uOjVDdWlIT0NTMlpRMQ==")],
             requestModifier: { $0.timeoutInterval = 5 }
         )
-//        .responseJSON(queue: DispatchQueue(label: "speech", qos: .utility)) { responce in
-//            Log.e("Responce:", responce.value.debugDescription)
-//            if let error = responce.error {
-//                Log.e("ERROR:", error)
-//                completion(nil)
-//            } else {
-//                let resp = ResponceMain(responce.value)
-//                completion(Data(base64Encoded: resp.response_audio))
-//            }
-//        }
         .responseDecodable(of: ResponceMain.self, queue: DispatchQueue(label: "speech", qos: .utility)) { responce in
-//            Log.e("Responce:", responce)
-            if let error = responce.error {
-//                Log.e("ERROR:", error)
-                completion(nil)
-            } else if let resp = responce.value,
-                      let audio = resp.response.first?.response_audio {
-                completion(Data(base64Encoded: audio))
-            }
+            guard responce.error == nil else { completion(nil); return }
+            
+            guard let resp = responce.value,
+                  let audio = resp.response.first?.response_audio  else { return }
+            completion(Data(base64Encoded: audio))
+            
         }
     }
 }
