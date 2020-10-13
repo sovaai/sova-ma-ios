@@ -168,7 +168,7 @@ enum UserSettings: String, CaseIterable{
     case language = "Язык приложения"
     case theme = "Темная тема"
     case cashe = "Очистить историю и кеш"
-    case logs = "ОТправить логи"
+    case logs = "Отправить логи"
     case support = "Техподдержка"
     case aboutApp = "О приложении"
     

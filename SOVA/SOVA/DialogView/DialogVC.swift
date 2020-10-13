@@ -112,12 +112,13 @@ class DialogViewController: UIViewController{
         
         self.view.backgroundColor = .white
         
+        self.view.addSubview(self.recordingBtn)
         self.view.addSubview(self.collectionView)
         self.collectionView.translatesAutoresizingMaskIntoConstraints = false
-        self.collectionView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
+        self.collectionView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
         self.collectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
         self.collectionView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
-        self.bottomCollectionView = self.collectionView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+        self.bottomCollectionView = self.collectionView.bottomAnchor.constraint(equalTo: self.recordingBtn.topAnchor, constant: 10)
         self.bottomCollectionView?.isActive = true
         
         self.collectionView.backgroundColor = .white
@@ -133,7 +134,7 @@ class DialogViewController: UIViewController{
         
         self.collectionView.contentInset = UIEdgeInsets(top: 124, left: 0, bottom: 0, right: 0)
         
-        self.view.addSubview(self.recordingBtn)
+        
         self.recordingBtn.translatesAutoresizingMaskIntoConstraints = false
         self.recordingBtn.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         self.recordingBtn.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -16).isActive = true
@@ -196,7 +197,7 @@ class DialogViewController: UIViewController{
     @objc func keyboardAction(sender: Any){
         guard !(sender is UITapGestureRecognizer) else {
             self.textField.keyboardIsHide = true
-            self.bottomCollectionView?.constant = 0
+            self.bottomCollectionView?.constant = 10
             self.textFieldBottomConstant?.constant = 0
             return
         }
@@ -213,7 +214,7 @@ class DialogViewController: UIViewController{
         let keyboardRectangle = keyboardFrame.cgRectValue
         let keyboardHeight = keyboardRectangle.height
         self.textFieldBottomConstant?.constant = -keyboardHeight
-        self.bottomCollectionView?.constant = -keyboardHeight
+        self.bottomCollectionView?.constant = -keyboardHeight + 90
         
     }
     
