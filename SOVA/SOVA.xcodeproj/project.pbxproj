@@ -154,6 +154,7 @@
 				5C99C6A7252752CD0056260F /* ViewController.swift */,
 				5C63AB81252787FD00814CF7 /* UIView.swift */,
 				5C34DAD2252B00BE00501F8A /* UIColor.swift */,
+				5C4B3CFE252DB50500BDDB35 /* UIImage.swift */,
 				5CC7E01F2530A60300AED403 /* Data.swift */,
 				5C86F17E252C99F70029CE50 /* Date.swift */,
 				5CC7E01B25305ED000AED403 /* Array.swift */,
@@ -167,7 +168,6 @@
 				5C99C6A4252744740056260F /* AssistantModel.swift */,
 				5C34DAD5252B11B200501F8A /* Message.swift */,
 				5C99C69D252721CD0056260F /* Cashes.swift */,
-				5C4B3CFE252DB50500BDDB35 /* UIImage.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";

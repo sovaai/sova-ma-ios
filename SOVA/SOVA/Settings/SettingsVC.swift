@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+import MessageUI
 
 class SettingsVC: UIViewController{
     
@@ -23,6 +23,15 @@ class SettingsVC: UIViewController{
             return DataManager.shared.assistantsId.compactMap{DataManager.shared.get(by: $0)}
         }
     }
+    
+    private var dateFormatter: DateFormatter {
+        let df = DateFormatter()
+        df.dateStyle = .medium
+        df.doesRelativeDateFormatting = true
+        return df
+    }
+    
+    private let mailComposer = MFMailComposeViewController()
     
     private var selectedAssistant = IndexPath(){
         didSet{
@@ -66,6 +75,46 @@ class SettingsVC: UIViewController{
     @objc func changeTheme(){
         
     }
+    
+    func createLog(){
+        let messageListId = DataManager.shared.currentAssistants.messageListId
+        var text: String = ""
+        for id in messageListId{
+            guard let ms: MessageList = DataManager.shared.get(by: id) else { continue }
+            text += self.dateFormatter.string(from: ms.date) + "\n"
+            for message in ms.messages{
+                text += message.sender.rawValue + ":" + message.title + "\n"
+            }
+        }
+        self.write(text: text, to: "Logs")
+    }
+    
+    func write(text: String, to fileNamed: String, folder: String = "SavedFiles") {
+        guard let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first else { return }
+        guard let writePath = NSURL(fileURLWithPath: path).appendingPathComponent(folder) else { return }
+        do{
+            try FileManager.default.createDirectory(atPath: writePath.path, withIntermediateDirectories: true)
+            let file = writePath.appendingPathComponent(fileNamed + ".txt")
+            try text.write(to: file, atomically: false, encoding: String.Encoding.utf8)
+            self.sendEmail(fileURL: file)
+        }catch{
+            self.showSimpleAlert(title: "Не получается сохранть файл".localized)
+        }
+    }
+    
+    func sendEmail(fileURL: URL) {
+        guard MFMailComposeViewController.canSendMail() else { self.showSimpleAlert(title: "Can send email".localized); return }
+        
+        self.mailComposer.mailComposeDelegate = self
+        self.mailComposer.setSubject("Logs")
+        
+        guard let fileData = try? Data(contentsOf: fileURL) else { self.showSimpleAlert(title: "Не получается выгрузить".localized); return }
+        self.mailComposer.addAttachmentData(fileData, mimeType: ".txt", fileName: "Logs")
+    
+        self.present(mailComposer, animated: true, completion: nil)
+        
+    }
+    
 }
 
 extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
@@ -136,6 +185,8 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                 alert.addAction(cancel)
                 alert.addAction(delete)
                 self.present(alert, animated: true, completion: nil)
+            case .logs:
+                self.createLog()
             case .support:
                 let email = "89196242960@mail.ru" //FIXME: какая почта? 
                 guard let url = URL(string: "mailto:\(email)") else { self.showSimpleAlert(title: "Упс, что-то пошло не так".localized); return}
@@ -166,6 +217,12 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
         let swipeAction = UISwipeActionsConfiguration(actions: [deleteAction,editAction])
         
         return swipeAction
+    }
+}
+
+extension SettingsVC: MFMailComposeViewControllerDelegate{
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        self.mailComposer.dismiss(animated: true, completion: nil)
     }
 }
 
