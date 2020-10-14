@@ -21,7 +21,7 @@ class AudioBtn: UIView{
         self.btn.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -17).isActive = true
         
         self.btn.setImage(UIImage(named: "Menu/recordingbtn")?.allowTinted, for: .normal)
-        self.btn.backgroundColor = .white
+        self.btn.backgroundColor = UIColor(named: "Colors/mainbacground")
         self.btn.tintColor = UIColor(r: 252, g: 45, b: 129, a: 1.0)
         self.btn.layer.cornerRadius = 30
         self.btn.shadowOptions()
@@ -38,8 +38,8 @@ class AudioBtn: UIView{
     }
     
     public func audioState(is state: AudioState){
-        self.btn.backgroundColor = state == .start ? UIColor(r: 252, g: 45, b: 129, a: 1.0) : .white
-        self.btn.tintColor = state == .start ? .white : UIColor(r: 252, g: 45, b: 129, a: 1.0)
+        self.btn.backgroundColor = state == .start ? UIColor(r: 252, g: 45, b: 129, a: 1.0) :  UIColor(named: "Colors/mainbacground")
+        self.btn.tintColor = state == .start ?  UIColor(named: "Colors/mainbacground") : UIColor(r: 252, g: 45, b: 129, a: 1.0)
         guard state == .stop else { self.startAnimate(); return }
         self.subviews.forEach{
             guard !($0 is UIButton) else { return }

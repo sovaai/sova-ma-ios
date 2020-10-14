@@ -28,7 +28,7 @@ class AssistantVC: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.backgroundColor = .white
+        self.view.backgroundColor =  UIColor(named: "Colors/mainbacground")
         self.title = self.model != nil ? "Редактирование асисента".localized : "Новый ассистент".localized
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Сохранить".localized, style: .plain, target: self, action: #selector(self.saveModel))
         
@@ -41,6 +41,7 @@ class AssistantVC: UIViewController{
         
         self.tableView.register(TextFieldCell.self, forCellReuseIdentifier: "TextFieldCell")
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: self.cellId)
+        self.tableView.backgroundColor = UIColor(named: "Colors/settingsBackground")
         
         self.tableView.allowsSelection = false
         
@@ -117,6 +118,7 @@ extension AssistantVC: UITableViewDataSource, UITableViewDelegate{
             cell.textLabel?.textAlignment = .center
             cell.textLabel?.text = "Удалить".localized
             cell.textLabel?.textColor = .red
+            cell.backgroundColor = UIColor(named: "Colors/settingsCell")
             return cell
         }
         
@@ -128,12 +130,14 @@ extension AssistantVC: UITableViewDataSource, UITableViewDelegate{
             switchView.tag = indexPath.row // for detect which row switch Changed
             switchView.addTarget(self, action: #selector(self.activationWordOn), for: .valueChanged)
             cell.accessoryView = switchView
+            cell.backgroundColor = UIColor(named: "Colors/settingsCell")
             return cell
         }
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "TextFieldCell") as?  TextFieldCell
         cell?.delegate = self
         cell?.configure(with: AssistantStateField.allCases[indexPath.section], model: self.model)
+        cell?.backgroundColor = UIColor(named: "Colors/settingsCell")
         
         return cell ?? UITableViewCell()
     }

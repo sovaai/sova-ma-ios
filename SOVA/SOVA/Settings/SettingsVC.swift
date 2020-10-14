@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+import MessageUI
 
 class SettingsVC: UIViewController{
     
@@ -23,6 +23,15 @@ class SettingsVC: UIViewController{
             return DataManager.shared.assistantsId.compactMap{DataManager.shared.get(by: $0)}
         }
     }
+    
+    private var dateFormatter: DateFormatter {
+        let df = DateFormatter()
+        df.dateStyle = .medium
+        df.doesRelativeDateFormatting = true
+        return df
+    }
+    
+    private let mailComposer = MFMailComposeViewController()
     
     private var selectedAssistant = IndexPath(){
         didSet{
@@ -41,7 +50,7 @@ class SettingsVC: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.backgroundColor = .white
+        self.view.backgroundColor =  UIColor(named: "Colors/settingsBackground")
         
         self.title = "Настройки".localized
         self.navigationController?.navigationBar.isHidden = false
@@ -49,6 +58,8 @@ class SettingsVC: UIViewController{
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: self.cellId)
         self.tableView.delegate = self
         self.tableView.dataSource = self
+        
+        self.tableView.backgroundColor = UIColor(named: "Colors/settingsBackground")
         
         self.view.addSubview(self.tableView)
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -64,8 +75,52 @@ class SettingsVC: UIViewController{
     }
     
     @objc func changeTheme(){
+        let isDarkTheme = UserDefaults.standard.value(forKey: "DarkTheme") as? Bool ?? (UIScreen.main.traitCollection.userInterfaceStyle == .dark)
+
+        UserDefaults.standard.setValue(!isDarkTheme, forKey: "DarkTheme")
+        UIApplication.shared.override(isDarkTheme ? .dark : .light)
+
+    }
+    
+    func createLog(){
+        let messageListId = DataManager.shared.currentAssistants.messageListId
+        var text: String = ""
+        for id in messageListId{
+            guard let ms: MessageList = DataManager.shared.get(by: id) else { continue }
+            text += self.dateFormatter.string(from: ms.date) + "\n"
+            for message in ms.messages{
+                text += message.sender.rawValue + ":" + message.title + "\n"
+            }
+        }
+        self.write(text: text, to: "Logs")
+    }
+    
+    func write(text: String, to fileNamed: String, folder: String = "SavedFiles") {
+        guard let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first else { return }
+        guard let writePath = NSURL(fileURLWithPath: path).appendingPathComponent(folder) else { return }
+        do{
+            try FileManager.default.createDirectory(atPath: writePath.path, withIntermediateDirectories: true)
+            let file = writePath.appendingPathComponent(fileNamed + ".txt")
+            try text.write(to: file, atomically: false, encoding: String.Encoding.utf8)
+            self.sendEmail(fileURL: file)
+        }catch{
+            self.showSimpleAlert(title: "Не получается сохранть файл".localized)
+        }
+    }
+    
+    func sendEmail(fileURL: URL) {
+        guard MFMailComposeViewController.canSendMail() else { self.showSimpleAlert(title: "Can send email".localized); return }
+        
+        self.mailComposer.mailComposeDelegate = self
+        self.mailComposer.setSubject("Logs")
+        
+        guard let fileData = try? Data(contentsOf: fileURL) else { self.showSimpleAlert(title: "Не получается выгрузить".localized); return }
+        self.mailComposer.addAttachmentData(fileData, mimeType: ".txt", fileName: "Logs")
+    
+        self.present(mailComposer, animated: true, completion: nil)
         
     }
+    
 }
 
 extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
@@ -84,6 +139,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .value1, reuseIdentifier: self.cellId)
         cell.selectionStyle = .none
+        cell.backgroundColor = UIColor(named: "Colors/settingsCell")
         //Configure cell with bots
         guard indexPath.section == 1 else {
             guard indexPath.row < self.model.count  else {
@@ -110,7 +166,8 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
         
         guard indexPath.row != 1 else {
             let switchView = UISwitch(frame: .zero)
-            switchView.setOn(false, animated: true)
+            let isDarkTheme = UserDefaults.standard.value(forKey: "DarkTheme") as? Bool ?? (UIScreen.main.traitCollection.userInterfaceStyle == .dark)
+            switchView.setOn(isDarkTheme, animated: true)
             switchView.tag = indexPath.row // for detect which row switch Changed
             switchView.addTarget(self, action: #selector(self.changeTheme), for: .valueChanged)
             cell.accessoryView = switchView
@@ -136,6 +193,14 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                 alert.addAction(cancel)
                 alert.addAction(delete)
                 self.present(alert, animated: true, completion: nil)
+            case .logs:
+                self.createLog()
+            case .support:
+                let email = "89196242960@mail.ru" //FIXME: какая почта? 
+                guard let url = URL(string: "mailto:\(email)") else { self.showSimpleAlert(title: "Упс, что-то пошло не так".localized); return}
+                    UIApplication.shared.open(url)
+            case .aboutApp:
+                AboutVC.show(parent: self.navigationController!)
             default:
                 break
             }
@@ -163,12 +228,18 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
     }
 }
 
+extension SettingsVC: MFMailComposeViewControllerDelegate{
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        self.mailComposer.dismiss(animated: true, completion: nil)
+    }
+}
+
 
 enum UserSettings: String, CaseIterable{
     case language = "Язык приложения"
     case theme = "Темная тема"
     case cashe = "Очистить историю и кеш"
-    case logs = "ОТправить логи"
+    case logs = "Отправить логи"
     case support = "Техподдержка"
     case aboutApp = "О приложении"
     

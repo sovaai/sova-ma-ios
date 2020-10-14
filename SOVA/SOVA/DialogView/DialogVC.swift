@@ -50,6 +50,10 @@ class DialogViewController: UIViewController{
     
     private var audioManager = AudioManager()
     
+    private var isSpeechRegonizing: Bool = false
+    
+    
+    private var animateComplition: (() -> ())? = nil
     //-----------------------------------------------------------------------------------------------------------------------------
     //MARK: TEST
     //-----------------------------------------------------------------------------------------------------------------------------
@@ -89,7 +93,7 @@ class DialogViewController: UIViewController{
     }
     
     @objc func playAudio(){
-        self.audioManager.playAudio()
+        self.audioManager.playSpeech(with: "Hellow")
     }
     
     //-----------------------------------------------------------------------------------------------------------------------------
@@ -106,20 +110,22 @@ class DialogViewController: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.backgroundColor = .white
+        self.view.backgroundColor = UIColor(named: "Colors/mainbacground")
         
+        self.view.addSubview(self.recordingBtn)
         self.view.addSubview(self.collectionView)
         self.collectionView.translatesAutoresizingMaskIntoConstraints = false
-        self.collectionView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
+        self.collectionView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
         self.collectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
         self.collectionView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
-        self.bottomCollectionView = self.collectionView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+        self.bottomCollectionView = self.collectionView.bottomAnchor.constraint(equalTo: self.recordingBtn.topAnchor, constant: 10)
         self.bottomCollectionView?.isActive = true
         
-        self.collectionView.backgroundColor = .white
+        self.collectionView.backgroundColor = UIColor(named: "Colors/mainbacground")
         
         self.collectionView.register(DialogCell.self, forCellWithReuseIdentifier: "dialogCell")
         self.collectionView.register(SimpleCell.self, forCellWithReuseIdentifier: "header")
+        self.collectionView.register(AnimationCell.self, forCellWithReuseIdentifier: "animationCell")
         
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
@@ -128,13 +134,13 @@ class DialogViewController: UIViewController{
         
         self.collectionView.contentInset = UIEdgeInsets(top: 124, left: 0, bottom: 0, right: 0)
         
-        self.view.addSubview(self.recordingBtn)
+        
         self.recordingBtn.translatesAutoresizingMaskIntoConstraints = false
         self.recordingBtn.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         self.recordingBtn.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -16).isActive = true
         self.recordingBtn.heightAnchor.constraint(equalToConstant: 94).isActive = true
         self.recordingBtn.widthAnchor.constraint(equalTo: self.recordingBtn.heightAnchor).isActive = true
-        
+                
         self.recordingBtn.addTarget(self, action: #selector(self.recodingAction), for: .touchUpInside)
         self.audioManager.delegate = self
         
@@ -145,7 +151,8 @@ class DialogViewController: UIViewController{
         self.settingsBtn.heightAnchor.constraint(equalToConstant: 24).isActive = true
         self.settingsBtn.widthAnchor.constraint(equalTo: self.settingsBtn.heightAnchor).isActive = true
         
-        self.settingsBtn.setImage(UIImage(named: "Menu/settingsBtn"), for: .normal)
+        self.settingsBtn.setImage(UIImage(named: "Menu/settingsBtn")?.allowTinted, for: .normal)
+        self.settingsBtn.tintColor = UIColor(named: "Colors/textColor")
         self.settingsBtn.addTarget(self, action: #selector(self.openSettings), for: .touchUpInside)
         
         self.view.addSubview(self.keyboardBtn)
@@ -155,7 +162,8 @@ class DialogViewController: UIViewController{
         self.keyboardBtn.heightAnchor.constraint(equalToConstant: 24).isActive = true
         self.keyboardBtn.widthAnchor.constraint(equalTo: self.keyboardBtn.heightAnchor).isActive = true
         
-        self.keyboardBtn.setImage(UIImage(named: "Menu/keyboardBtn"), for: [])
+        self.keyboardBtn.tintColor = UIColor(named: "Colors/textColor")
+        self.keyboardBtn.setImage(UIImage(named: "Menu/keyboardBtn")?.allowTinted, for: [])
         self.keyboardBtn.addTarget(self, action: #selector(self.keyboardAction(sender:)), for: .touchUpInside)
         
         NotificationCenter.default.addObserver(
@@ -191,7 +199,7 @@ class DialogViewController: UIViewController{
     @objc func keyboardAction(sender: Any){
         guard !(sender is UITapGestureRecognizer) else {
             self.textField.keyboardIsHide = true
-            self.bottomCollectionView?.constant = 0
+            self.bottomCollectionView?.constant = 10
             self.textFieldBottomConstant?.constant = 0
             return
         }
@@ -208,7 +216,7 @@ class DialogViewController: UIViewController{
         let keyboardRectangle = keyboardFrame.cgRectValue
         let keyboardHeight = keyboardRectangle.height
         self.textFieldBottomConstant?.constant = -keyboardHeight
-        self.bottomCollectionView?.constant = -keyboardHeight
+        self.bottomCollectionView?.constant = -keyboardHeight + 90
         
     }
     
@@ -223,27 +231,35 @@ class DialogViewController: UIViewController{
 
 extension DialogViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return self.messageList.count
+        return self.messageList.count + (self.isSpeechRegonizing ? 1 : 0)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.messageList[section].messages.count + 1
+        guard section != 0 || !self.isSpeechRegonizing else { return 1}
+        return self.messageList[section - (self.isSpeechRegonizing ? 1 : 0)].messages.count + 1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard self.messageList[indexPath.section].messages.count != indexPath.row else {
+        guard indexPath.section != 0 || !self.isSpeechRegonizing else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "animationCell", for: indexPath) as? AnimationCell  else { return UICollectionViewCell() }
+            cell.startAnimate()
+            self.animateComplition = { cell.stopAnimate() }
+            return cell
+        }
+        let section = indexPath.section - (self.isSpeechRegonizing ? 1 : 0)
+        guard self.messageList[section].messages.count != indexPath.row else {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "header", for: indexPath) as? SimpleCell  else { return UICollectionViewCell() }
-            cell.title = self.dateFormatter.string(from: self.messageList[indexPath.section].date)
+            cell.title = self.dateFormatter.string(from: self.messageList[section].date)
             return cell
         }
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "dialogCell", for: indexPath) as? DialogCell else { return UICollectionViewCell() }
-        let messages = self.messageList[indexPath.section].messages
+        let messages = self.messageList[section].messages
         let message = messages[messages.count - indexPath.row - 1]
         let indent: CGFloat
         if indexPath.row >= messages.count - 1{
             indent = 8
         }else{
-            let beforeMessageSender = self.messageList[indexPath.section].messages[indexPath.row + 1].sender
+            let beforeMessageSender = self.messageList[section].messages[indexPath.row + 1].sender
             indent = beforeMessageSender == message.sender ? 8 : 24
         }
         cell.configure(with: message, and: indent)
@@ -282,6 +298,14 @@ extension DialogViewController: AudioDelegate{
     
     func recording(state: AudioState) {
         self.recordingBtn.audioState(is: state)
+    }
+    
+    func speechState(state: AudioState) {
+        DispatchQueue.main.async {
+            self.isSpeechRegonizing = state == .start
+            guard state == .stop else { return }
+            self.animateComplition?()
+        }
     }
 }
 

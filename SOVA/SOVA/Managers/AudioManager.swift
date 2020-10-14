@@ -6,11 +6,13 @@
 //
 
 import AVFoundation
+import AVKit
 
 protocol AudioDelegate: class, AVAudioRecorderDelegate{
     func audioErrorMessage(title: String)
     func allowAlert() // “Разрешите доступ к микрофону”
     func recording(state : AudioState)
+    func speechState(state: AudioState)
 }
 
 extension AudioDelegate{
@@ -22,7 +24,7 @@ extension AudioDelegate{
 
 class AudioManager: NSObject{
     private lazy var recordingSession: AVAudioSession = {
-       let session = AVAudioSession.sharedInstance()
+        let session = AVAudioSession.sharedInstance()
         do{
             try session.setCategory(.playAndRecord)
             try session.setActive(true)
@@ -48,7 +50,9 @@ class AudioManager: NSObject{
     }
     
     public weak var delegate: AudioDelegate? = nil
-        
+    
+    private lazy var speech = TTS()
+    private lazy var speechRecognizer = ASR()
     
     private lazy var url: URL? = {
         let url = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first?.appendingPathComponent("userRecording.m4a")
@@ -91,22 +95,60 @@ class AudioManager: NSObject{
             self.delegate?.audioErrorMessage(title: "Не удалось коректно завершить запись".localized)
             return
         }
-    }
-    
-    public func playAudio(){
-        guard let url = self.url else { self.delegate?.audioErrorMessage(title: "Не удалось воспроизвести аудио по данному пути"); return}
-        do {
-            self.player = try AVAudioPlayer(contentsOf: url)
-            self.player?.prepareToPlay()
-            self.player?.play()
+        do{
+            let data = try Data(contentsOf: self.url!)
+            self.delegate?.speechState(state: .start)
+            self.speechRecognizer.recognize(data: data) { (text, error) in
+                guard error == nil, let text = text else {
+                    self.delegate?.audioErrorMessage(title: "Ошибка распозования текста".localized)
+                    self.delegate?.speechState(state: .stop)
+                    return
+                }
+                let message = Message(title: text, sender: DialogViewController.sender)
+                DataManager.shared.saveNew(message)
+                self.sendMessageFromAudio(text: text)
+            }
         }catch{
-            self.delegate?.audioErrorMessage(title: "Не удалось воспроизвести аудио по данному пути")
+            print(error)
         }
     }
+    
+    public func playSpeech(with text: String){
+        self.speech.getSpeech(text: text) { (data) in
+            defer{
+                self.delegate?.speechState(state: .stop)
+                let message = Message(title: text, sender: .assistant)
+                DataManager.shared.saveNew(message)
+            }
+            
+            guard let dataAudio = data else{
+                self.delegate?.audioErrorMessage(title: "Ошибка воспроизведения синтезатора речи")
+                return
+            }
+            do{
+                self.player = try AVAudioPlayer(data: dataAudio)
+            }catch{
+                print(error)
+            }
+            
+            self.player?.play()
+        }
+    }
+    
+    private func sendMessageFromAudio(text: String){
+        NetworkManager.shared.sendMessage(cuid: DataManager.shared.currentAssistants.cuid.string, message: text) { (msg, error) in
+            guard error == nil, let messg = msg else {
+                self.delegate?.audioErrorMessage(title: "Ошибка отправки сообщения".localized)
+                self.delegate?.speechState(state: .stop)
+                return
+            }
+            self.playSpeech(with: messg)
+        }
+    }
+    
 }
 
 enum AudioState{
     case start
     case stop
 }
-

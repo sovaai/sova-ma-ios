@@ -62,9 +62,9 @@ enum WhosMessage: String, Codable{
     
     var backgroundColor: UIColor{
         if self == .user{
-            return UIColor(r: 56, g: 111, b: 254, a: 1)
+            return UIColor(named: "Colors/userColor") ?? UIColor(r: 56, g: 111, b: 254, a: 1)
         }else{
-            return UIColor(r: 243, g: 243, b: 243, a: 1)
+            return UIColor(named: "Colors/assisTantColor") ?? UIColor(r: 243, g: 243, b: 243, a: 1)
         }
     }
     
@@ -72,23 +72,7 @@ enum WhosMessage: String, Codable{
         if self == .user{
             return UIColor(r: 255, g: 255, b: 255, a: 1)
         }else{
-            return UIColor(r: 15, g: 31, b: 72, a: 1)
-        }
-    }
-    
-    var roundCorner: UIRectCorner{
-        if self == .user{
-            return [.topLeft,.topRight, .bottomLeft]
-        }else{
-            return [.topLeft,.topRight, .bottomRight]
-        }
-    }
-    
-    var rightAngle: UIRectCorner{
-        if self == .user{
-            return [.bottomRight]
-        }else{
-            return [.bottomLeft]
+            return UIColor(named: "Colors/assistantTextColor") ?? UIColor(r: 15, g: 31, b: 72, a: 1)
         }
     }
 }
