@@ -15,7 +15,7 @@ extension UIView{
         layer.mask = mask
     }
     
-    func shadowOptions(with color: UIColor = .black, opacity: Float = 0.1, shadowOffSet: CGSize = .zero, shadowRadius: CGFloat = 5.0){
+    func shadowOptions(with color: UIColor = (UIColor(named: "Colors/textColor") ?? .black), opacity: Float = 0.1, shadowOffSet: CGSize = .zero, shadowRadius: CGFloat = 5.0){
         self.layer.shadowColor = color.cgColor
         self.layer.shadowOpacity = opacity
         self.layer.shadowOffset = shadowOffSet
@@ -34,3 +34,23 @@ extension UITextView {
     }
 
 }
+
+public extension UIApplication {
+
+     func override(_ userInterfaceStyle: UIUserInterfaceStyle) {
+         if supportsMultipleScenes {
+             for connectedScene in connectedScenes {
+                 if let scene = connectedScene as? UIWindowScene {
+                     for window in scene.windows {
+                          window.overrideUserInterfaceStyle = userInterfaceStyle
+                     }
+                 }
+             }
+         }
+         else {
+             for window in windows {
+                 window.overrideUserInterfaceStyle = userInterfaceStyle
+             }
+         }
+     }
+ }

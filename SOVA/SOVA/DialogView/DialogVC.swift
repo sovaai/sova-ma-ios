@@ -110,7 +110,7 @@ class DialogViewController: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.backgroundColor = .white
+        self.view.backgroundColor = UIColor(named: "Colors/mainbacground")
         
         self.view.addSubview(self.recordingBtn)
         self.view.addSubview(self.collectionView)
@@ -121,7 +121,7 @@ class DialogViewController: UIViewController{
         self.bottomCollectionView = self.collectionView.bottomAnchor.constraint(equalTo: self.recordingBtn.topAnchor, constant: 10)
         self.bottomCollectionView?.isActive = true
         
-        self.collectionView.backgroundColor = .white
+        self.collectionView.backgroundColor = UIColor(named: "Colors/mainbacground")
         
         self.collectionView.register(DialogCell.self, forCellWithReuseIdentifier: "dialogCell")
         self.collectionView.register(SimpleCell.self, forCellWithReuseIdentifier: "header")
@@ -140,7 +140,7 @@ class DialogViewController: UIViewController{
         self.recordingBtn.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -16).isActive = true
         self.recordingBtn.heightAnchor.constraint(equalToConstant: 94).isActive = true
         self.recordingBtn.widthAnchor.constraint(equalTo: self.recordingBtn.heightAnchor).isActive = true
-        
+                
         self.recordingBtn.addTarget(self, action: #selector(self.recodingAction), for: .touchUpInside)
         self.audioManager.delegate = self
         
@@ -151,7 +151,8 @@ class DialogViewController: UIViewController{
         self.settingsBtn.heightAnchor.constraint(equalToConstant: 24).isActive = true
         self.settingsBtn.widthAnchor.constraint(equalTo: self.settingsBtn.heightAnchor).isActive = true
         
-        self.settingsBtn.setImage(UIImage(named: "Menu/settingsBtn"), for: .normal)
+        self.settingsBtn.setImage(UIImage(named: "Menu/settingsBtn")?.allowTinted, for: .normal)
+        self.settingsBtn.tintColor = UIColor(named: "Colors/textColor")
         self.settingsBtn.addTarget(self, action: #selector(self.openSettings), for: .touchUpInside)
         
         self.view.addSubview(self.keyboardBtn)
@@ -161,7 +162,8 @@ class DialogViewController: UIViewController{
         self.keyboardBtn.heightAnchor.constraint(equalToConstant: 24).isActive = true
         self.keyboardBtn.widthAnchor.constraint(equalTo: self.keyboardBtn.heightAnchor).isActive = true
         
-        self.keyboardBtn.setImage(UIImage(named: "Menu/keyboardBtn"), for: [])
+        self.keyboardBtn.tintColor = UIColor(named: "Colors/textColor")
+        self.keyboardBtn.setImage(UIImage(named: "Menu/keyboardBtn")?.allowTinted, for: [])
         self.keyboardBtn.addTarget(self, action: #selector(self.keyboardAction(sender:)), for: .touchUpInside)
         
         NotificationCenter.default.addObserver(

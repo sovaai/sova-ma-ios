@@ -19,7 +19,7 @@ class AboutVC: UIViewController{
         super.viewDidLoad()
         self.title = "О приложении".localized
         
-        self.view.backgroundColor = .white
+        self.view.backgroundColor =  UIColor(named: "Colors/mainbacground")
         
         self.view.addSubview(self.label)
         self.label.translatesAutoresizingMaskIntoConstraints = false
@@ -28,7 +28,7 @@ class AboutVC: UIViewController{
         
         self.label.text = "SOVA Mobile App".localized
         self.label.font = UIFont.systemFont(ofSize: 15)
-        self.label.textColor = .black
+        self.label.textColor = UIColor(named: "Colors/textColor")
         
         self.view.addSubview(self.textFiled)
         self.textFiled.translatesAutoresizingMaskIntoConstraints = false
@@ -38,8 +38,9 @@ class AboutVC: UIViewController{
         self.textFiled.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         
         self.textFiled.font = UIFont.systemFont(ofSize: 15)
-        self.textFiled.textColor = .black
+        self.textFiled.textColor = UIColor(named: "Colors/textColor")
         self.textFiled.allowsEditingTextAttributes = false
+        self.textFiled.backgroundColor = UIColor(named: "Colors/mainbacground")
         
         self.textFiled.text = "Для современного мира сплочённость команды профессионалов требует определения и уточнения кластеризации усилий. Для современного мира укрепление и развитие внутренней структуры позволяет оценить значение новых принципов формирования материально-технической и кадровой базы. Имеется спорная точка зрения, гласящая примерно следующее: диаграммы связей объективно рассмотрены соответствующими инстанциями. Прежде всего, социально-экономическое развитие предоставляет широкие возможности для поэтапного и.".localized
     }

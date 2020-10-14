@@ -50,7 +50,7 @@ class SettingsVC: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.backgroundColor = .white
+        self.view.backgroundColor =  UIColor(named: "Colors/settingsBackground")
         
         self.title = "Настройки".localized
         self.navigationController?.navigationBar.isHidden = false
@@ -58,6 +58,8 @@ class SettingsVC: UIViewController{
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: self.cellId)
         self.tableView.delegate = self
         self.tableView.dataSource = self
+        
+        self.tableView.backgroundColor = UIColor(named: "Colors/settingsBackground")
         
         self.view.addSubview(self.tableView)
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -73,7 +75,11 @@ class SettingsVC: UIViewController{
     }
     
     @objc func changeTheme(){
-        
+        let isDarkTheme = UserDefaults.standard.value(forKey: "DarkTheme") as? Bool ?? (UIScreen.main.traitCollection.userInterfaceStyle == .dark)
+
+        UserDefaults.standard.setValue(!isDarkTheme, forKey: "DarkTheme")
+        UIApplication.shared.override(isDarkTheme ? .dark : .light)
+
     }
     
     func createLog(){
@@ -133,6 +139,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .value1, reuseIdentifier: self.cellId)
         cell.selectionStyle = .none
+        cell.backgroundColor = UIColor(named: "Colors/settingsCell")
         //Configure cell with bots
         guard indexPath.section == 1 else {
             guard indexPath.row < self.model.count  else {
@@ -159,7 +166,8 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
         
         guard indexPath.row != 1 else {
             let switchView = UISwitch(frame: .zero)
-            switchView.setOn(false, animated: true)
+            let isDarkTheme = UserDefaults.standard.value(forKey: "DarkTheme") as? Bool ?? (UIScreen.main.traitCollection.userInterfaceStyle == .dark)
+            switchView.setOn(isDarkTheme, animated: true)
             switchView.tag = indexPath.row // for detect which row switch Changed
             switchView.addTarget(self, action: #selector(self.changeTheme), for: .valueChanged)
             cell.accessoryView = switchView

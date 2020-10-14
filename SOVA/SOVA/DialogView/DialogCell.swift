@@ -23,7 +23,7 @@ class DialogCell: UICollectionViewCell{
     lazy var messageBackground: UIView = {
         let backgroundView = UIView()
         backgroundView.translatesAutoresizingMaskIntoConstraints = false
-        backgroundView.backgroundColor = #colorLiteral(red: 0, green: 0.5898008943, blue: 1, alpha: 1)
+        backgroundView.backgroundColor = UIColor(named: "Colors/userColor")
         backgroundView.layer.cornerRadius = 17
         return backgroundView
     }()
@@ -157,7 +157,7 @@ class AnimationCell: UICollectionViewCell {
         let heightConstrintCentr = self.centralView.heightAnchor.constraint(equalToConstant: 4)
         heightConstrintCentr.isActive = true
         self.heightConstrints.append(heightConstrintCentr)
-        self.centralView.backgroundColor = .red//UIColor.rgba(15, 31, 72, 0.4)
+        self.centralView.backgroundColor = UIColor.rgba(15, 31, 72, 0.4)
         
         self.addSubview(self.rightView)
         self.rightView.translatesAutoresizingMaskIntoConstraints = false
@@ -241,7 +241,7 @@ extension DialogViewController{
             self.label.translatesAutoresizingMaskIntoConstraints = false
             self.label.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
             self.label.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-            self.label.textColor = UIColor(r: 21, g: 31, b: 73, a: 0.3)
+            self.label.textColor = UIColor(named: "Colors/headerColor") ?? UIColor(r: 21, g: 31, b: 73, a: 0.3)
             self.label.font = UIFont.systemFont(ofSize: 12)
         }
         

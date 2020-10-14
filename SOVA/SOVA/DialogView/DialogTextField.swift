@@ -27,7 +27,7 @@ class DialogTextField: UIView{
     override init(frame: CGRect) {
         super.init(frame: .zero)
         
-        self.backgroundColor = .white
+        self.backgroundColor = UIColor(named: "Colors/mainbacground")
         
         self.addSubview(self.sendMessageBtn)
         self.sendMessageBtn.translatesAutoresizingMaskIntoConstraints = false
@@ -49,7 +49,7 @@ class DialogTextField: UIView{
         self.textView.rightAnchor.constraint(equalTo: self.sendMessageBtn.leftAnchor, constant: -17).isActive = true
         
         self.textView.text = "Напишите сообщение…"
-        self.textView.textColor = UIColor(r: 15, g: 31, b: 72, a: 0.2)
+        self.textView.textColor = UIColor(named: "Colors/headerColor") ?? UIColor(r: 15, g: 31, b: 72, a: 0.2)
         self.textView.font = UIFont.systemFont(ofSize: 16)
         self.textView.isEditable = true
         
@@ -76,7 +76,7 @@ class DialogTextField: UIView{
     @objc func sendMesg(){
         guard let text = self.textView.text else { return }
         self.textView.text = "Напишите сообщение…"
-        self.textView.textColor = UIColor(r: 15, g: 31, b: 72, a: 0.2)
+        self.textView.textColor = UIColor(named: "Colors/headerColor") ?? UIColor(r: 15, g: 31, b: 72, a: 0.2)
         self.sendMessageBtn.isHidden = true
         let message = Message(title: text, sender: DialogViewController.sender)
         DataManager.shared.saveNew(message)
@@ -96,13 +96,13 @@ class DialogTextField: UIView{
 extension DialogTextField: UITextViewDelegate{
         
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        if textView.textColor == UIColor(r: 15, g: 31, b: 72, a: 0.2) {
+        if textView.textColor == (UIColor(named: "Colors/headerColor") ?? UIColor(r: 15, g: 31, b: 72, a: 0.2)) {
             textView.text = nil
-            textView.textColor = UIColor.black
+            textView.textColor = UIColor(named: "Colors/textColor") ?? UIColor.black
             self.sendMessageBtn.isHidden = false
         }else if range == NSRange(location: 0, length: 1) , text.isEmpty {
             textView.text = "Напишите сообщение…"
-            textView.textColor = UIColor(r: 15, g: 31, b: 72, a: 0.2)
+            textView.textColor = UIColor(named: "Colors/headerColor") ?? UIColor(r: 15, g: 31, b: 72, a: 0.2)
             self.sendMessageBtn.isHidden = true
             return false
         }
