@@ -112,8 +112,9 @@ class DialogViewController: UIViewController{
         
         self.view.backgroundColor = UIColor(named: "Colors/mainbacground")
         
-        self.view.addSubview(self.recordingBtn)
+        
         self.view.addSubview(self.collectionView)
+        self.view.addSubview(self.recordingBtn)
         self.collectionView.translatesAutoresizingMaskIntoConstraints = false
         self.collectionView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
         self.collectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
