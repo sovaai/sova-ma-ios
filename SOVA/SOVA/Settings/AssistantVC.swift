@@ -214,7 +214,7 @@ class TextFieldCell: UITableViewCell, UITextFieldDelegate, UITextPasteDelegate{
     }
     
     @objc func past(){
-        guard self.textField.text == "https://" || self.textField.text == "Введите токен".localized else { return }
+        guard textField.text == AssistantStateField.url.defaultValue || textField.text == AssistantStateField.token.defaultValue.localized else { return }
         let alert = UIAlertController(title: "Вставить из буфера".localized, message: nil, preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Вставить".localized, style: .default, handler: { (_) in
             self.textField.text = UIPasteboard.general.string
@@ -247,7 +247,7 @@ class TextFieldCell: UITableViewCell, UITextFieldDelegate, UITextPasteDelegate{
         self.textField.becomeFirstResponder()
         self.textField.selectAll(nil)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            guard self.textField.text == "https://" || self.textField.text == "Введите токен".localized else { return }
+            guard self.textField.text == "https://" || self.textField.text == "Введите uuid".localized else { return }
             let alert = UIAlertController(title: "Вставить из буфера".localized, message: nil, preferredStyle: .actionSheet)
             alert.addAction(UIAlertAction(title: "Вставить".localized, style: .default, handler: { (_) in
                 self.textField.text = UIPasteboard.general.string
@@ -288,7 +288,7 @@ class TextFieldCell: UITableViewCell, UITextFieldDelegate, UITextPasteDelegate{
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        guard textField.text == "https://" || textField.text == "Введите токен".localized else { return  }
+        guard textField.text == AssistantStateField.url.defaultValue || textField.text == AssistantStateField.token.defaultValue.localized else { return  }
         guard !self.isAlreadyEdit else { return }
         self.startEditing()
     }
@@ -343,7 +343,7 @@ enum AssistantStateField: Int, CaseIterable {
         case .url:
             return "https://"
         case .token:
-            return "Введите токен".localized
+            return "Введите uuid".localized
         default:
             return ""
         }

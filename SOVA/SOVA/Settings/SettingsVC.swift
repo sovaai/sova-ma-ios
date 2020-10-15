@@ -31,7 +31,7 @@ class SettingsVC: UIViewController{
         return df
     }
     
-    private let mailComposer = MFMailComposeViewController()
+    private var mailComposer = MFMailComposeViewController()
     
     private var selectedAssistant = IndexPath(){
         didSet{
@@ -50,16 +50,17 @@ class SettingsVC: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.backgroundColor =  UIColor(named: "Colors/settingsBackground")
+        self.view.backgroundColor =  UIColor(named: "Colors/mainbacground")
         
         self.title = "Настройки".localized
         self.navigationController?.navigationBar.isHidden = false
         
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: self.cellId)
-        self.tableView.delegate = self
-        self.tableView.dataSource = self
         
-        self.tableView.backgroundColor = UIColor(named: "Colors/settingsBackground")
+        let isDarkTheme = UserDefaults.standard.value(forKey: "DarkTheme") as? Bool ?? (UIScreen.main.traitCollection.userInterfaceStyle == .dark)
+        if isDarkTheme{
+            self.tableView.backgroundColor = UIColor(named: "Colors/settingsBackground")
+        }
         
         self.view.addSubview(self.tableView)
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -71,7 +72,9 @@ class SettingsVC: UIViewController{
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.tableView.reloadData()
+//        self.tableView.reloadData()
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
     }
     
     @objc func changeTheme(){
@@ -110,7 +113,7 @@ class SettingsVC: UIViewController{
     
     func sendEmail(fileURL: URL) {
         guard MFMailComposeViewController.canSendMail() else { self.showSimpleAlert(title: "Can send email".localized); return }
-        
+        self.mailComposer = MFMailComposeViewController()
         self.mailComposer.mailComposeDelegate = self
         self.mailComposer.setSubject("Logs")
         
@@ -196,7 +199,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
             case .logs:
                 self.createLog()
             case .support:
-                let email = "89196242960@mail.ru" //FIXME: какая почта? 
+                let email = "support@sova.ai" 
                 guard let url = URL(string: "mailto:\(email)") else { self.showSimpleAlert(title: "Упс, что-то пошло не так".localized); return}
                     UIApplication.shared.open(url)
             case .aboutApp:
@@ -232,6 +235,9 @@ extension SettingsVC: MFMailComposeViewControllerDelegate{
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         self.mailComposer.dismiss(animated: true, completion: nil)
     }
+    
+    
+    
 }
 
 

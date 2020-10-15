@@ -307,12 +307,12 @@ class InteractiveLinkLabel: UILabel {
         let locationOfTouchInTextContainer = CGPoint(x: locationOfTouchInLabel.x -  2, y: locationOfTouchInLabel.y - 2)
         
         // work out which character was tapped
-        let characterIndex = layoutManager.characterIndex(for: locationOfTouchInTextContainer, in: textContainer, fractionOfDistanceBetweenInsertionPoints: nil)
+        var characterIndex = layoutManager.characterIndex(for: locationOfTouchInTextContainer, in: textContainer, fractionOfDistanceBetweenInsertionPoints: nil)
         
         let attributeName = NSAttributedString.Key.link
-        
+        characterIndex += characterIndex == 0 ? 0 : -1
         // work out how many characters are in the string up to and including the line tapped, to ensure we are not off the end of the character string
-        let lineTapped = Int(ceil(locationOfTouchInLabel.y / font.lineHeight)) - 1
+        let lineTapped = Int(ceil(locationOfTouchInLabel.y / font.lineHeight)) 
         let rightMostPointInLineTapped = CGPoint(x: bounds.size.width, y: font.lineHeight * CGFloat(lineTapped))
         let charsInLineTapped = layoutManager.characterIndex(for: rightMostPointInLineTapped, in: textContainer, fractionOfDistanceBetweenInsertionPoints: nil)
         
