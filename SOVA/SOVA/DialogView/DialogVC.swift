@@ -133,7 +133,7 @@ class DialogViewController: UIViewController{
         
         self.collectionView.transform = CGAffineTransform.init(rotationAngle: (-(CGFloat)(Double.pi)))
         
-        self.collectionView.contentInset = UIEdgeInsets(top: 124, left: 0, bottom: 0, right: 0)
+//        self.collectionView.contentInset = UIEdgeInsets(top: 124, left: 0, bottom: 0, right: 0)
         
         
         self.recordingBtn.translatesAutoresizingMaskIntoConstraints = false
@@ -217,7 +217,7 @@ class DialogViewController: UIViewController{
         let keyboardRectangle = keyboardFrame.cgRectValue
         let keyboardHeight = keyboardRectangle.height
         self.textFieldBottomConstant?.constant = -keyboardHeight
-        self.bottomCollectionView?.constant = -keyboardHeight + 90
+        self.bottomCollectionView?.constant = -keyboardHeight + 50
         
     }
     
