@@ -8,6 +8,7 @@
 import UIKit
 import Foundation
 
+//MARK: DialogCell
 class DialogCell: UICollectionViewCell{
     
     private(set) lazy var messageLabel: InteractiveLinkLabel = {
@@ -104,6 +105,7 @@ class DialogCell: UICollectionViewCell{
 }
 
 
+//MARK: AnimationCell
 class AnimationCell: UICollectionViewCell {
     
     private lazy var centralView = UIView()
@@ -114,17 +116,29 @@ class AnimationCell: UICollectionViewCell {
     
     private var backgroundImageView = UIImageView()
     
+    public var isAnimateStart: Bool = false{
+        didSet{
+            guard oldValue != self.isAnimateStart else { return }
+            if isAnimateStart{
+                self.startAnimate()
+            }else{
+                self.stopAnimate()
+            }
+        }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.heightAnchor.constraint(equalToConstant: 44).isActive = true
         
         self.addSubview(self.backgroundImageView)
         self.backgroundImageView.translatesAutoresizingMaskIntoConstraints = false
-        self.backgroundImageView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        self.backgroundImageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 8).isActive = true
         self.backgroundImageView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
         self.backgroundImageView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 16).isActive = true
         self.backgroundImageView.widthAnchor.constraint(equalToConstant: 60).isActive = true
-        self.backgroundImageView.image = UIImage(named: "Menu/Bundle")
+        self.backgroundImageView.image = UIImage(named: "Menu/Bundle")?.allowTinted
+        self.backgroundImageView.tintColor = UIColor(named: "Colors/assisTantColor")
         
         self.addSubview(self.centralView)
         self.addSubview(self.leftView)
@@ -135,7 +149,7 @@ class AnimationCell: UICollectionViewCell {
         heightConstrint.isActive = true
         self.heightConstrints.append(heightConstrint)
         self.leftView.rightAnchor.constraint(equalTo: self.centralView.leftAnchor, constant: -3).isActive = true
-        self.leftView.backgroundColor = UIColor.rgba(15, 31, 72, 0.4)
+        self.leftView.backgroundColor = UIColor(named: "Colors/assistantTextColor")?.withAlphaComponent(0.4)
         
         self.centralView.translatesAutoresizingMaskIntoConstraints = false
         self.centralView.centerYAnchor.constraint(equalTo: self.backgroundImageView.centerYAnchor).isActive = true
@@ -144,7 +158,7 @@ class AnimationCell: UICollectionViewCell {
         let heightConstrintCentr = self.centralView.heightAnchor.constraint(equalToConstant: 4)
         heightConstrintCentr.isActive = true
         self.heightConstrints.append(heightConstrintCentr)
-        self.centralView.backgroundColor = UIColor.rgba(15, 31, 72, 0.4)
+        self.centralView.backgroundColor = UIColor(named: "Colors/assistantTextColor")?.withAlphaComponent(0.4)
         
         self.addSubview(self.rightView)
         self.rightView.translatesAutoresizingMaskIntoConstraints = false
@@ -157,7 +171,7 @@ class AnimationCell: UICollectionViewCell {
         
         self.rightView.leftAnchor.constraint(equalTo: self.centralView.rightAnchor, constant: 3).isActive = true
         
-        self.rightView.backgroundColor = UIColor.rgba(15, 31, 72, 0.4)
+        self.rightView.backgroundColor = UIColor(named: "Colors/assistantTextColor")?.withAlphaComponent(0.4)
     }
     
     required init?(coder: NSCoder) {
@@ -172,30 +186,31 @@ class AnimationCell: UICollectionViewCell {
         self.rightView.layer.cornerRadius = self.rightView.frame.height / 2
     }
     
-    func stopAnimate(){
+    private func stopAnimate(){
         self.layer.removeAllAnimations()
     }
     
-    func startAnimate(){
+    private func startAnimate(){
+        guard self.isAnimateStart else { return }
         UIView.animate(withDuration: 0.5) {
             self.heightConstrints[2].constant = 4
             self.heightConstrints[0].constant = 5
-            self.rightView.backgroundColor = UIColor.rgba(15, 31, 72, 0.4)
-            self.leftView.backgroundColor = UIColor.rgba(15, 31, 72, 1)
+            self.rightView.backgroundColor = UIColor(named: "Colors/assistantTextColor")?.withAlphaComponent(0.4)
+            self.leftView.backgroundColor = UIColor(named: "Colors/assistantTextColor")
             self.layoutIfNeeded()
         } completion: { (_) in
             UIView.animate(withDuration: 0.5) {
                 self.heightConstrints[0].constant = 4
                 self.heightConstrints[1].constant = 5
-                self.leftView.backgroundColor = UIColor.rgba(15, 31, 72, 0.4)
-                self.centralView.backgroundColor = UIColor.rgba(15, 31, 72, 1)
+                self.leftView.backgroundColor = UIColor(named: "Colors/assistantTextColor")?.withAlphaComponent(0.4)
+                self.centralView.backgroundColor = UIColor(named: "Colors/assistantTextColor")
                 self.layoutIfNeeded()
             } completion: { (_) in
                 UIView.animate(withDuration: 0.5) {
                     self.heightConstrints[1].constant = 4
                     self.heightConstrints[2].constant = 5
-                    self.centralView.backgroundColor = UIColor.rgba(15, 31, 72, 0.4)
-                    self.rightView.backgroundColor = UIColor.rgba(15, 31, 72, 1)
+                    self.centralView.backgroundColor = UIColor(named: "Colors/assistantTextColor")?.withAlphaComponent(0.4)
+                    self.rightView.backgroundColor = UIColor(named: "Colors/assistantTextColor")
                     self.layoutIfNeeded()
                 } completion: { (_) in
                     self.startAnimate()
@@ -206,6 +221,7 @@ class AnimationCell: UICollectionViewCell {
     
 }
 
+//MARK: SimpleCell
 extension DialogViewController{
     class SimpleCell: UICollectionViewCell{
         

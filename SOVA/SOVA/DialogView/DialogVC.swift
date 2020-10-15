@@ -243,8 +243,8 @@ extension DialogViewController: UICollectionViewDelegate, UICollectionViewDataSo
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard indexPath.section != 0 || !self.isSpeechRegonizing else {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "animationCell", for: indexPath) as? AnimationCell  else { return UICollectionViewCell() }
-            cell.startAnimate()
-            self.animateComplition = { cell.stopAnimate() }
+            cell.isAnimateStart = true
+            self.animateComplition = { cell.isAnimateStart = false }
             return cell
         }
         let section = indexPath.section - (self.isSpeechRegonizing ? 1 : 0)
@@ -304,6 +304,7 @@ extension DialogViewController: AudioDelegate{
     func speechState(state: AudioState) {
         DispatchQueue.main.async {
             self.isSpeechRegonizing = state == .start
+            self.collectionView.reloadData()
             guard state == .stop else { return }
             self.animateComplition?()
         }
