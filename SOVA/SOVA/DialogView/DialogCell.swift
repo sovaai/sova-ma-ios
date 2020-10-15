@@ -10,11 +10,10 @@ import Foundation
 
 class DialogCell: UICollectionViewCell{
     
-    private(set) lazy var messageLabel: UILabel = {
-        let label = UILabel()
+    private(set) lazy var messageLabel: InteractiveLinkLabel = {
+        let label = InteractiveLinkLabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
-        label.font = UIFont.systemFont(ofSize: 15)
         
         return label
     }()
@@ -90,20 +89,8 @@ class DialogCell: UICollectionViewCell{
         self.messageBackground.backgroundColor = self.sender.backgroundColor
         self.bottomLine.backgroundColor = self.sender.backgroundColor
         
-        self.messageLabel.textColor = self.sender.messageColor
-        self.messageLabel.text = message.title.html2String
+        self.messageLabel.message = message
         
-        guard let startIndex = message.title.range(of: "<a href=\"") else{ return }
-        var string = message.title[startIndex.upperBound...]
-        guard let endIndex = string.firstIndex(where: {$0 == "\""}) else { return }
-        string = string[...endIndex]
-        
-        while string.first != "h" {
-            string.removeFirst()
-        }
-        string.removeLast()
-        guard let url = URL(string: String(string)) else { return }
-        self.url = url
     }
     
     required init?(coder: NSCoder) {
@@ -213,12 +200,10 @@ class AnimationCell: UICollectionViewCell {
                 } completion: { (_) in
                     self.startAnimate()
                 }
-
             }
-
         }
-
     }
+    
 }
 
 extension DialogViewController{
@@ -253,5 +238,97 @@ extension DialogViewController{
             super.layoutSubviews()
             self.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
         }
+    }
+}
+
+class InteractiveLinkLabel: UILabel {
+    
+    required init(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)!
+        self.configure()
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.configure()
+    }
+    
+    private func configure() {
+        self.isUserInteractionEnabled = true
+    }
+    
+    public var message: Message = Message(title: ""){
+        didSet{
+            self.textColor = message.sender.messageColor
+            
+            guard self.message.title != self.message.title.html2String else {self.text = message.title.html2String; return }
+            
+            let muttableAttributedString = NSMutableAttributedString(string: message.title.html2String, attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 15), NSAttributedString.Key.foregroundColor: message.sender.messageColor])
+            
+            
+            guard let att = message.title.html2AttributedString else { self.text = message.title.html2String; return }
+            let wholeRange = NSRange((att.string.startIndex...), in: att.string)
+            att.enumerateAttribute(.link, in: wholeRange, options: []) { (value, range, pointee) in
+                guard value != nil else { return }
+                muttableAttributedString.addAttributes([NSAttributedString.Key.foregroundColor : UIColor.blue], range: range)
+                self.attributedText = muttableAttributedString
+            }
+            
+            self.attributedText = muttableAttributedString
+            
+        }
+    }
+    
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        guard self.text != nil else { return false}
+        
+        let superBool = super.point(inside: point, with: event)
+        
+        // Configure NSTextContainer
+        let textContainer = NSTextContainer(size: self.frame.size)
+        textContainer.lineFragmentPadding = 0.0
+        textContainer.lineBreakMode = lineBreakMode
+        textContainer.maximumNumberOfLines = self.numberOfLines
+        
+        // Configure NSLayoutManager and add the text container
+        let layoutManager = NSLayoutManager()
+        layoutManager.addTextContainer(textContainer)
+        
+        guard let attributedText = attributedText else {return false}
+        
+        // Configure NSTextStorage and apply the layout manager
+        let textStorage = NSTextStorage(attributedString: attributedText)
+        textStorage.addAttribute(NSAttributedString.Key.font, value: font!, range: NSMakeRange(0, attributedText.length))
+        textStorage.addLayoutManager(layoutManager)
+        
+        // get the tapped character location
+        let locationOfTouchInLabel = point
+        
+        let locationOfTouchInTextContainer = CGPoint(x: locationOfTouchInLabel.x -  2, y: locationOfTouchInLabel.y - 2)
+        
+        // work out which character was tapped
+        let characterIndex = layoutManager.characterIndex(for: locationOfTouchInTextContainer, in: textContainer, fractionOfDistanceBetweenInsertionPoints: nil)
+        
+        let attributeName = NSAttributedString.Key.link
+        
+        // work out how many characters are in the string up to and including the line tapped, to ensure we are not off the end of the character string
+        let lineTapped = Int(ceil(locationOfTouchInLabel.y / font.lineHeight)) - 1
+        let rightMostPointInLineTapped = CGPoint(x: bounds.size.width, y: font.lineHeight * CGFloat(lineTapped))
+        let charsInLineTapped = layoutManager.characterIndex(for: rightMostPointInLineTapped, in: textContainer, fractionOfDistanceBetweenInsertionPoints: nil)
+        
+        guard characterIndex < charsInLineTapped else {return false}
+        
+        let attributeValue = self.message.title.html2AttributedString!.attribute(attributeName, at: characterIndex - 1, effectiveRange: nil)
+        
+        guard let value = attributeValue as? URL  else { return false }
+        var fakeURLString = value.absoluteString
+        guard let range = fakeURLString.range(of: "http") else{ return false}
+        let startIndex = range.lowerBound
+        fakeURLString.removeSubrange(..<startIndex)
+        guard let url = URL(string: fakeURLString) else { return false}
+        UIApplication.shared.open(url)
+        
+        return superBool
+        
     }
 }

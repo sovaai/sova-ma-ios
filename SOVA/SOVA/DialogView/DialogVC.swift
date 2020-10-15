@@ -137,7 +137,7 @@ class DialogViewController: UIViewController{
         
         self.recordingBtn.translatesAutoresizingMaskIntoConstraints = false
         self.recordingBtn.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        self.recordingBtn.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -16).isActive = true
+        self.recordingBtn.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: 15).isActive = true
         self.recordingBtn.heightAnchor.constraint(equalToConstant: 94).isActive = true
         self.recordingBtn.widthAnchor.constraint(equalTo: self.recordingBtn.heightAnchor).isActive = true
                 

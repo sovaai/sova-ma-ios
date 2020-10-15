@@ -180,9 +180,9 @@ extension AssistantVC: TextFieldCellDelegate{
 }
 
 
-class TextFieldCell: UITableViewCell, UITextFieldDelegate{
+class TextFieldCell: UITableViewCell, UITextFieldDelegate, UITextPasteDelegate{
     
-    private var textField = UITextField()
+    private var textField = InfoTextField()
     
     private(set) var type: AssistantStateField!
     
@@ -204,6 +204,28 @@ class TextFieldCell: UITableViewCell, UITextFieldDelegate{
         
         self.textField.clearButtonMode = .whileEditing
         self.textField.delegate = self
+        
+        self.textField.autocorrectionType = .no
+        self.textField.pasteDelegate = self
+
+        let longTap = UILongPressGestureRecognizer(target: self, action: #selector(self.past))
+        self.textField.addGestureRecognizer(longTap)
+        
+    }
+    
+    @objc func past(){
+        guard self.textField.text == "https://" || self.textField.text == "Введите токен".localized else { return }
+        let alert = UIAlertController(title: "Вставить из буфера".localized, message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "Вставить".localized, style: .default, handler: { (_) in
+            self.textField.text = UIPasteboard.general.string
+            self.delegate?.nextEditingFiled(type: self.type)
+        }))
+        alert.addAction(UIAlertAction(title: "Нет спасибо", style: .cancel, handler: { (_) in
+            self.textField.selectAll(nil)
+        }))
+        self.isAlreadyEdit = true
+        DialogViewController.shared.present(alert, animated: true)
+        self.textField.resignFirstResponder()
     }
     
     public func configure(with type: AssistantStateField, model:  Assitant?){
@@ -256,11 +278,12 @@ class TextFieldCell: UITableViewCell, UITextFieldDelegate{
             guard UUID(uuidString: text) == nil else { return true }
         default:
             guard isEmpty else {
-                self.backgroundColor = .clear
+                self.layer.borderWidth = 0
                 return true
             }
         }
-        self.backgroundColor = .red
+        self.layer.borderColor = UIColor.red.withAlphaComponent(0.8).cgColor
+        self.layer.borderWidth = 1
         return true
     }
     
@@ -276,6 +299,14 @@ class TextFieldCell: UITableViewCell, UITextFieldDelegate{
         self.endEditing(true)
         self.delegate?.nextEditingFiled(type: self.type)
         return false
+    }
+    
+    override func canPaste(_ itemProviders: [NSItemProvider]) -> Bool {
+        return true
+    }
+    
+    func textPasteConfigurationSupporting(_ textPasteConfigurationSupporting: UITextPasteConfigurationSupporting, shouldAnimatePasteOf attributedString: NSAttributedString, to textRange: UITextRange) -> Bool {
+        return true
     }
     
     required init?(coder: NSCoder) {
@@ -299,7 +330,7 @@ enum AssistantStateField: Int, CaseIterable {
         case .url:
             return .URL
         case .token:
-            return .numberPad
+            return .default
         default:
             return .default
         }
@@ -325,5 +356,24 @@ enum AssistantStateField: Int, CaseIterable {
         case .token: return "ТОКЕН".localized
         case .word: return "Активационное слово".localized
         }
+    }
+}
+
+class InfoTextField: UITextField{
+    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+        if  action == #selector(self.paste(_:))
+               ||
+               action == #selector(self.copy(_:))
+               ||
+               action == #selector(self.cut(_:))
+               ||
+               action == #selector(self.select(_:))
+               ||
+               action == #selector(self.selectAll(_:))
+
+           {
+               return false
+           }
+           return super.canPerformAction(action, withSender: sender)
     }
 }
