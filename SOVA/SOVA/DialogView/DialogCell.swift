@@ -334,7 +334,7 @@ class InteractiveLinkLabel: UILabel {
         
         guard characterIndex < charsInLineTapped else {return false}
         
-        let attributeValue = self.message.title.html2AttributedString!.attribute(attributeName, at: characterIndex - 1, effectiveRange: nil)
+        let attributeValue = self.message.title.html2AttributedString!.attribute(attributeName, at: characterIndex, effectiveRange: nil)
         
         guard let value = attributeValue as? URL  else { return false }
         var fakeURLString = value.absoluteString
