@@ -182,7 +182,7 @@ extension AssistantVC: TextFieldCellDelegate{
 
 class TextFieldCell: UITableViewCell, UITextFieldDelegate, UITextPasteDelegate{
     
-    private var textField = InfoTextField()
+    private var textField = UITextField()
     
     private(set) var type: AssistantStateField!
     
@@ -214,11 +214,11 @@ class TextFieldCell: UITableViewCell, UITextFieldDelegate, UITextPasteDelegate{
     }
     
     @objc func past(){
-        guard textField.text == AssistantStateField.url.defaultValue || textField.text == AssistantStateField.token.defaultValue.localized else { return }
         let alert = UIAlertController(title: "Вставить из буфера".localized, message: nil, preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Вставить".localized, style: .default, handler: { (_) in
             self.textField.text = UIPasteboard.general.string
             self.delegate?.nextEditingFiled(type: self.type)
+            _ = self.textFieldShouldEndEditing(self.textField)
         }))
         alert.addAction(UIAlertAction(title: "Нет спасибо", style: .cancel, handler: { (_) in
             self.textField.selectAll(nil)
@@ -273,9 +273,15 @@ class TextFieldCell: UITableViewCell, UITextFieldDelegate, UITextPasteDelegate{
         let isEmpty = textField.text?.isEmpty ?? true
         switch self.type {
         case .url:
-            guard URL(string: text) == nil else { return true}
+            guard URL(string: text) == nil && text != self.type.defaultValue else {
+                self.layer.borderWidth = 0
+                return true
+            }
         case .token:
-            guard UUID(uuidString: text) == nil else { return true }
+            guard UUID(uuidString: text) == nil && text != self.type.defaultValue else {
+                self.layer.borderWidth = 0
+                return true
+            }
         default:
             guard isEmpty else {
                 self.layer.borderWidth = 0
@@ -299,14 +305,6 @@ class TextFieldCell: UITableViewCell, UITextFieldDelegate, UITextPasteDelegate{
         self.endEditing(true)
         self.delegate?.nextEditingFiled(type: self.type)
         return false
-    }
-    
-    override func canPaste(_ itemProviders: [NSItemProvider]) -> Bool {
-        return true
-    }
-    
-    func textPasteConfigurationSupporting(_ textPasteConfigurationSupporting: UITextPasteConfigurationSupporting, shouldAnimatePasteOf attributedString: NSAttributedString, to textRange: UITextRange) -> Bool {
-        return true
     }
     
     required init?(coder: NSCoder) {
@@ -356,24 +354,5 @@ enum AssistantStateField: Int, CaseIterable {
         case .token: return "ТОКЕН".localized
         case .word: return "Активационное слово".localized
         }
-    }
-}
-
-class InfoTextField: UITextField{
-    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
-        if  action == #selector(self.paste(_:))
-               ||
-               action == #selector(self.copy(_:))
-               ||
-               action == #selector(self.cut(_:))
-               ||
-               action == #selector(self.select(_:))
-               ||
-               action == #selector(self.selectAll(_:))
-
-           {
-               return false
-           }
-           return super.canPerformAction(action, withSender: sender)
     }
 }
