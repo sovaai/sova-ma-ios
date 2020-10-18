@@ -52,6 +52,7 @@ class DialogTextField: UIView{
         self.textView.textColor = UIColor(named: "Colors/headerColor") ?? UIColor(r: 15, g: 31, b: 72, a: 0.2)
         self.textView.font = UIFont.systemFont(ofSize: 16)
         self.textView.isEditable = true
+        self.textView.backgroundColor = UIColor(named: "Colors/mainbacground")
         
         self.textView.delegate = self
         
@@ -74,7 +75,7 @@ class DialogTextField: UIView{
     }
         
     @objc func sendMesg(){
-        guard let text = self.textView.text else { return }
+        guard let text = self.textView.text, !text.isEmpty else { return }
         self.textView.text = "Напишите сообщение…"
         self.textView.textColor = UIColor(named: "Colors/headerColor") ?? UIColor(r: 15, g: 31, b: 72, a: 0.2)
         self.sendMessageBtn.isHidden = true
@@ -106,7 +107,7 @@ extension DialogTextField: UITextViewDelegate{
             self.sendMessageBtn.isHidden = true
             return false
         }
-        guard text == "\n" else { return true }
+        guard !text.isEmpty, text == "\n" else { return true }
         self.sendMesg()
         return false
     }

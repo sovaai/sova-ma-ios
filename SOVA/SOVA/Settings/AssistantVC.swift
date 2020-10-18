@@ -56,6 +56,24 @@ class AssistantVC: UIViewController{
         self.tableView.dataSource = self
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        let cells = self.tableView.visibleCells
+        for cell in cells where cell is TextFieldCell{
+            let cell = cell as? TextFieldCell
+            switch cell?.type {
+            case .name:
+                cell?.value = "Элиза"
+            case .token:
+                cell?.value = "ae83a6cc-8c54-4123-9fbe-1a4c9a8720d2"
+            case .url:
+                cell?.value = "https://biz.nanosemantics.ru/api/bat/nkd/json/"
+            default:
+                return
+            }
+        }
+    }
+    
     @objc func activationWordOn(){
         
     }
@@ -179,14 +197,14 @@ extension AssistantVC: TextFieldCellDelegate{
     }
 }
 
-
-class TextFieldCell: UITableViewCell, UITextFieldDelegate{
+//MARK: TextFieldCell
+class TextFieldCell: UITableViewCell, UITextFieldDelegate, UITextPasteDelegate{
     
     private var textField = UITextField()
     
     private(set) var type: AssistantStateField!
     
-    private(set) var value: String = ""
+     var value: String = ""
     
     private var isAlreadyEdit: Bool = false
     
@@ -204,6 +222,28 @@ class TextFieldCell: UITableViewCell, UITextFieldDelegate{
         
         self.textField.clearButtonMode = .whileEditing
         self.textField.delegate = self
+        
+        self.textField.autocorrectionType = .no
+        self.textField.pasteDelegate = self
+
+        let longTap = UILongPressGestureRecognizer(target: self, action: #selector(self.past))
+        self.textField.addGestureRecognizer(longTap)
+        
+    }
+    
+    @objc func past(){
+        let alert = UIAlertController(title: "Вставить из буфера".localized, message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "Вставить".localized, style: .default, handler: { (_) in
+            self.textField.text = UIPasteboard.general.string
+            self.delegate?.nextEditingFiled(type: self.type)
+            _ = self.textFieldShouldEndEditing(self.textField)
+        }))
+        alert.addAction(UIAlertAction(title: "Нет спасибо", style: .cancel, handler: { (_) in
+            self.textField.selectAll(nil)
+        }))
+        self.isAlreadyEdit = true
+        DialogViewController.shared.present(alert, animated: true)
+        self.textField.resignFirstResponder()
     }
     
     public func configure(with type: AssistantStateField, model:  Assitant?){
@@ -225,7 +265,7 @@ class TextFieldCell: UITableViewCell, UITextFieldDelegate{
         self.textField.becomeFirstResponder()
         self.textField.selectAll(nil)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            guard self.textField.text == "https://" || self.textField.text == "Введите токен".localized else { return }
+            guard self.textField.text == "https://" || self.textField.text == "Введите uuid".localized else { return }
             let alert = UIAlertController(title: "Вставить из буфера".localized, message: nil, preferredStyle: .actionSheet)
             alert.addAction(UIAlertAction(title: "Вставить".localized, style: .default, handler: { (_) in
                 self.textField.text = UIPasteboard.general.string
@@ -251,21 +291,28 @@ class TextFieldCell: UITableViewCell, UITextFieldDelegate{
         let isEmpty = textField.text?.isEmpty ?? true
         switch self.type {
         case .url:
-            guard URL(string: text) == nil else { return true}
+            guard URL(string: text) == nil && text != self.type.defaultValue else {
+                self.layer.borderWidth = 0
+                return true
+            }
         case .token:
-            guard UUID(uuidString: text) == nil else { return true }
+            guard UUID(uuidString: text) == nil && text != self.type.defaultValue else {
+                self.layer.borderWidth = 0
+                return true
+            }
         default:
             guard isEmpty else {
-                self.backgroundColor = .clear
+                self.layer.borderWidth = 0
                 return true
             }
         }
-        self.backgroundColor = .red
+        self.layer.borderColor = UIColor.red.withAlphaComponent(0.8).cgColor
+        self.layer.borderWidth = 1
         return true
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        guard textField.text == "https://" || textField.text == "Введите токен".localized else { return  }
+        guard textField.text == AssistantStateField.url.defaultValue || textField.text == AssistantStateField.token.defaultValue.localized else { return  }
         guard !self.isAlreadyEdit else { return }
         self.startEditing()
     }
@@ -299,7 +346,7 @@ enum AssistantStateField: Int, CaseIterable {
         case .url:
             return .URL
         case .token:
-            return .numberPad
+            return .default
         default:
             return .default
         }
@@ -312,7 +359,7 @@ enum AssistantStateField: Int, CaseIterable {
         case .url:
             return "https://"
         case .token:
-            return "Введите токен".localized
+            return "Введите uuid".localized
         default:
             return ""
         }

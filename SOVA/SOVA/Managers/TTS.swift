@@ -58,7 +58,7 @@ class TTS {
     // берем только то что нужно
     
     public func getSpeech(text: String, _ completion: @escaping(Data?) -> Void ) {
-        let request = Request(model_type: "Belenkaya", text: text, options: "")
+        let request = Request(model_type: "Belenkaya", text: text.html2String, options: "")
 
         AF.upload(
             multipartFormData: request.multipartFormData,

@@ -14,6 +14,7 @@
 		5C4B3CFC252DA6E600BDDB35 /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4B3CFB252DA6E600BDDB35 /* AudioManager.swift */; };
 		5C4B3CFF252DB50500BDDB35 /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4B3CFE252DB50500BDDB35 /* UIImage.swift */; };
 		5C4B3D05252DD4F800BDDB35 /* AudioBtn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4B3D04252DD4F800BDDB35 /* AudioBtn.swift */; };
+		5C542421253C8C9300A35E18 /* BtnsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C542420253C8C9300A35E18 /* BtnsCollectionView.swift */; };
 		5C63AB7C2527834500814CF7 /* DialogVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C63AB7B2527834500814CF7 /* DialogVC.swift */; };
 		5C63AB7F2527851C00814CF7 /* DialogCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C63AB7E2527851C00814CF7 /* DialogCell.swift */; };
 		5C63AB82252787FD00814CF7 /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C63AB81252787FD00814CF7 /* UIView.swift */; };
@@ -55,6 +56,7 @@
 		5C4B3CFB252DA6E600BDDB35 /* AudioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
 		5C4B3CFE252DB50500BDDB35 /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
 		5C4B3D04252DD4F800BDDB35 /* AudioBtn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioBtn.swift; sourceTree = "<group>"; };
+		5C542420253C8C9300A35E18 /* BtnsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BtnsCollectionView.swift; sourceTree = "<group>"; };
 		5C63AB7B2527834500814CF7 /* DialogVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogVC.swift; sourceTree = "<group>"; };
 		5C63AB7E2527851C00814CF7 /* DialogCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogCell.swift; sourceTree = "<group>"; };
 		5C63AB81252787FD00814CF7 /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
@@ -142,6 +144,7 @@
 				5C63AB7B2527834500814CF7 /* DialogVC.swift */,
 				5C63AB7E2527851C00814CF7 /* DialogCell.swift */,
 				5C86F17A252C7DEF0029CE50 /* DialogTextField.swift */,
+				5C542420253C8C9300A35E18 /* BtnsCollectionView.swift */,
 				5C4B3D04252DD4F800BDDB35 /* AudioBtn.swift */,
 			);
 			path = DialogView;
@@ -394,6 +397,7 @@
 				5C4B3CFF252DB50500BDDB35 /* UIImage.swift in Sources */,
 				5C6E4F382534A135008CCA3C /* ASR.swift in Sources */,
 				5CB7DB6D252F11C30016AEA7 /* AssistantEndPoint.swift in Sources */,
+				5C542421253C8C9300A35E18 /* BtnsCollectionView.swift in Sources */,
 				5CB7DB71252F138A0016AEA7 /* NetworkManager.swift in Sources */,
 				5C99C69625271C2A0056260F /* SettingsVC.swift in Sources */,
 				5C99C6A125273AD70056260F /* AssistantVC.swift in Sources */,
@@ -541,7 +545,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = 23DGPC99H2;
 				INFOPLIST_FILE = SOVA/project/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -564,7 +568,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = 23DGPC99H2;
 				INFOPLIST_FILE = SOVA/project/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

@@ -9,7 +9,7 @@ import UIKit
 
 class AboutVC: UIViewController{
     private var label = UILabel()
-    private var textFiled = UITextView()
+    private var textFiled = UILabel()
     
     static func show(parent: UINavigationController){
         parent.pushViewController(AboutVC(), animated: true)
@@ -35,12 +35,16 @@ class AboutVC: UIViewController{
         self.textFiled.topAnchor.constraint(equalTo: self.label.bottomAnchor, constant: 16).isActive = true
         self.textFiled.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16).isActive = true
         self.textFiled.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -16).isActive = true
-        self.textFiled.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+//        self.textFiled.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         
         self.textFiled.font = UIFont.systemFont(ofSize: 15)
         self.textFiled.textColor = UIColor(named: "Colors/textColor")
-        self.textFiled.allowsEditingTextAttributes = false
+        self.textFiled.numberOfLines = 0
+        self.textFiled.lineBreakMode = .byWordWrapping
+//        self.textFiled.allowsEditingTextAttributes = false
+//        self.textFiled.isEditable = false
         self.textFiled.backgroundColor = UIColor(named: "Colors/mainbacground")
+        
         
         self.textFiled.text = "Для современного мира сплочённость команды профессионалов требует определения и уточнения кластеризации усилий. Для современного мира укрепление и развитие внутренней структуры позволяет оценить значение новых принципов формирования материально-технической и кадровой базы. Имеется спорная точка зрения, гласящая примерно следующее: диаграммы связей объективно рассмотрены соответствующими инстанциями. Прежде всего, социально-экономическое развитие предоставляет широкие возможности для поэтапного и.".localized
     }

@@ -8,13 +8,13 @@
 import UIKit
 import Foundation
 
+//MARK: DialogCell
 class DialogCell: UICollectionViewCell{
     
-    private(set) lazy var messageLabel: UILabel = {
-        let label = UILabel()
+    private(set) lazy var messageLabel: InteractiveLinkLabel = {
+        let label = InteractiveLinkLabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
-        label.font = UIFont.systemFont(ofSize: 15)
         
         return label
     }()
@@ -90,20 +90,8 @@ class DialogCell: UICollectionViewCell{
         self.messageBackground.backgroundColor = self.sender.backgroundColor
         self.bottomLine.backgroundColor = self.sender.backgroundColor
         
-        self.messageLabel.textColor = self.sender.messageColor
-        self.messageLabel.text = message.title.html2String
+        self.messageLabel.message = message
         
-        guard let startIndex = message.title.range(of: "<a href=\"") else{ return }
-        var string = message.title[startIndex.upperBound...]
-        guard let endIndex = string.firstIndex(where: {$0 == "\""}) else { return }
-        string = string[...endIndex]
-        
-        while string.first != "h" {
-            string.removeFirst()
-        }
-        string.removeLast()
-        guard let url = URL(string: String(string)) else { return }
-        self.url = url
     }
     
     required init?(coder: NSCoder) {
@@ -117,6 +105,7 @@ class DialogCell: UICollectionViewCell{
 }
 
 
+//MARK: AnimationCell
 class AnimationCell: UICollectionViewCell {
     
     private lazy var centralView = UIView()
@@ -127,17 +116,29 @@ class AnimationCell: UICollectionViewCell {
     
     private var backgroundImageView = UIImageView()
     
+    public var isAnimateStart: Bool = false{
+        didSet{
+            guard oldValue != self.isAnimateStart else { return }
+            if isAnimateStart{
+                self.startAnimate()
+            }else{
+                self.stopAnimate()
+            }
+        }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.heightAnchor.constraint(equalToConstant: 44).isActive = true
         
         self.addSubview(self.backgroundImageView)
         self.backgroundImageView.translatesAutoresizingMaskIntoConstraints = false
-        self.backgroundImageView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        self.backgroundImageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 8).isActive = true
         self.backgroundImageView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
         self.backgroundImageView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 16).isActive = true
         self.backgroundImageView.widthAnchor.constraint(equalToConstant: 60).isActive = true
-        self.backgroundImageView.image = UIImage(named: "Menu/Bundle")
+        self.backgroundImageView.image = UIImage(named: "Menu/Bundle")?.allowTinted
+        self.backgroundImageView.tintColor = UIColor(named: "Colors/assisTantColor")
         
         self.addSubview(self.centralView)
         self.addSubview(self.leftView)
@@ -148,7 +149,7 @@ class AnimationCell: UICollectionViewCell {
         heightConstrint.isActive = true
         self.heightConstrints.append(heightConstrint)
         self.leftView.rightAnchor.constraint(equalTo: self.centralView.leftAnchor, constant: -3).isActive = true
-        self.leftView.backgroundColor = UIColor.rgba(15, 31, 72, 0.4)
+        self.leftView.backgroundColor = UIColor(named: "Colors/assistantTextColor")?.withAlphaComponent(0.4)
         
         self.centralView.translatesAutoresizingMaskIntoConstraints = false
         self.centralView.centerYAnchor.constraint(equalTo: self.backgroundImageView.centerYAnchor).isActive = true
@@ -157,7 +158,7 @@ class AnimationCell: UICollectionViewCell {
         let heightConstrintCentr = self.centralView.heightAnchor.constraint(equalToConstant: 4)
         heightConstrintCentr.isActive = true
         self.heightConstrints.append(heightConstrintCentr)
-        self.centralView.backgroundColor = UIColor.rgba(15, 31, 72, 0.4)
+        self.centralView.backgroundColor = UIColor(named: "Colors/assistantTextColor")?.withAlphaComponent(0.4)
         
         self.addSubview(self.rightView)
         self.rightView.translatesAutoresizingMaskIntoConstraints = false
@@ -170,7 +171,7 @@ class AnimationCell: UICollectionViewCell {
         
         self.rightView.leftAnchor.constraint(equalTo: self.centralView.rightAnchor, constant: 3).isActive = true
         
-        self.rightView.backgroundColor = UIColor.rgba(15, 31, 72, 0.4)
+        self.rightView.backgroundColor = UIColor(named: "Colors/assistantTextColor")?.withAlphaComponent(0.4)
     }
     
     required init?(coder: NSCoder) {
@@ -185,42 +186,42 @@ class AnimationCell: UICollectionViewCell {
         self.rightView.layer.cornerRadius = self.rightView.frame.height / 2
     }
     
-    func stopAnimate(){
+    private func stopAnimate(){
         self.layer.removeAllAnimations()
     }
     
-    func startAnimate(){
+    private func startAnimate(){
+        guard self.isAnimateStart else { return }
         UIView.animate(withDuration: 0.5) {
             self.heightConstrints[2].constant = 4
             self.heightConstrints[0].constant = 5
-            self.rightView.backgroundColor = UIColor.rgba(15, 31, 72, 0.4)
-            self.leftView.backgroundColor = UIColor.rgba(15, 31, 72, 1)
+            self.rightView.backgroundColor = UIColor(named: "Colors/assistantTextColor")?.withAlphaComponent(0.4)
+            self.leftView.backgroundColor = UIColor(named: "Colors/assistantTextColor")
             self.layoutIfNeeded()
         } completion: { (_) in
             UIView.animate(withDuration: 0.5) {
                 self.heightConstrints[0].constant = 4
                 self.heightConstrints[1].constant = 5
-                self.leftView.backgroundColor = UIColor.rgba(15, 31, 72, 0.4)
-                self.centralView.backgroundColor = UIColor.rgba(15, 31, 72, 1)
+                self.leftView.backgroundColor = UIColor(named: "Colors/assistantTextColor")?.withAlphaComponent(0.4)
+                self.centralView.backgroundColor = UIColor(named: "Colors/assistantTextColor")
                 self.layoutIfNeeded()
             } completion: { (_) in
                 UIView.animate(withDuration: 0.5) {
                     self.heightConstrints[1].constant = 4
                     self.heightConstrints[2].constant = 5
-                    self.centralView.backgroundColor = UIColor.rgba(15, 31, 72, 0.4)
-                    self.rightView.backgroundColor = UIColor.rgba(15, 31, 72, 1)
+                    self.centralView.backgroundColor = UIColor(named: "Colors/assistantTextColor")?.withAlphaComponent(0.4)
+                    self.rightView.backgroundColor = UIColor(named: "Colors/assistantTextColor")
                     self.layoutIfNeeded()
                 } completion: { (_) in
                     self.startAnimate()
                 }
-
             }
-
         }
-
     }
+    
 }
 
+//MARK: SimpleCell
 extension DialogViewController{
     class SimpleCell: UICollectionViewCell{
         
@@ -253,5 +254,98 @@ extension DialogViewController{
             super.layoutSubviews()
             self.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
         }
+    }
+}
+//MARK: InteractiveLinkLabel
+class InteractiveLinkLabel: UILabel {
+    
+    required init(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)!
+        self.configure()
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.configure()
+    }
+    
+    private func configure() {
+        self.isUserInteractionEnabled = true
+    }
+    
+    public var message: Message = Message(title: ""){
+        didSet{
+            self.textColor = message.sender.messageColor
+            
+            guard self.message.title != self.message.title.html2String else {self.text = message.title.html2String; return }
+            
+            let muttableAttributedString = NSMutableAttributedString(string: message.title.html2String, attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 15), NSAttributedString.Key.foregroundColor: message.sender.messageColor])
+            
+            
+            guard let att = message.title.html2AttributedString else { self.text = message.title.html2String; return }
+            let wholeRange = NSRange((att.string.startIndex...), in: att.string)
+            att.enumerateAttribute(.link, in: wholeRange, options: []) { (value, range, pointee) in
+                guard value != nil else { return }
+                muttableAttributedString.addAttributes([NSAttributedString.Key.foregroundColor : UIColor.blue], range: range)
+                self.attributedText = muttableAttributedString
+            }
+            
+            self.attributedText = muttableAttributedString
+            //<userlink>
+            //</userlink>
+        }
+    }
+    
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        guard self.text != nil else { return false}
+        
+        let superBool = super.point(inside: point, with: event)
+        
+        // Configure NSTextContainer
+        let textContainer = NSTextContainer(size: self.frame.size)
+        textContainer.lineFragmentPadding = 0.0
+        textContainer.lineBreakMode = lineBreakMode
+        textContainer.maximumNumberOfLines = self.numberOfLines
+        
+        // Configure NSLayoutManager and add the text container
+        let layoutManager = NSLayoutManager()
+        layoutManager.addTextContainer(textContainer)
+        
+        guard let attributedText = attributedText else {return false}
+        
+        // Configure NSTextStorage and apply the layout manager
+        let textStorage = NSTextStorage(attributedString: attributedText)
+        textStorage.addAttribute(NSAttributedString.Key.font, value: font!, range: NSMakeRange(0, attributedText.length))
+        textStorage.addLayoutManager(layoutManager)
+        
+        // get the tapped character location
+        let locationOfTouchInLabel = point
+        
+        let locationOfTouchInTextContainer = CGPoint(x: locationOfTouchInLabel.x -  2, y: locationOfTouchInLabel.y - 2)
+        
+        // work out which character was tapped
+        var characterIndex = layoutManager.characterIndex(for: locationOfTouchInTextContainer, in: textContainer, fractionOfDistanceBetweenInsertionPoints: nil)
+        
+        let attributeName = NSAttributedString.Key.link
+        characterIndex += characterIndex == 0 ? 0 : -1
+        // work out how many characters are in the string up to and including the line tapped, to ensure we are not off the end of the character string
+        let lineTapped = Int(ceil(locationOfTouchInLabel.y / font.lineHeight)) 
+        let rightMostPointInLineTapped = CGPoint(x: bounds.size.width, y: font.lineHeight * CGFloat(lineTapped))
+        let charsInLineTapped = layoutManager.characterIndex(for: rightMostPointInLineTapped, in: textContainer, fractionOfDistanceBetweenInsertionPoints: nil)
+        
+        guard characterIndex < charsInLineTapped else {return false}
+        
+        let attributeValue = self.message.title.html2AttributedString!.attribute(attributeName, at: characterIndex, effectiveRange: nil)
+        
+        guard let value = attributeValue as? URL  else { return false }
+        var fakeURLString = value.absoluteString
+        guard let range = fakeURLString.range(of: "http") else{ return false}
+        let startIndex = range.lowerBound
+        fakeURLString.removeSubrange(..<startIndex)
+        guard let url = URL(string: fakeURLString) else { return false}
+        UIApplication.shared.open(url)
+        
+        return superBool
+        
     }
 }

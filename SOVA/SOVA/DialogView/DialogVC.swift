@@ -54,51 +54,8 @@ class DialogViewController: UIViewController{
     
     
     private var animateComplition: (() -> ())? = nil
-    //-----------------------------------------------------------------------------------------------------------------------------
-    //MARK: TEST
-    //-----------------------------------------------------------------------------------------------------------------------------
     
-    lazy var testSwitch: UISwitch = {
-        let sw = UISwitch()
-        self.view.addSubview(sw)
-        sw.translatesAutoresizingMaskIntoConstraints = false
-        sw.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 40).isActive = true
-        sw.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 10).isActive = true
-        sw.addTarget(self, action: #selector(self.selector), for: .allEvents)
-        return sw
-    }()
-    
-    lazy var playAudioBtn: UIButton = {
-        let btn = UIButton()
-        self.view.addSubview(btn)
-        btn.translatesAutoresizingMaskIntoConstraints = false
-        btn.topAnchor.constraint(equalTo: self.testSwitch.bottomAnchor, constant: 5).isActive = true
-        btn.leftAnchor.constraint(equalTo: self.testSwitch.leftAnchor).isActive = true
-        btn.heightAnchor.constraint(equalTo: self.testSwitch.heightAnchor).isActive = true
-        btn.widthAnchor.constraint(equalTo: self.testSwitch.widthAnchor).isActive = true
-        btn.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
-        btn.addTarget(self, action: #selector(self.playAudio), for: .touchUpInside)
-        btn.layer.cornerRadius = self.testSwitch.frame.height / 2
-        return btn
-    }()
-    
-    static var sender: WhosMessage = .user
-    
-    @objc func selector(){
-        guard DialogViewController.sender == .user else {
-            DialogViewController.sender = .user
-            return
-        }
-        DialogViewController.sender = .assistant
-    }
-    
-    @objc func playAudio(){
-        self.audioManager.playSpeech(with: "Hellow")
-    }
-    
-    //-----------------------------------------------------------------------------------------------------------------------------
-    //MARK: TEST
-    //-----------------------------------------------------------------------------------------------------------------------------
+    private var btnsCollectionView = BtnsCollectonView()
     
     private var dateFormatter: DateFormatter {
         let df = DateFormatter()
@@ -110,15 +67,41 @@ class DialogViewController: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.uiSetUp()
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillShow),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(self, selector: #selector(self.reloadData), name: NSNotification.Name.init("MessagesUpdate"), object: nil)
+
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.isHidden = true
+        self.collectionView.scrollToItem(at: IndexPath(row: self.messageList.last?.messages.count ?? 0, section: self.messageList.count), at: .bottom, animated: true)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.init("MessagesUpdate"), object: nil)
+    }
+
+    
+    func uiSetUp(){
         self.view.backgroundColor = UIColor(named: "Colors/mainbacground")
         
-        self.view.addSubview(self.recordingBtn)
         self.view.addSubview(self.collectionView)
+        self.view.addSubview(self.btnsCollectionView)
+        self.view.addSubview(self.recordingBtn)
         self.collectionView.translatesAutoresizingMaskIntoConstraints = false
         self.collectionView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
         self.collectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
         self.collectionView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
-        self.bottomCollectionView = self.collectionView.bottomAnchor.constraint(equalTo: self.recordingBtn.topAnchor, constant: 10)
+        self.bottomCollectionView = self.collectionView.bottomAnchor.constraint(equalTo: self.btnsCollectionView.topAnchor, constant: -16)
         self.bottomCollectionView?.isActive = true
         
         self.collectionView.backgroundColor = UIColor(named: "Colors/mainbacground")
@@ -132,12 +115,18 @@ class DialogViewController: UIViewController{
         
         self.collectionView.transform = CGAffineTransform.init(rotationAngle: (-(CGFloat)(Double.pi)))
         
-        self.collectionView.contentInset = UIEdgeInsets(top: 124, left: 0, bottom: 0, right: 0)
+//        self.collectionView.contentInset = UIEdgeInsets(top: 124, left: 0, bottom: 0, right: 0)
+        
+        self.btnsCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        self.btnsCollectionView.bottomAnchor.constraint(equalTo: self.recordingBtn.topAnchor, constant: 5).isActive = true
+        self.btnsCollectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
+        self.btnsCollectionView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
+        self.btnsCollectionView.heightAnchor.constraint(equalToConstant: 44).isActive = true
         
         
         self.recordingBtn.translatesAutoresizingMaskIntoConstraints = false
         self.recordingBtn.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        self.recordingBtn.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -16).isActive = true
+        self.recordingBtn.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: 15).isActive = true
         self.recordingBtn.heightAnchor.constraint(equalToConstant: 94).isActive = true
         self.recordingBtn.widthAnchor.constraint(equalTo: self.recordingBtn.heightAnchor).isActive = true
                 
@@ -165,30 +154,7 @@ class DialogViewController: UIViewController{
         self.keyboardBtn.tintColor = UIColor(named: "Colors/textColor")
         self.keyboardBtn.setImage(UIImage(named: "Menu/keyboardBtn")?.allowTinted, for: [])
         self.keyboardBtn.addTarget(self, action: #selector(self.keyboardAction(sender:)), for: .touchUpInside)
-        
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillShow),
-            name: UIResponder.keyboardWillShowNotification,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(self, selector: #selector(self.reloadData), name: NSNotification.Name.init("MessagesUpdate"), object: nil)
-        
-        self.testSwitch.isOn = true
-        self.playAudioBtn.setTitle("play", for: [])
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.navigationController?.navigationBar.isHidden = true
-        self.collectionView.scrollToItem(at: IndexPath(row: self.messageList.last?.messages.count ?? 0, section: self.messageList.count), at: .bottom, animated: true)
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.init("MessagesUpdate"), object: nil)
-    }
-
     
     //MARK: Btn actions
     
@@ -216,7 +182,7 @@ class DialogViewController: UIViewController{
         let keyboardRectangle = keyboardFrame.cgRectValue
         let keyboardHeight = keyboardRectangle.height
         self.textFieldBottomConstant?.constant = -keyboardHeight
-        self.bottomCollectionView?.constant = -keyboardHeight + 90
+        self.bottomCollectionView?.constant = -keyboardHeight + 50
         
     }
     
@@ -242,8 +208,8 @@ extension DialogViewController: UICollectionViewDelegate, UICollectionViewDataSo
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard indexPath.section != 0 || !self.isSpeechRegonizing else {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "animationCell", for: indexPath) as? AnimationCell  else { return UICollectionViewCell() }
-            cell.startAnimate()
-            self.animateComplition = { cell.stopAnimate() }
+            cell.isAnimateStart = true
+            self.animateComplition = { cell.isAnimateStart = false }
             return cell
         }
         let section = indexPath.section - (self.isSpeechRegonizing ? 1 : 0)
@@ -303,6 +269,7 @@ extension DialogViewController: AudioDelegate{
     func speechState(state: AudioState) {
         DispatchQueue.main.async {
             self.isSpeechRegonizing = state == .start
+            self.collectionView.reloadData()
             guard state == .stop else { return }
             self.animateComplition?()
         }

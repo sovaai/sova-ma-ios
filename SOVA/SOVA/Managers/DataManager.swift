@@ -25,8 +25,12 @@ class DataManager{
             guard self._currentAssistants == nil else {
                 return self._currentAssistants!
             }
-            guard let assistantId = UserDefaults.standard.value(forKey: "currentAssistantsId") as? String else {
+            guard let assistantId = UserDefaults.standard.value(forKey: "currentAssistantsId") as? String, let assitant: Assitant =  self.get(by: assistantId) else {
                 //поставить дефолтного бота
+                if let first = self.assistantsId.first, let assitant: Assitant = self.get(by: first){
+                    self._currentAssistants = assitant
+                    return self._currentAssistants!
+                }
                 let group = DispatchGroup()
             
                 group.enter()
@@ -38,7 +42,7 @@ class DataManager{
                 
                 return self._currentAssistants!
             }
-            self._currentAssistants = self.get(by: assistantId)
+            self._currentAssistants = assitant
             return self._currentAssistants!
         }
     }
@@ -127,6 +131,12 @@ class DataManager{
         self.reloadAssistantsId()
         self.checkAnotherAssistant(assistant.id)
         NotificationCenter.default.post(name: NSNotification.Name.init("MessagesUpdate"), object: nil, userInfo: nil)
+        let context = ["context": ["count": 3]]
+        NetworkManager.shared.sendEvent(cuid: assistant.cuid.string, euid: .ready, context: context) { (answer, error) in
+            guard answer != nil, error == nil else { return }
+            let msg = Message(title: answer!, sender: .assistant)
+            self.saveNew(msg)
+        }
     }
     
     public func deleteAssistant(_ assistant: Assitant){
