@@ -56,6 +56,24 @@ class AssistantVC: UIViewController{
         self.tableView.dataSource = self
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        let cells = self.tableView.visibleCells
+        for cell in cells where cell is TextFieldCell{
+            let cell = cell as? TextFieldCell
+            switch cell?.type {
+            case .name:
+                cell?.value = "Элиза"
+            case .token:
+                cell?.value = "ae83a6cc-8c54-4123-9fbe-1a4c9a8720d2"
+            case .url:
+                cell?.value = "https://biz.nanosemantics.ru/api/bat/nkd/json/"
+            default:
+                return
+            }
+        }
+    }
+    
     @objc func activationWordOn(){
         
     }
@@ -179,14 +197,14 @@ extension AssistantVC: TextFieldCellDelegate{
     }
 }
 
-
+//MARK: TextFieldCell
 class TextFieldCell: UITableViewCell, UITextFieldDelegate, UITextPasteDelegate{
     
     private var textField = UITextField()
     
     private(set) var type: AssistantStateField!
     
-    private(set) var value: String = ""
+     var value: String = ""
     
     private var isAlreadyEdit: Bool = false
     

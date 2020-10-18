@@ -256,7 +256,7 @@ extension DialogViewController{
         }
     }
 }
-
+//MARK: InteractiveLinkLabel
 class InteractiveLinkLabel: UILabel {
     
     required init(coder aDecoder: NSCoder) {
@@ -291,7 +291,8 @@ class InteractiveLinkLabel: UILabel {
             }
             
             self.attributedText = muttableAttributedString
-            
+            //<userlink>
+            //</userlink>
         }
     }
     
