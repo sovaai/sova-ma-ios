@@ -72,7 +72,7 @@ class SettingsVC: UIViewController{
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        self.tableView.reloadData()
+        self.tableView.reloadData()
         self.tableView.delegate = self
         self.tableView.dataSource = self
     }

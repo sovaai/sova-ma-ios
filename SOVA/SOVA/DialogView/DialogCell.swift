@@ -19,7 +19,6 @@ class DialogCell: UICollectionViewCell{
         return label
     }()
     
-    
     lazy var messageBackground: UIView = {
         let backgroundView = UIView()
         backgroundView.translatesAutoresizingMaskIntoConstraints = false
@@ -81,7 +80,6 @@ class DialogCell: UICollectionViewCell{
         self.messageLabel.leftAnchor.constraint(equalTo: messageBackground.leftAnchor, constant: 16).isActive = true
     }
     
-    
     func configure(with message: Message, and indent: CGFloat){
         self.sender = message.sender
         
@@ -91,7 +89,6 @@ class DialogCell: UICollectionViewCell{
         self.bottomLine.backgroundColor = self.sender.backgroundColor
         
         self.messageLabel.message = message
-        
     }
     
     required init?(coder: NSCoder) {
@@ -218,7 +215,6 @@ class AnimationCell: UICollectionViewCell {
             }
         }
     }
-    
 }
 
 //MARK: SimpleCell

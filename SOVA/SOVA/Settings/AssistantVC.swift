@@ -109,10 +109,9 @@ class AssistantVC: UIViewController{
             let model = Assitant(name: name, url: url, uuid: uuid, cuid: cuid)
             
             DataManager.shared.saveAssistant(model)
+            
             self.close()
         }
-        
-       
     }
     
     func close(){

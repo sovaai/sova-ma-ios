@@ -18,12 +18,14 @@ struct NetworkManager{
     private var timer: Timer = Timer.scheduledTimer(withTimeInterval: 120.0, repeats: false, block: { (_) in
         guard let messgID = DataManager.shared.currentAssistants.messageListId.last, let msgList:MessageList = DataManager.shared.get(by: messgID), let msg = msgList.messages.last else { return }
         guard Date().timeIntervalSince(msg.date) >= 120 else { return }
-        let assistant = DataManager.shared.currentAssistants
-        let waitCount = UserDefaults.standard.value(forKey: "waitCount") as? Int ?? 0
+        let waitCount = DataManager.shared.currentAssistants.waitCount
         let context = ["context":["count":waitCount]]
-        NetworkManager.shared.sendEvent(cuid: assistant.cuid.string, euid: .inactive, context: context) { (answer, error) in
+        NetworkManager.shared.sendEvent(cuid: DataManager.shared.currentAssistants.cuid.string, euid: .inactive, context: context) { (answer, error) in
             guard answer != nil, error == nil else { return }
-            UserDefaults.standard.setValue(waitCount + 1, forKey: "waitCount")
+            var assist = DataManager.shared.currentAssistants
+            assist.waitCount += 1
+            DataManager.shared.saveAssistant(assist)
+            DataManager.shared.currentAssistants.save()
             let msg = Message(title: answer!, sender: .assistant)
             DataManager.shared.saveNew(msg)
         }
