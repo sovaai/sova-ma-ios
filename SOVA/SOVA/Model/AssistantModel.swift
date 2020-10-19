@@ -15,6 +15,8 @@ struct Assitant: Codable{
     var wordActive: Bool = false
     var word: String? = nil
     
+    var waitCount: Int = 0
+    
     var url: URL
     var uuid: UUID
     var cuid: UUID
