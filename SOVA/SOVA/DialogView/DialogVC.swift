@@ -69,14 +69,9 @@ class DialogViewController: UIViewController{
         
         self.uiSetUp()
         
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillShow),
-            name: UIResponder.keyboardWillShowNotification,
-            object: nil
-        )
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadData), name: NSNotification.Name.init("MessagesUpdate"), object: nil)
-
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -121,8 +116,7 @@ class DialogViewController: UIViewController{
         self.btnsCollectionView.bottomAnchor.constraint(equalTo: self.recordingBtn.topAnchor, constant: 5).isActive = true
         self.btnsCollectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
         self.btnsCollectionView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
-        self.btnsCollectionView.heightAnchor.constraint(equalToConstant: 44).isActive = true
-        
+        self.btnsCollectionView.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         self.recordingBtn.translatesAutoresizingMaskIntoConstraints = false
         self.recordingBtn.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
@@ -192,7 +186,6 @@ class DialogViewController: UIViewController{
             self.collectionView.reloadData()
         }
     }
-    
 }
 
 extension DialogViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{

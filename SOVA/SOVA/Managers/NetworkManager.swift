@@ -100,6 +100,7 @@ struct NetworkManager{
                 //                        let apiResponse = try JSONDecoder().decode(MovieApiResponse.self, from: responseData)
                 //                        completion(apiResponse.movies,nil)
             completion(value,nil)
+            self.checkBtns(text: value)
         }
     }
     
@@ -130,7 +131,20 @@ struct NetworkManager{
                 //                        let apiResponse = try JSONDecoder().decode(MovieApiResponse.self, from: responseData)
                 //                        completion(apiResponse.movies,nil)
             completion(value,nil)
+            self.checkBtns(text: value)
         }
+    }
+    
+    func checkBtns(text: String, array: [String] = []){
+//        var texting = [String]()
+//        guard let low = text.range(of: "<userlink>")?.upperBound,
+//              let upper = text.range(of: "</userlink>")?.lowerBound else {
+//            NotificationCenter.default.post(name: NSNotification.Name.init("updateBtns"), object: nil, userInfo: ["btnsData":array])
+//            return
+//        }
+//        let textBtn = text[low..<upper]
+//        texting.append(String(textBtn))
+//        self.checkBtns(text: String(text[upper...]), array: texting)
     }
 
 }

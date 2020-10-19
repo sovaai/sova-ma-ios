@@ -12,9 +12,13 @@ class BtnsCollectonView: UICollectionView{
     private var model = [String](){
         didSet{
             guard oldValue != self.model else { return }
-            self.reloadData()
+            DispatchQueue.main.async {
+//                self.heightContraint.constant = self.model.isEmpty ? 0 : 44
+                self.reloadData()
+            }
         }
     }
+//    private var heightContraint: NSLayoutConstraint!
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         let layout = UICollectionViewFlowLayout()
@@ -29,26 +33,31 @@ class BtnsCollectonView: UICollectionView{
         self.backgroundColor = UIColor(named: "Colors/mainbacground")
         self.contentInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         
+//        self.heightContraint = self.heightAnchor.constraint(equalToConstant: 44)
+//        self.heightContraint.isActive = true
         self.register(BtnsCell.self, forCellWithReuseIdentifier: "BtnsCell")
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updateBtns(notification:)), name: NSNotification.Name.init("updateBtns"), object: nil)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    func configure(with data: [String]){
-        self.model = data
+        
+    @objc func updateBtns(notification: Notification){
+        guard let userInfo = notification.userInfo, let btnsData = userInfo["btnsData"] as? [String] else { return }
+        self.model = btnsData
     }
 }
 
 extension BtnsCollectonView: UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 6
+        return self.model.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BtnsCell", for: indexPath) as? BtnsCell else { return UICollectionViewCell()}
-        cell.text = "1-4 класс"
+        cell.text = self.model[indexPath.row]
         return cell
     }
 }

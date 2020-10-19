@@ -273,6 +273,8 @@ class InteractiveLinkLabel: UILabel {
         self.isUserInteractionEnabled = true
     }
     
+    private var ranges: [NSRange : String] = [:]
+    
     public var message: Message = Message(title: ""){
         didSet{
             self.textColor = message.sender.messageColor
@@ -280,7 +282,6 @@ class InteractiveLinkLabel: UILabel {
             guard self.message.title != self.message.title.html2String else {self.text = message.title.html2String; return }
             
             let muttableAttributedString = NSMutableAttributedString(string: message.title.html2String, attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 15), NSAttributedString.Key.foregroundColor: message.sender.messageColor])
-            
             
             guard let att = message.title.html2AttributedString else { self.text = message.title.html2String; return }
             let wholeRange = NSRange((att.string.startIndex...), in: att.string)
@@ -291,9 +292,29 @@ class InteractiveLinkLabel: UILabel {
             }
             
             self.attributedText = muttableAttributedString
-            //<userlink>
-            //</userlink>
+            self.ranges.removeAll()
+            let ranges = self.checkUserLinks(firstText: self.message.title.html2String, text: self.message.title)
+            for range in ranges{
+                let rangeVal = NSRange(range, in: self.message.title.html2String)
+                muttableAttributedString.addAttributes([NSAttributedString.Key.foregroundColor : UIColor.blue], range: rangeVal)
+                let text = self.message.title.html2String[range]
+                self.ranges[rangeVal] = String(text)
+                self.attributedText = muttableAttributedString
+            }
         }
+    }
+    
+    func checkUserLinks(firstText: String, text: String, ranges: [Range<String.Index>] = [] ) -> [Range<String.Index>]{
+        
+        guard let low = text.range(of: "<userlink>")?.upperBound,
+              let upper = text.range(of: "</userlink>")?.lowerBound,
+              let upperforRemove = text.range(of: "</userlink>")?.upperBound else { return ranges}
+        let textBtn = text[low..<upper]
+        var rangeArray = ranges
+        if let range = firstText.range(of: textBtn) {
+            rangeArray.append(range)
+        }
+        return self.checkUserLinks(firstText: firstText,text: String(text[upperforRemove...]), ranges: rangeArray)
     }
     
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
@@ -334,6 +355,18 @@ class InteractiveLinkLabel: UILabel {
         let charsInLineTapped = layoutManager.characterIndex(for: rightMostPointInLineTapped, in: textContainer, fractionOfDistanceBetweenInsertionPoints: nil)
         
         guard characterIndex < charsInLineTapped else {return false}
+        
+        for range in self.ranges{
+            guard range.key.contains(characterIndex) else { continue }
+            let message = Message(title: range.value, sender: .user)
+            DataManager.shared.saveNew(message)
+            NetworkManager.shared.sendMessage(cuid: DataManager.shared.currentAssistants.cuid.string, message: range.value) { (msg, error) in
+                guard error == nil else { return }
+                guard let messg = msg else { return }
+                let message = Message(title: messg, sender: .assistant)
+                DataManager.shared.saveNew(message)
+            }
+        }
         
         let attributeValue = self.message.title.html2AttributedString!.attribute(attributeName, at: characterIndex, effectiveRange: nil)
         

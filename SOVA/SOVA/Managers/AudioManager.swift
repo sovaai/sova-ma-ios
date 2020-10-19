@@ -104,7 +104,7 @@ class AudioManager: NSObject{
                     self.delegate?.speechState(state: .stop)
                     return
                 }
-                let message = Message(title: text, sender: DialogViewController.sender)
+                let message = Message(title: text, sender: .user)
                 DataManager.shared.saveNew(message)
                 self.sendMessageFromAudio(text: text)
             }
