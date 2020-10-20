@@ -63,26 +63,26 @@ class AudioManager: NSObject{
         self.recordingSession.requestRecordPermission { [weak self] allowed in
             guard let self = self else { return }
             guard allowed else { self.delegate?.allowAlert(); return }
-        }
-        
-        guard let url = self.url else {
-            self.delegate?.audioErrorMessage(title: "Не удается найти путь для записи".localized)
-            return
-        }
-        let settings = [
-            AVFormatIDKey : Int(kAudioFormatMPEG4AAC),
-            AVSampleRateKey : 12000,
-            AVNumberOfChannelsKey: 1,
-            AVEncoderAudioQualityKey : AVAudioQuality.high.rawValue
-        ]
-        
-        do{
-            self.audioRecorder = try AVAudioRecorder(url: url, settings: settings)
-            self.audioRecorder.delegate = delegate
-            self.audioRecorder.record()
-            self.delegate?.recording(state: .start)
-        }catch{
-            self.delegate?.audioErrorMessage(title: "Не удается начать запись".localized)
+            
+            guard let url = self.url else {
+                self.delegate?.audioErrorMessage(title: "Не удается найти путь для записи".localized)
+                return
+            }
+            let settings = [
+                AVFormatIDKey : Int(kAudioFormatMPEG4AAC),
+                AVSampleRateKey : 12000,
+                AVNumberOfChannelsKey: 1,
+                AVEncoderAudioQualityKey : AVAudioQuality.high.rawValue
+            ]
+            
+            do{
+                self.audioRecorder = try AVAudioRecorder(url: url, settings: settings)
+                self.audioRecorder.delegate = self.delegate
+                self.audioRecorder.record()
+                self.delegate?.recording(state: .start)
+            }catch{
+                self.delegate?.audioErrorMessage(title: "Не удается начать запись".localized)
+            }
         }
     }
     
