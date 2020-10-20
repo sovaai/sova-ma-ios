@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		15C44558F30F76668B449D8C /* Pods_SOVA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 995C752847D11CCE22346F45 /* Pods_SOVA.framework */; };
+		5C12BF74253EFD6A00AF9EDA /* NoConnectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C12BF73253EFD6A00AF9EDA /* NoConnectionView.swift */; };
 		5C34DAD3252B00BE00501F8A /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C34DAD2252B00BE00501F8A /* UIColor.swift */; };
 		5C34DAD6252B11B200501F8A /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C34DAD5252B11B200501F8A /* Message.swift */; };
 		5C34DAD9252B149400501F8A /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C34DAD8252B149400501F8A /* DataManager.swift */; };
@@ -50,6 +51,7 @@
 /* Begin PBXFileReference section */
 		3EF602EF13118596AAC86D9C /* Pods-SOVA.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SOVA.release.xcconfig"; path = "Target Support Files/Pods-SOVA/Pods-SOVA.release.xcconfig"; sourceTree = "<group>"; };
 		4700C0592FB36A9E88D8177B /* Pods-SOVA.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SOVA.debug.xcconfig"; path = "Target Support Files/Pods-SOVA/Pods-SOVA.debug.xcconfig"; sourceTree = "<group>"; };
+		5C12BF73253EFD6A00AF9EDA /* NoConnectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoConnectionView.swift; sourceTree = "<group>"; };
 		5C34DAD2252B00BE00501F8A /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		5C34DAD5252B11B200501F8A /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		5C34DAD8252B149400501F8A /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
@@ -146,6 +148,7 @@
 				5C86F17A252C7DEF0029CE50 /* DialogTextField.swift */,
 				5C542420253C8C9300A35E18 /* BtnsCollectionView.swift */,
 				5C4B3D04252DD4F800BDDB35 /* AudioBtn.swift */,
+				5C12BF73253EFD6A00AF9EDA /* NoConnectionView.swift */,
 			);
 			path = DialogView;
 			sourceTree = "<group>";
@@ -383,6 +386,7 @@
 				5C63AB82252787FD00814CF7 /* UIView.swift in Sources */,
 				5C63AB7C2527834500814CF7 /* DialogVC.swift in Sources */,
 				5CB7DB54252F00AB0016AEA7 /* EndPointType.swift in Sources */,
+				5C12BF74253EFD6A00AF9EDA /* NoConnectionView.swift in Sources */,
 				5C6E4F422535C718008CCA3C /* About.swift in Sources */,
 				5C63AB7F2527851C00814CF7 /* DialogCell.swift in Sources */,
 				5C99C6A8252752CD0056260F /* ViewController.swift in Sources */,
