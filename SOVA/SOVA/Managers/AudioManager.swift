@@ -63,26 +63,26 @@ class AudioManager: NSObject{
         self.recordingSession.requestRecordPermission { [weak self] allowed in
             guard let self = self else { return }
             guard allowed else { self.delegate?.allowAlert(); return }
-        }
-        
-        guard let url = self.url else {
-            self.delegate?.audioErrorMessage(title: "Не удается найти путь для записи".localized)
-            return
-        }
-        let settings = [
-            AVFormatIDKey : Int(kAudioFormatMPEG4AAC),
-            AVSampleRateKey : 12000,
-            AVNumberOfChannelsKey: 1,
-            AVEncoderAudioQualityKey : AVAudioQuality.high.rawValue
-        ]
-        
-        do{
-            self.audioRecorder = try AVAudioRecorder(url: url, settings: settings)
-            self.audioRecorder.delegate = delegate
-            self.audioRecorder.record()
-            self.delegate?.recording(state: .start)
-        }catch{
-            self.delegate?.audioErrorMessage(title: "Не удается начать запись".localized)
+            
+            guard let url = self.url else {
+                self.delegate?.audioErrorMessage(title: "Не удается найти путь для записи".localized)
+                return
+            }
+            let settings = [
+                AVFormatIDKey : Int(kAudioFormatMPEG4AAC),
+                AVSampleRateKey : 12000,
+                AVNumberOfChannelsKey: 1,
+                AVEncoderAudioQualityKey : AVAudioQuality.high.rawValue
+            ]
+            
+            do{
+                self.audioRecorder = try AVAudioRecorder(url: url, settings: settings)
+                self.audioRecorder.delegate = self.delegate
+                self.audioRecorder.record()
+                self.delegate?.recording(state: .start)
+            }catch{
+                self.delegate?.audioErrorMessage(title: "Не удается начать запись".localized)
+            }
         }
     }
     
@@ -95,21 +95,24 @@ class AudioManager: NSObject{
             self.delegate?.audioErrorMessage(title: "Не удалось коректно завершить запись".localized)
             return
         }
-        do{
-            let data = try Data(contentsOf: self.url!)
-            self.delegate?.speechState(state: .start)
-            self.speechRecognizer.recognize(data: data) { (text, error) in
-                guard error == nil, let text = text else {
-                    self.delegate?.audioErrorMessage(title: "Ошибка распозования текста".localized)
-                    self.delegate?.speechState(state: .stop)
-                    return
+        DispatchQueue.global(qos: .userInteractive).async {
+            do{
+                let data = try Data(contentsOf: self.url!)
+                self.delegate?.speechState(state: .start)
+                self.speechRecognizer.recognize(data: data) { (text, error) in
+                    guard error == nil, let text = text else {
+                        self.delegate?.audioErrorMessage(title: "Ошибка распозования текста".localized)
+                        self.delegate?.speechState(state: .stop)
+                        return
+                    }
+                    let message = Message(title: text, sender: .user)
+                    DataManager.shared.saveNew(message)
+                    self.sendMessageFromAudio(text: text)
                 }
-                let message = Message(title: text, sender: .user)
-                DataManager.shared.saveNew(message)
-                self.sendMessageFromAudio(text: text)
+                
+            }catch{
+                self.delegate?.audioErrorMessage(title: error.localizedDescription)
             }
-        }catch{
-            print(error)
         }
     }
     

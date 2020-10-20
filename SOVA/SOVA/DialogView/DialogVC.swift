@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Network
 
 class DialogViewController: UIViewController{
     
@@ -38,6 +39,28 @@ class DialogViewController: UIViewController{
         tf.centerVertically()
         return tf
     }()
+    
+    private lazy var intetnetView: NoInternetConnectionView = {
+       let view = NoInternetConnectionView()
+        self.view.addSubview(view)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor).isActive = true
+        view.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        view.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
+        view.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
+        view.isHidden = true
+        
+        return view
+    }()
+    
+    internal var internetConnection: ConntectionState = .correct {
+        didSet{
+            guard oldValue != self.internetConnection else { return }
+            DispatchQueue.main.async {
+                self.intetnetView.configure(with: self.internetConnection)
+            }
+        }
+    }
     
     private var textFieldBottomConstant: NSLayoutConstraint? = nil
     private var bottomCollectionView: NSLayoutConstraint? = nil
@@ -72,6 +95,15 @@ class DialogViewController: UIViewController{
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadData), name: NSNotification.Name.init("MessagesUpdate"), object: nil)
         
+        
+        let monitor = NWPathMonitor()
+        
+        monitor.pathUpdateHandler = { path in
+            self.internetConnection = path.status == .satisfied ? .correct : .incorrect
+        }
+        
+        let queue = DispatchQueue(label: "Monitor")
+        monitor.start(queue: queue)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -148,6 +180,7 @@ class DialogViewController: UIViewController{
         self.keyboardBtn.tintColor = UIColor(named: "Colors/textColor")
         self.keyboardBtn.setImage(UIImage(named: "Menu/keyboardBtn")?.allowTinted, for: [])
         self.keyboardBtn.addTarget(self, action: #selector(self.keyboardAction(sender:)), for: .touchUpInside)
+        
     }
     
     //MARK: Btn actions
@@ -246,17 +279,22 @@ extension DialogViewController: AudioDelegate{
     
     func allowAlert() {
         let alert = UIAlertController(title: "Разрешите доступ к микрофону".localized, message: nil, preferredStyle: .alert)
-        let openSettings = UIAlertAction(title: "Открыть настройки", style: .default) { (_) in
+        let openSettings = UIAlertAction(title: "Открыть настройки".localized, style: .default) { (_) in
             UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:], completionHandler: nil)
         }
         let cancel = UIAlertAction(title: "Отмена".localized, style: .destructive)
         alert.addAction(cancel)
         alert.addAction(openSettings)
-        self.present(alert, animated: true)
+        
+        DispatchQueue.main.async {
+            self.present(alert, animated: true)
+        }
     }
     
     func recording(state: AudioState) {
-        self.recordingBtn.audioState(is: state)
+        DispatchQueue.main.async {
+            self.recordingBtn.audioState(is: state)
+        }
     }
     
     func speechState(state: AudioState) {
