@@ -246,17 +246,22 @@ extension DialogViewController: AudioDelegate{
     
     func allowAlert() {
         let alert = UIAlertController(title: "Разрешите доступ к микрофону".localized, message: nil, preferredStyle: .alert)
-        let openSettings = UIAlertAction(title: "Открыть настройки", style: .default) { (_) in
+        let openSettings = UIAlertAction(title: "Открыть настройки".localized, style: .default) { (_) in
             UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:], completionHandler: nil)
         }
         let cancel = UIAlertAction(title: "Отмена".localized, style: .destructive)
         alert.addAction(cancel)
         alert.addAction(openSettings)
-        self.present(alert, animated: true)
+        
+        DispatchQueue.main.async {
+            self.present(alert, animated: true)
+        }
     }
     
     func recording(state: AudioState) {
-        self.recordingBtn.audioState(is: state)
+        DispatchQueue.main.async {
+            self.recordingBtn.audioState(is: state)
+        }
     }
     
     func speechState(state: AudioState) {

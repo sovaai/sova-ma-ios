@@ -95,21 +95,24 @@ class AudioManager: NSObject{
             self.delegate?.audioErrorMessage(title: "Не удалось коректно завершить запись".localized)
             return
         }
-        do{
-            let data = try Data(contentsOf: self.url!)
-            self.delegate?.speechState(state: .start)
-            self.speechRecognizer.recognize(data: data) { (text, error) in
-                guard error == nil, let text = text else {
-                    self.delegate?.audioErrorMessage(title: "Ошибка распозования текста".localized)
-                    self.delegate?.speechState(state: .stop)
-                    return
+        DispatchQueue.global(qos: .userInteractive).async {
+            do{
+                let data = try Data(contentsOf: self.url!)
+                self.delegate?.speechState(state: .start)
+                self.speechRecognizer.recognize(data: data) { (text, error) in
+                    guard error == nil, let text = text else {
+                        self.delegate?.audioErrorMessage(title: "Ошибка распозования текста".localized)
+                        self.delegate?.speechState(state: .stop)
+                        return
+                    }
+                    let message = Message(title: text, sender: .user)
+                    DataManager.shared.saveNew(message)
+                    self.sendMessageFromAudio(text: text)
                 }
-                let message = Message(title: text, sender: .user)
-                DataManager.shared.saveNew(message)
-                self.sendMessageFromAudio(text: text)
+                
+            }catch{
+                self.delegate?.audioErrorMessage(title: error.localizedDescription)
             }
-        }catch{
-            print(error)
         }
     }
     
