@@ -71,7 +71,7 @@ class DialogViewController: UIViewController{
         self.collectionView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
         self.collectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
         self.collectionView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
-        self.bottomCollectionView = self.collectionView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
+        self.bottomCollectionView = self.collectionView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -70)
         self.bottomCollectionView?.isActive = true
         
         self.collectionView.backgroundColor = UIColor(named: "Colors/mainbacground")

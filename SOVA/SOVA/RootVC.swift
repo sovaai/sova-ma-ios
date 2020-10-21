@@ -150,7 +150,7 @@ class PageViewController: UIPageViewController{
             self.textField.keyboardIsHide = true
             self.textFieldBottomConstant?.constant = 0
             guard self.curentVC is DialogViewController else { return }
-            self.dilogVc.bottomCollectionView?.constant = 10
+            self.dilogVc.bottomCollectionView?.constant = -70
             return
         }
         guard sender is UIButton else { return }
@@ -167,18 +167,27 @@ class PageViewController: UIPageViewController{
         let keyboardHeight = keyboardRectangle.height
         self.textFieldBottomConstant?.constant = -keyboardHeight
         guard self.curentVC is DialogViewController else { return }
-        self.dilogVc.bottomCollectionView?.constant = -keyboardHeight + 50
+        self.dilogVc.bottomCollectionView?.constant = -keyboardHeight - 20
     }
         
 }
 
 extension PageViewController: UIPageViewControllerDataSource{
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        return self.nextVC
+        return self.nextVc()
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        return self.nextVC
+        return self.nextVc()
+    }
+    
+    func nextVc() -> UIViewController{
+        self.textField.keyboardIsHide = true
+        let nextVC = self.nextVC
+        if nextVC is DialogViewController{
+            self.dilogVc.bottomCollectionView?.constant = -70
+        }
+        return nextVC
     }
 }
 
