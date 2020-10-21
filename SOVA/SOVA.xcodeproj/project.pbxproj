@@ -55,6 +55,7 @@
 		5CFBDEAF25262706005D8057 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CFBDEAE25262706005D8057 /* SceneDelegate.swift */; };
 		5CFBDEB625262708005D8057 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5CFBDEB525262708005D8057 /* Assets.xcassets */; };
 		5CFBDEB925262708005D8057 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5CFBDEB725262708005D8057 /* LaunchScreen.storyboard */; };
+		5CFCA1CD2540A3D000D737EF /* VideoPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CFCA1CC2540A3D000D737EF /* VideoPlayerView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -109,6 +110,7 @@
 		5CFBDEB525262708005D8057 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5CFBDEB825262708005D8057 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5CFBDEBA25262708005D8057 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5CFCA1CC2540A3D000D737EF /* VideoPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerView.swift; sourceTree = "<group>"; };
 		995C752847D11CCE22346F45 /* Pods_SOVA.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SOVA.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -231,6 +233,7 @@
 			isa = PBXGroup;
 			children = (
 				5CD048E2253F38E00008662F /* AnimateVC.swift */,
+				5CFCA1CC2540A3D000D737EF /* VideoPlayerView.swift */,
 				5CD048EC253F7D5B0008662F /* video */,
 			);
 			path = AnimateVc;
@@ -424,6 +427,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5CB7DB61252F02370016AEA7 /* ParameterEncoding.swift in Sources */,
+				5CFCA1CD2540A3D000D737EF /* VideoPlayerView.swift in Sources */,
 				5CC7E0202530A60300AED403 /* Data.swift in Sources */,
 				5CFBDEAD25262706005D8057 /* AppDelegate.swift in Sources */,
 				5C34DAD3252B00BE00501F8A /* UIColor.swift in Sources */,

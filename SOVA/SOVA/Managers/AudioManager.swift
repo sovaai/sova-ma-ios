@@ -8,17 +8,22 @@
 import AVFoundation
 import AVKit
 
-protocol AudioDelegate: class, AVAudioRecorderDelegate{
+protocol AudioErrorDelegate: class, AVAudioRecorderDelegate{
     func audioErrorMessage(title: String)
     func allowAlert() // “Разрешите доступ к микрофону”
-    func recording(state : AudioState)
 }
 
-protocol AudioAnimateDelegate: class{
+protocol AudioRecordingDelegate: class{
+    func recording(state : AudioState)
     func speechState(state: AudioState)
 }
 
-extension AudioDelegate{
+extension AudioRecordingDelegate{
+    func recording(state : AudioState) {}
+    func speechState(state: AudioState) {}
+}
+
+extension AudioRecordingDelegate{
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
         guard !flag else { return }
         self.recording(state: .stop)
@@ -33,7 +38,7 @@ class AudioManager: NSObject{
             try session.setActive(true)
             try session.overrideOutputAudioPort(.speaker)
         }catch{
-            self.delegate?.audioErrorMessage(title: "Ошибка доступа к AVAudioSession".localized)
+            self.errorDelegate?.audioErrorMessage(title: "Ошибка доступа к AVAudioSession".localized)
         }
         return session
     }()
@@ -52,8 +57,8 @@ class AudioManager: NSObject{
         }
     }
     
-    public weak var delegate: AudioDelegate? = nil
-    public weak var animateDelegate: AudioAnimateDelegate? = nil
+    public weak var errorDelegate: AudioErrorDelegate? = nil
+    public weak var recordDelegate: AudioRecordingDelegate? = nil
     
     private lazy var speech = TTS()
     private lazy var speechRecognizer = ASR()
@@ -66,10 +71,10 @@ class AudioManager: NSObject{
     private func startRecoding(){
         self.recordingSession.requestRecordPermission { [weak self] allowed in
             guard let self = self else { return }
-            guard allowed else { self.delegate?.allowAlert(); return }
+            guard allowed else { self.errorDelegate?.allowAlert(); return }
             
             guard let url = self.url else {
-                self.delegate?.audioErrorMessage(title: "Не удается найти путь для записи".localized)
+                self.errorDelegate?.audioErrorMessage(title: "Не удается найти путь для записи".localized)
                 return
             }
             let settings = [
@@ -81,11 +86,11 @@ class AudioManager: NSObject{
             
             do{
                 self.audioRecorder = try AVAudioRecorder(url: url, settings: settings)
-                self.audioRecorder.delegate = self.delegate
+                self.audioRecorder.delegate = self.errorDelegate //FIXEME
                 self.audioRecorder.record()
-                self.delegate?.recording(state: .start)
+                self.recordDelegate?.recording(state: .start)
             }catch{
-                self.delegate?.audioErrorMessage(title: "Не удается начать запись".localized)
+                self.errorDelegate?.audioErrorMessage(title: "Не удается начать запись".localized)
             }
         }
     }
@@ -94,19 +99,19 @@ class AudioManager: NSObject{
         self.audioRecorder.stop()
         self.audioRecorder = nil
         
-        self.delegate?.recording(state: .stop)
+        self.recordDelegate?.recording(state: .stop)
         guard succes else {
-            self.delegate?.audioErrorMessage(title: "Не удалось коректно завершить запись".localized)
+            self.errorDelegate?.audioErrorMessage(title: "Не удалось коректно завершить запись".localized)
             return
         }
         DispatchQueue.global(qos: .userInteractive).async {
             do{
                 let data = try Data(contentsOf: self.url!)
-                self.animateDelegate?.speechState(state: .start)
+//                self.recordDelegate?.speechState(state: .proces)
                 self.speechRecognizer.recognize(data: data) { (text, error) in
                     guard error == nil, let text = text else {
-                        self.delegate?.audioErrorMessage(title: "Ошибка распозования текста".localized)
-                        self.animateDelegate?.speechState(state: .stop)
+                        self.errorDelegate?.audioErrorMessage(title: "Ошибка распозования текста".localized)
+                        self.recordDelegate?.speechState(state: .stop)
                         return
                     }
                     let message = Message(title: text, sender: .user)
@@ -115,7 +120,7 @@ class AudioManager: NSObject{
                 }
                 
             }catch{
-                self.delegate?.audioErrorMessage(title: error.localizedDescription)
+                self.errorDelegate?.audioErrorMessage(title: error.localizedDescription)
             }
         }
     }
@@ -123,13 +128,13 @@ class AudioManager: NSObject{
     public func playSpeech(with text: String){
         self.speech.getSpeech(text: text) { (data) in
             defer{
-                self.animateDelegate?.speechState(state: .stop)
+                self.recordDelegate?.speechState(state: .stop)
                 let message = Message(title: text, sender: .assistant)
                 DataManager.shared.saveNew(message)
             }
             
             guard let dataAudio = data else{
-                self.delegate?.audioErrorMessage(title: "Ошибка воспроизведения синтезатора речи")
+                self.errorDelegate?.audioErrorMessage(title: "Ошибка воспроизведения синтезатора речи")
                 return
             }
             do{
@@ -143,11 +148,14 @@ class AudioManager: NSObject{
     }
     
     private func sendMessageFromAudio(text: String){
-        NetworkManager.shared.sendMessage(cuid: DataManager.shared.currentAssistants.cuid.string, message: text) { (msg, error) in
+        NetworkManager.shared.sendMessage(cuid: DataManager.shared.currentAssistants.cuid.string, message: text) { (msg,animation, error)  in
             guard error == nil, let messg = msg else {
-                self.delegate?.audioErrorMessage(title: "Ошибка отправки сообщения".localized)
-                self.animateDelegate?.speechState(state: .stop)
+                self.errorDelegate?.audioErrorMessage(title: "Ошибка отправки сообщения".localized)
+                self.recordDelegate?.speechState(state: .stop)
                 return
+            }
+            if let type = animation, let animationType = AnimationType(rawValue: type) {
+//                AnimateVC.shared.configure(with: animationType)
             }
             self.playSpeech(with: messg)
         }

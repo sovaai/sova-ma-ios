@@ -74,10 +74,10 @@ struct NetworkManager{
         }
     }
     
-    func sendMessage(cuid: String, message: String, context: [String: Any]? = nil, completion: @escaping (_ answer: String? ,_ error: String?)->()) {
+    func sendMessage(cuid: String, message: String, context: [String: Any]? = nil, completion: @escaping (_ answer: String?,_ animation: Int?, _ error: String?)->()) {
         self.router.request(.request(cuid: cuid, text: message, context: context)) { data, response, error in
             
-            guard error == nil else { completion(nil, "Please check your network connection."); return }
+            guard error == nil else { completion(nil, nil, "Please check your network connection."); return }
             
             guard let response = response as? HTTPURLResponse else { return }
             
@@ -85,12 +85,12 @@ struct NetworkManager{
             
             guard case .success = result else {
                 guard case .failure(let networkFailureError) = result else { return }
-                completion(nil, networkFailureError)
+                completion(nil, nil, networkFailureError)
                 return
             }
             
             guard let responseData = data else {
-                completion(nil, NetworkResponse.noData.rawValue)
+                completion(nil, nil, NetworkResponse.noData.rawValue)
                 return
             }
             
@@ -98,10 +98,12 @@ struct NetworkManager{
             guard let json = responseData.jsonDictionary,
                   let resultDict = json["result"] as? [String: Any],
                   let text = resultDict["text"] as? [String: Any],
-                  let value = text["value"] as? String else { completion(nil, "Server answer is wrong".localized); return }
+                  let value = text["value"] as? String else { completion(nil, nil, "Server answer is wrong".localized); return }
                 //                        let apiResponse = try JSONDecoder().decode(MovieApiResponse.self, from: responseData)
                 //                        completion(apiResponse.movies,nil)
-            completion(value,nil)
+            let animation = resultDict["animation"] as? [String: Any]
+            let type = animation?["type"] as? Int
+            completion(value,type,nil)
             self.checkBtns(text: value)
         }
     }
@@ -166,4 +168,36 @@ enum EventType: String{
     case ready = "00b2fcbe-f27f-437b-a0d5-91072d840ed3"
     case inactive = "29e75851-6cae-44f4-8a9c-f6489c4dca88"
 }
-//2 минуты
+
+
+enum AnimationType: Int{
+    case hi = 1
+    case no
+    case yes
+    case startIdle
+    case idle
+    case stopIdle
+    case idk
+    
+    var videoPath: String {
+        switch self {
+        case .hi:
+            return "hi"
+        case .no:
+            return "no"
+        case .yes:
+            return "yes"
+        case .startIdle:
+            return "idle_in"
+        case .idle:
+            return "idle"
+        case .stopIdle:
+            return "idle_out"
+        case .idk:
+            return "idk"
+        }
+        return ""
+    }
+}
+
+

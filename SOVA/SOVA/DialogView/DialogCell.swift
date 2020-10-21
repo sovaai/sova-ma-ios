@@ -356,8 +356,11 @@ class InteractiveLinkLabel: UILabel {
             guard range.key.contains(characterIndex) else { continue }
             let message = Message(title: range.value, sender: .user)
             DataManager.shared.saveNew(message)
-            NetworkManager.shared.sendMessage(cuid: DataManager.shared.currentAssistants.cuid.string, message: range.value) { (msg, error) in
+            NetworkManager.shared.sendMessage(cuid: DataManager.shared.currentAssistants.cuid.string, message: range.value) { (msg,animation, error) in
                 guard error == nil else { return }
+                if let type = animation, let animationType = AssistantVideoStarter.AnimType(rawValue: type) {
+                    AssistantVideoStarter.showAnimation(type: animationType)
+                }
                 guard let messg = msg else { return }
                 let message = Message(title: messg, sender: .assistant)
                 DataManager.shared.saveNew(message)

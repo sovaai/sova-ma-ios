@@ -152,10 +152,10 @@ extension DialogViewController: UICollectionViewDelegate, UICollectionViewDataSo
 }
 
 
-extension DialogViewController: AudioAnimateDelegate{
+extension DialogViewController: AudioRecordingDelegate{
     func speechState(state: AudioState) {
         DispatchQueue.main.async {
-            self.isSpeechRegonizing = state == .start
+            self.isSpeechRegonizing = state != .stop
             self.collectionView.reloadData()
             guard state == .stop else { return }
             self.animateComplition?()

@@ -75,18 +75,21 @@ class DataManager{
     }
     
     public func saveNew(_ message: Message){
-        var ml: MessageList
-        if self.messageList.isEmpty == false, self.messageList[0].date.asInt == message.date.asInt {
-            ml = self.messageList[0]
-            ml.messages.append(message)
-            self._messageList![0] = ml
-        }else{
-            ml = MessageList()
+        DispatchQueue.global(qos: .userInteractive).async {
+            guard !message.title.isEmpty else { return }
+            var ml: MessageList
+            if self.messageList.isEmpty == false, self.messageList[0].date.asInt == message.date.asInt {
+                ml = self.messageList[0]
+                ml.messages.append(message)
+                self._messageList![0] = ml
+            }else{
+                ml = MessageList()
+                ml.save()
+                ml.messages.append(message)
+                self._messageList?.insert(ml, at: 0)
+            }
             ml.save()
-            ml.messages.append(message)
-            self._messageList?.insert(ml, at: 0)
         }
-        ml.save()
     }
     
     private func createDefaultAssistant(compition: @escaping () -> ()) {

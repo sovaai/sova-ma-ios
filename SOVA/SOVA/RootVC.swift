@@ -10,6 +10,7 @@ import Network
 
 class PageViewController: UIPageViewController{
     
+    static var shared = PageViewController()
     
     //MARK: Buttons
     private var settingsBtn = UIButton()
@@ -95,8 +96,9 @@ class PageViewController: UIPageViewController{
         let queue = DispatchQueue(label: "Monitor")
         monitor.start(queue: queue)
         
-        self.audioManager.delegate = self
-        self.audioManager.animateDelegate = self.dilogVc
+        self.audioManager.errorDelegate = self
+        self.audioManager.recordDelegate = self
+//        self.audioManager
     
     }
     
@@ -194,12 +196,12 @@ extension PageViewController: UIPageViewControllerDataSource{
 extension PageViewController: UIPageViewControllerDelegate{
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         guard completed, self.curentVC is AnimateVC else { return }
-        self.animateVC.configure()
+//        self.animateVC.configure(with: .hi)
     }
 }
 
 
-extension PageViewController: AudioDelegate{
+extension PageViewController: AudioErrorDelegate{
     func audioErrorMessage(title: String) {
         self.showSimpleAlert(title: title)
     }
@@ -221,6 +223,14 @@ extension PageViewController: AudioDelegate{
     func recording(state: AudioState) {
         DispatchQueue.main.async {
             self.recordingBtn.audioState(is: state)
+            self.animateVC.speechState(state: state)
         }
+    }
+}
+
+extension PageViewController: AudioRecordingDelegate{
+    func speechState(state: AudioState) {
+        self.dilogVc.speechState(state: state)
+        self.animateVC.speechState(state: state)
     }
 }

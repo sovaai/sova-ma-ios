@@ -81,8 +81,11 @@ class DialogTextField: UIView{
         self.sendMessageBtn.isHidden = true
         let message = Message(title: text, sender: .user)
         DataManager.shared.saveNew(message)
-        NetworkManager.shared.sendMessage(cuid: DataManager.shared.currentAssistants.cuid.string, message: text) { (msg, error) in
+        NetworkManager.shared.sendMessage(cuid: DataManager.shared.currentAssistants.cuid.string, message: text) { (msg, animation, error) in
             guard error == nil else { return }
+            if let type = animation, let animationType = AssistantVideoStarter.AnimType(rawValue: type) {
+                AssistantVideoStarter.showAnimation(type: animationType)
+            }
             guard let messg = msg else { return }
             let message = Message(title: messg, sender: .assistant)
             DataManager.shared.saveNew(message)
