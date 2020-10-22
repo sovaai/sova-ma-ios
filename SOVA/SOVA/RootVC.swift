@@ -220,17 +220,19 @@ extension PageViewController: AudioErrorDelegate{
         }
     }
     
-    func recording(state: AudioState) {
-        DispatchQueue.main.async {
-            self.recordingBtn.audioState(is: state)
-            self.animateVC.speechState(state: state)
-        }
-    }
 }
 
 extension PageViewController: AudioRecordingDelegate{
     func speechState(state: AudioState) {
-        self.dilogVc.speechState(state: state)
-        self.animateVC.speechState(state: state)
+        DispatchQueue.main.async {
+            self.animateVC.speechState(state: state)
+            self.dilogVc.speechState(state: state)
+        }
+    }
+    
+    func recording(state: AudioState) {
+        DispatchQueue.main.async {
+            self.recordingBtn.audioState(is: state)
+        }
     }
 }

@@ -23,13 +23,6 @@ extension AudioRecordingDelegate{
     func speechState(state: AudioState) {}
 }
 
-extension AudioRecordingDelegate{
-    func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
-        guard !flag else { return }
-        self.recording(state: .stop)
-    }
-}
-
 class AudioManager: NSObject{
     private lazy var recordingSession: AVAudioSession = {
         let session = AVAudioSession.sharedInstance()
@@ -40,12 +33,13 @@ class AudioManager: NSObject{
         }catch{
             self.errorDelegate?.audioErrorMessage(title: "Ошибка доступа к AVAudioSession".localized)
         }
+    
         return session
     }()
     
-    private var audioRecorder: AVAudioRecorder!
+    private var audioRecorder: AVAudioRecorder? = AVAudioRecorder()
     
-    private var player: AVAudioPlayer?
+    private var player: AVAudioPlayer? = AVAudioPlayer()
     
     public var isRecording: Bool = false {
         didSet{
@@ -63,6 +57,8 @@ class AudioManager: NSObject{
     private lazy var speech = TTS()
     private lazy var speechRecognizer = ASR()
     
+    private var playItem = [Data]()
+    
     private lazy var url: URL? = {
         let url = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first?.appendingPathComponent("userRecording.m4a")
         return url
@@ -72,7 +68,7 @@ class AudioManager: NSObject{
         self.recordingSession.requestRecordPermission { [weak self] allowed in
             guard let self = self else { return }
             guard allowed else { self.errorDelegate?.allowAlert(); return }
-            
+            self.finishRecording(is: true)
             guard let url = self.url else {
                 self.errorDelegate?.audioErrorMessage(title: "Не удается найти путь для записи".localized)
                 return
@@ -86,8 +82,7 @@ class AudioManager: NSObject{
             
             do{
                 self.audioRecorder = try AVAudioRecorder(url: url, settings: settings)
-                self.audioRecorder.delegate = self.errorDelegate //FIXEME
-                self.audioRecorder.record()
+                self.audioRecorder?.record()
                 self.recordDelegate?.recording(state: .start)
             }catch{
                 self.errorDelegate?.audioErrorMessage(title: "Не удается начать запись".localized)
@@ -96,7 +91,7 @@ class AudioManager: NSObject{
     }
     
     private func finishRecording(is succes: Bool){
-        self.audioRecorder.stop()
+        self.audioRecorder?.stop()
         self.audioRecorder = nil
         
         self.recordDelegate?.recording(state: .stop)
@@ -107,7 +102,7 @@ class AudioManager: NSObject{
         DispatchQueue.global(qos: .userInteractive).async {
             do{
                 let data = try Data(contentsOf: self.url!)
-//                self.recordDelegate?.speechState(state: .proces)
+                self.recordDelegate?.speechState(state: .start)
                 self.speechRecognizer.recognize(data: data) { (text, error) in
                     guard error == nil, let text = text else {
                         self.errorDelegate?.audioErrorMessage(title: "Ошибка распозования текста".localized)
@@ -137,12 +132,13 @@ class AudioManager: NSObject{
                 self.errorDelegate?.audioErrorMessage(title: "Ошибка воспроизведения синтезатора речи")
                 return
             }
+            self.playItem.append(dataAudio)
+            guard self.playItem.count == 1 else { return }
             do{
                 self.player = try AVAudioPlayer(data: dataAudio)
             }catch{
                 print(error)
             }
-            
             self.player?.play()
         }
     }
@@ -154,6 +150,8 @@ class AudioManager: NSObject{
                 self.recordDelegate?.speechState(state: .stop)
                 return
             }
+            let message = Message(title: messg, sender: .assistant)
+            DataManager.shared.saveNew(message)
             if let type = animation, let animationType = AnimationType(rawValue: type) {
 //                AnimateVC.shared.configure(with: animationType)
             }
@@ -161,6 +159,36 @@ class AudioManager: NSObject{
         }
     }
     
+    override init() {
+        super.init()
+        self.player?.delegate = self
+        self.audioRecorder?.delegate = self
+    }
+}
+
+extension AudioManager: AVAudioPlayerDelegate{
+    func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: Error?) {
+        self.errorDelegate?.audioErrorMessage(title: error?.localizedDescription ?? "Some error".localized)
+    }
+    
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+        guard flag else { return }
+        self.playItem.removeFirst()
+        guard let dataAudio = self.playItem.first else { return }
+        do{
+            self.player = try AVAudioPlayer(data: dataAudio)
+            self.player?.play()
+        }catch{
+            print(error)
+        }
+    }
+}
+
+extension AudioManager: AVAudioRecorderDelegate{
+    func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
+        guard flag else { return }
+        self.recordDelegate?.recording(state: .stop)
+    }
 }
 
 enum AudioState{

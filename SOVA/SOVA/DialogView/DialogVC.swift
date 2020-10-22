@@ -56,7 +56,6 @@ class DialogViewController: UIViewController{
     }
     
     deinit {
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.init("MessagesUpdate"), object: nil)
     }
 
@@ -103,35 +102,37 @@ class DialogViewController: UIViewController{
 
 extension DialogViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return self.messageList.count + (self.isSpeechRegonizing ? 1 : 0)
+        return self.messageList.count
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        guard section != 0 || !self.isSpeechRegonizing else { return 1}
-        return self.messageList[section - (self.isSpeechRegonizing ? 1 : 0)].messages.count + 1
+        return self.messageList[section].messages.count + 1 + (self.isSpeechRegonizing ? (section == 0 ? 1 : 0) : 0)
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard indexPath.section != 0 || !self.isSpeechRegonizing else {
+        print("начал строить")
+        defer {
+            print("закончил строить")
+        }
+        guard indexPath != IndexPath(row: 0, section: 0) || !self.isSpeechRegonizing else {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "animationCell", for: indexPath) as? AnimationCell  else { return UICollectionViewCell() }
             cell.isAnimateStart = true
             self.animateComplition = { cell.isAnimateStart = false }
             return cell
         }
-        let section = indexPath.section - (self.isSpeechRegonizing ? 1 : 0)
-        guard self.messageList[section].messages.count != indexPath.row else {
+        guard self.messageList[indexPath.section].messages.count != indexPath.row else {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "header", for: indexPath) as? SimpleCell  else { return UICollectionViewCell() }
-            cell.title = self.dateFormatter.string(from: self.messageList[section].date)
+            cell.title = self.dateFormatter.string(from: self.messageList[indexPath.section].date)
             return cell
         }
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "dialogCell", for: indexPath) as? DialogCell else { return UICollectionViewCell() }
-        let messages = self.messageList[section].messages
+        let messages = self.messageList[indexPath.section].messages
         let message = messages[messages.count - indexPath.row - 1]
         let indent: CGFloat
         if indexPath.row >= messages.count - 1{
             indent = 8
         }else{
-            let beforeMessageSender = self.messageList[section].messages[indexPath.row + 1].sender
+            let beforeMessageSender = self.messageList[indexPath.section].messages[indexPath.row + 1].sender
             indent = beforeMessageSender == message.sender ? 8 : 24
         }
         cell.configure(with: message, and: indent)

@@ -274,11 +274,11 @@ class InteractiveLinkLabel: UILabel {
     public var message: Message = Message(title: ""){
         didSet{
             self.textColor = message.sender.messageColor
-            
+self.text = message.title.html2String
             guard self.message.title != self.message.title.html2String else {self.text = message.title.html2String; return }
-            
+
             let muttableAttributedString = NSMutableAttributedString(string: message.title.html2String, attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 15), NSAttributedString.Key.foregroundColor: message.sender.messageColor])
-            
+
             guard let att = message.title.html2AttributedString else { self.text = message.title.html2String; return }
             let wholeRange = NSRange((att.string.startIndex...), in: att.string)
             att.enumerateAttribute(.link, in: wholeRange, options: []) { (value, range, pointee) in
@@ -286,7 +286,7 @@ class InteractiveLinkLabel: UILabel {
                 muttableAttributedString.addAttributes([NSAttributedString.Key.foregroundColor : UIColor.blue], range: range)
                 self.attributedText = muttableAttributedString
             }
-            
+
             self.attributedText = muttableAttributedString
             self.ranges.removeAll()
             let ranges = self.checkUserLinks(firstText: self.message.title.html2String, text: self.message.title)
