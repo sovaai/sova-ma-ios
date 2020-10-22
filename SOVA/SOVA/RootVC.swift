@@ -10,7 +10,15 @@ import Network
 
 class PageViewController: UIPageViewController{
     
-    static var shared = PageViewController()
+    static var shared = PageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: [UIPageViewController.OptionsKey.interPageSpacing : 0])
+    
+    private override init(transitionStyle style: UIPageViewController.TransitionStyle, navigationOrientation: UIPageViewController.NavigationOrientation, options: [UIPageViewController.OptionsKey : Any]? = nil) {
+        super.init(transitionStyle: style, navigationOrientation: navigationOrientation, options: options)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     //MARK: Buttons
     private var settingsBtn = UIButton()
@@ -73,8 +81,7 @@ class PageViewController: UIPageViewController{
     
     private var nextVC: UIViewController {
         get{
-            self.curentVC = self.curentVC is DialogViewController ? self.animateVC : self.dilogVc
-            return self.curentVC
+            return self.curentVC is DialogViewController ? self.animateVC : self.dilogVc
         }
     }
     
@@ -98,6 +105,7 @@ class PageViewController: UIPageViewController{
         
         self.audioManager.errorDelegate = self
         self.audioManager.recordDelegate = self
+        
 //        self.audioManager
     
     }
@@ -195,9 +203,10 @@ extension PageViewController: UIPageViewControllerDataSource{
 
 extension PageViewController: UIPageViewControllerDelegate{
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
-        guard completed, self.curentVC is AnimateVC else { return }
-//        self.animateVC.configure(with: .hi)
+        guard completed else { return }
+        self.curentVC = self.nextVC
     }
+
 }
 
 

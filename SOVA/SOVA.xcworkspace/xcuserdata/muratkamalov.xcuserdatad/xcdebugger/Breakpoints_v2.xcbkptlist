@@ -107,65 +107,33 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "26BCD804-91D8-4DBF-AAE0-CFB3F9E17A6A"
+            uuid = "D9A1E75D-21D0-40E6-A7A3-5CDA4BF4F30E"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "SOVA/DialogView/DialogTextField.swift"
+            filePath = "SOVA/RootVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "91"
-            endingLineNumber = "91"
-            landmarkName = "sendMesg()"
+            startingLineNumber = "187"
+            endingLineNumber = "187"
+            landmarkName = "pageViewController(_:viewControllerBefore:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "B2A69ED4-65F5-4849-8D54-B12AE7022841"
+            uuid = "57233EEA-7A4B-42B2-902D-36C980213BF6"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "SOVA/DialogView/DialogVC.swift"
+            filePath = "SOVA/RootVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "98"
-            endingLineNumber = "98"
-            landmarkName = "reloadData(notification:)"
+            startingLineNumber = "191"
+            endingLineNumber = "191"
+            landmarkName = "pageViewController(_:viewControllerAfter:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "B2A69ED4-65F5-4849-8D54-B12AE7022841 - 525b97922a4069c5"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SOVA.DialogViewController.reloadData(notification: Foundation.Notification) -&gt; ()"
-                  moduleName = "SOVA"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/muratkamalov/Desktop/ios/SOVA/SOVA/DialogView/DialogVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "98"
-                  endingLineNumber = "98"
-                  offsetFromSymbolStart = "364">
-               </Location>
-               <Location
-                  uuid = "B2A69ED4-65F5-4849-8D54-B12AE7022841 - 291a618fd7511959"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; () in SOVA.DialogViewController.reloadData(notification: Foundation.Notification) -&gt; ()"
-                  moduleName = "SOVA"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/muratkamalov/Desktop/ios/SOVA/SOVA/DialogView/DialogVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "99"
-                  endingLineNumber = "99"
-                  offsetFromSymbolStart = "24">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

@@ -40,10 +40,10 @@ class DialogCell: UICollectionViewCell{
     
     fileprivate var sender: WhosMessage = .user{
         didSet{
-            self.leftLabelContraint.constant = self.sender == .user ? 16 : 0
-            self.rightLabelConstrint.constant = self.sender == .user ? 0 : -16
-            self.leftConstraint.isActive = self.sender != .user
-            self.rightConstraint.isActive = self.sender == .user
+            self.leftLabelContraint.constant = self.sender == .user ? 0 : 16
+            self.rightLabelConstrint.constant = self.sender == .user ? -16 : 0
+            self.leftConstraint.isActive = self.sender == .user
+            self.rightConstraint.isActive = self.sender != .user
         }
     }
     
@@ -66,7 +66,7 @@ class DialogCell: UICollectionViewCell{
         
         self.messageBackground.addSubview(self.bottomLine)
         self.bottomLine.translatesAutoresizingMaskIntoConstraints = false
-        self.bottomLine.bottomAnchor.constraint(equalTo: self.messageBackground.bottomAnchor).isActive = true
+        self.bottomLine.topAnchor.constraint(equalTo: self.messageBackground.topAnchor).isActive = true
         self.bottomLine.heightAnchor.constraint(equalToConstant: 17).isActive = true
         self.rightLabelConstrint = self.bottomLine.rightAnchor.constraint(equalTo: self.messageBackground.rightAnchor)
         self.leftLabelContraint = self.bottomLine.leftAnchor.constraint(equalTo: self.messageBackground.leftAnchor)
@@ -97,7 +97,7 @@ class DialogCell: UICollectionViewCell{
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
+        self.messageLabel.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
     }
 }
 

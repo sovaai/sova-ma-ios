@@ -84,18 +84,16 @@ class DialogViewController: UIViewController{
         
         self.collectionView.transform = CGAffineTransform.init(rotationAngle: (-(CGFloat)(Double.pi)))
         
-//        self.btnsCollectionView.translatesAutoresizingMaskIntoConstraints = false
-//        self.btnsCollectionView.bottomAnchor.constraint(equalTo: self.recordingBtn.topAnchor, constant: 0).isActive = true
-//        self.btnsCollectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-//        self.btnsCollectionView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
-//        self.btnsCollectionView.heightAnchor.constraint(equalToConstant: 0).isActive = true
-        
     }
     
     @objc func reloadData(notification: Notification){
         self.messageList = DataManager.shared.messageList
         DispatchQueue.main.async {
-            self.collectionView.reloadData()
+            if self.messageList.count <= 1 {
+                self.collectionView.reloadData()
+            }else{
+                self.collectionView.reloadSections(IndexSet(0...0))
+            }
         }
     }
 }
@@ -143,13 +141,7 @@ extension DialogViewController: UICollectionViewDelegate, UICollectionViewDataSo
         
         return CGSize(width: self.view.frame.width, height: 44)
     }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let cell = collectionView.cellForItem(at: indexPath) as? DialogCell,
-              let url = cell.url else { return }
-        UIApplication.shared.open(url)
-    }
-    
+ 
 }
 
 
