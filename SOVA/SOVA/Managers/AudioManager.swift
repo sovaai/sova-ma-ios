@@ -152,9 +152,7 @@ class AudioManager: NSObject{
             }
             let message = Message(title: messg, sender: .assistant)
             DataManager.shared.saveNew(message)
-            if let type = animation, let animationType = AnimationType(rawValue: type) {
-//                AnimateVC.shared.configure(with: animationType)
-            }
+            AnimateVC.shared.configure(with: animation)
             self.playSpeech(with: messg)
         }
     }

@@ -16,40 +16,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "236"
             endingLineNumber = "236"
-            landmarkName = "mailComposeController(_:didFinishWith:error:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "4F08DF2D-D987-4C00-8753-6408F346EDA6"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SOVA/DialogView/BtnsCollectionView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "48"
-            endingLineNumber = "48"
-            landmarkName = "updateBtns(notification:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "E0FBACE0-C6D3-4222-A610-EF06D3657751"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SOVA/DialogView/BtnsCollectionView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "14"
-            endingLineNumber = "14"
-            landmarkName = "model"
-            landmarkType = "24">
+            landmarkName = "unknown"
+            landmarkType = "0">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -82,8 +50,8 @@
             filePath = "SOVA/Managers/AudioManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "171"
-            endingLineNumber = "171"
+            startingLineNumber = "169"
+            endingLineNumber = "169"
             landmarkName = "audioPlayerDecodeErrorDidOccur(_:error:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -107,32 +75,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "D9A1E75D-21D0-40E6-A7A3-5CDA4BF4F30E"
+            uuid = "C527EDA1-A07E-41DB-9D20-2F787DBE68F2"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "SOVA/RootVC.swift"
+            filePath = "SOVA/AnimateVc/AnimateVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "187"
-            endingLineNumber = "187"
-            landmarkName = "pageViewController(_:viewControllerBefore:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "57233EEA-7A4B-42B2-902D-36C980213BF6"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SOVA/RootVC.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "191"
-            endingLineNumber = "191"
-            landmarkName = "pageViewController(_:viewControllerAfter:)"
+            startingLineNumber = "77"
+            endingLineNumber = "77"
+            landmarkName = "configure(with:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
