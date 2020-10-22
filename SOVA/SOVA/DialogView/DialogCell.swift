@@ -40,10 +40,10 @@ class DialogCell: UICollectionViewCell{
     
     fileprivate var sender: WhosMessage = .user{
         didSet{
-            self.leftLabelContraint.constant = self.sender == .user ? 16 : 0
-            self.rightLabelConstrint.constant = self.sender == .user ? 0 : -16
-            self.leftConstraint.isActive = self.sender != .user
-            self.rightConstraint.isActive = self.sender == .user
+            self.leftLabelContraint.constant = self.sender == .user ? 0 : 16
+            self.rightLabelConstrint.constant = self.sender == .user ? -16 : 0
+            self.leftConstraint.isActive = self.sender == .user
+            self.rightConstraint.isActive = self.sender != .user
         }
     }
     
@@ -66,7 +66,7 @@ class DialogCell: UICollectionViewCell{
         
         self.messageBackground.addSubview(self.bottomLine)
         self.bottomLine.translatesAutoresizingMaskIntoConstraints = false
-        self.bottomLine.bottomAnchor.constraint(equalTo: self.messageBackground.bottomAnchor).isActive = true
+        self.bottomLine.topAnchor.constraint(equalTo: self.messageBackground.topAnchor).isActive = true
         self.bottomLine.heightAnchor.constraint(equalToConstant: 17).isActive = true
         self.rightLabelConstrint = self.bottomLine.rightAnchor.constraint(equalTo: self.messageBackground.rightAnchor)
         self.leftLabelContraint = self.bottomLine.leftAnchor.constraint(equalTo: self.messageBackground.leftAnchor)
@@ -97,7 +97,7 @@ class DialogCell: UICollectionViewCell{
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
+        self.messageLabel.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
     }
 }
 
@@ -274,11 +274,11 @@ class InteractiveLinkLabel: UILabel {
     public var message: Message = Message(title: ""){
         didSet{
             self.textColor = message.sender.messageColor
-            
+self.text = message.title.html2String
             guard self.message.title != self.message.title.html2String else {self.text = message.title.html2String; return }
-            
+
             let muttableAttributedString = NSMutableAttributedString(string: message.title.html2String, attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 15), NSAttributedString.Key.foregroundColor: message.sender.messageColor])
-            
+
             guard let att = message.title.html2AttributedString else { self.text = message.title.html2String; return }
             let wholeRange = NSRange((att.string.startIndex...), in: att.string)
             att.enumerateAttribute(.link, in: wholeRange, options: []) { (value, range, pointee) in
@@ -286,7 +286,7 @@ class InteractiveLinkLabel: UILabel {
                 muttableAttributedString.addAttributes([NSAttributedString.Key.foregroundColor : UIColor.blue], range: range)
                 self.attributedText = muttableAttributedString
             }
-            
+
             self.attributedText = muttableAttributedString
             self.ranges.removeAll()
             let ranges = self.checkUserLinks(firstText: self.message.title.html2String, text: self.message.title)
@@ -356,8 +356,11 @@ class InteractiveLinkLabel: UILabel {
             guard range.key.contains(characterIndex) else { continue }
             let message = Message(title: range.value, sender: .user)
             DataManager.shared.saveNew(message)
-            NetworkManager.shared.sendMessage(cuid: DataManager.shared.currentAssistants.cuid.string, message: range.value) { (msg, error) in
+            NetworkManager.shared.sendMessage(cuid: DataManager.shared.currentAssistants.cuid.string, message: range.value) { (msg,animation, error) in
                 guard error == nil else { return }
+                if let type = animation, let animationType = AssistantVideoStarter.AnimType(rawValue: type) {
+                    AssistantVideoStarter.showAnimation(type: animationType)
+                }
                 guard let messg = msg else { return }
                 let message = Message(title: messg, sender: .assistant)
                 DataManager.shared.saveNew(message)

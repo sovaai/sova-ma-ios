@@ -18,7 +18,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         self.window = UIWindow(frame: UIScreen.main.bounds)
         
-        let viewController = DialogViewController.shared
+        let viewController = PageViewController.shared
+//        let viewController = DialogViewController.shared
         
         let navigationViewController = UINavigationController(rootViewController: viewController)
         self.navigtionController = navigationViewController
