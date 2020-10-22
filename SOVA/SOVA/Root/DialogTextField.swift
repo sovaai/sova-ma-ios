@@ -83,9 +83,9 @@ class DialogTextField: UIView{
         DataManager.shared.saveNew(message)
         NetworkManager.shared.sendMessage(cuid: DataManager.shared.currentAssistants.cuid.string, message: text) { (msg, animation, error) in
             guard error == nil else { return }
-            if let type = animation, let animationType = AssistantVideoStarter.AnimType(rawValue: type) {
-                AssistantVideoStarter.showAnimation(type: animationType)
-            }
+            
+            AnimateVC.shared.configure(with: animation)
+            
             guard let messg = msg else { return }
             let message = Message(title: messg, sender: .assistant)
             DataManager.shared.saveNew(message)

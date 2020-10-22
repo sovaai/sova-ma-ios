@@ -22,6 +22,8 @@ class DialogViewController: UIViewController{
         return cv
     }()
     
+    public var isActive: Bool = false
+    
     internal private(set) var bottomCollectionView: NSLayoutConstraint? = nil
     
     private var messageList = DataManager.shared.messageList //Array(DataManager.shared.currentAssistants.messageList.reversed()).sorted{$0.date > $1.date}
@@ -55,12 +57,17 @@ class DialogViewController: UIViewController{
         self.collectionView.scrollToItem(at: IndexPath(row: self.messageList.last?.messages.count ?? 0, section: self.messageList.count), at: .bottom, animated: true)
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        self.animateComplition?()
+    }
+    
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.init("MessagesUpdate"), object: nil)
     }
 
     
-    func uiSetUp(){
+    private func uiSetUp(){
         self.view.backgroundColor = UIColor(named: "Colors/mainbacground")
         
         self.view.addSubview(self.collectionView)
@@ -87,6 +94,7 @@ class DialogViewController: UIViewController{
     }
     
     @objc func reloadData(notification: Notification){
+        guard self.isActive else { return }
         self.messageList = DataManager.shared.messageList
         DispatchQueue.main.async {
             if self.messageList.count <= 1 {
@@ -94,6 +102,16 @@ class DialogViewController: UIViewController{
             }else{
                 self.collectionView.reloadSections(IndexSet(0...0))
             }
+        }
+    }
+    
+    func speechState(state: AudioState) {
+        guard self.isActive else { return }
+        DispatchQueue.main.async {
+            self.isSpeechRegonizing = state != .stop
+            self.collectionView.reloadData()
+            guard state == .stop else { return }
+            self.animateComplition?()
         }
     }
 }
@@ -142,18 +160,6 @@ extension DialogViewController: UICollectionViewDelegate, UICollectionViewDataSo
         return CGSize(width: self.view.frame.width, height: 44)
     }
  
-}
-
-
-extension DialogViewController: AudioRecordingDelegate{
-    func speechState(state: AudioState) {
-        DispatchQueue.main.async {
-            self.isSpeechRegonizing = state != .stop
-            self.collectionView.reloadData()
-            guard state == .stop else { return }
-            self.animateComplition?()
-        }
-    }
 }
 
 

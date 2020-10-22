@@ -189,31 +189,31 @@ class AnimationCell: UICollectionViewCell {
     
     private func startAnimate(){
         guard self.isAnimateStart else { return }
-        UIView.animate(withDuration: 0.5) {
-            self.heightConstrints[2].constant = 4
-            self.heightConstrints[0].constant = 5
-            self.rightView.backgroundColor = UIColor(named: "Colors/assistantTextColor")?.withAlphaComponent(0.4)
-            self.leftView.backgroundColor = UIColor(named: "Colors/assistantTextColor")
-            self.layoutIfNeeded()
-        } completion: { (_) in
-            UIView.animate(withDuration: 0.5) {
-                self.heightConstrints[0].constant = 4
-                self.heightConstrints[1].constant = 5
-                self.leftView.backgroundColor = UIColor(named: "Colors/assistantTextColor")?.withAlphaComponent(0.4)
-                self.centralView.backgroundColor = UIColor(named: "Colors/assistantTextColor")
-                self.layoutIfNeeded()
-            } completion: { (_) in
-                UIView.animate(withDuration: 0.5) {
-                    self.heightConstrints[1].constant = 4
-                    self.heightConstrints[2].constant = 5
-                    self.centralView.backgroundColor = UIColor(named: "Colors/assistantTextColor")?.withAlphaComponent(0.4)
-                    self.rightView.backgroundColor = UIColor(named: "Colors/assistantTextColor")
-                    self.layoutIfNeeded()
-                } completion: { (_) in
-                    self.startAnimate()
-                }
-            }
-        }
+//        UIView.animate(withDuration: 0.5) {
+//            self.heightConstrints[2].constant = 4
+//            self.heightConstrints[0].constant = 5
+//            self.rightView.backgroundColor = UIColor(named: "Colors/assistantTextColor")?.withAlphaComponent(0.4)
+//            self.leftView.backgroundColor = UIColor(named: "Colors/assistantTextColor")
+//            self.layoutIfNeeded()
+//        } completion: { (_) in
+//            UIView.animate(withDuration: 0.5) {
+//                self.heightConstrints[0].constant = 4
+//                self.heightConstrints[1].constant = 5
+//                self.leftView.backgroundColor = UIColor(named: "Colors/assistantTextColor")?.withAlphaComponent(0.4)
+//                self.centralView.backgroundColor = UIColor(named: "Colors/assistantTextColor")
+//                self.layoutIfNeeded()
+//            } completion: { (_) in
+//                UIView.animate(withDuration: 0.5) {
+//                    self.heightConstrints[1].constant = 4
+//                    self.heightConstrints[2].constant = 5
+//                    self.centralView.backgroundColor = UIColor(named: "Colors/assistantTextColor")?.withAlphaComponent(0.4)
+//                    self.rightView.backgroundColor = UIColor(named: "Colors/assistantTextColor")
+//                    self.layoutIfNeeded()
+//                } completion: { (_) in
+//                    self.startAnimate()
+//                }
+//            }
+//        }
     }
 }
 
@@ -358,9 +358,7 @@ self.text = message.title.html2String
             DataManager.shared.saveNew(message)
             NetworkManager.shared.sendMessage(cuid: DataManager.shared.currentAssistants.cuid.string, message: range.value) { (msg,animation, error) in
                 guard error == nil else { return }
-                if let type = animation, let animationType = AssistantVideoStarter.AnimType(rawValue: type) {
-                    AssistantVideoStarter.showAnimation(type: animationType)
-                }
+                AnimateVC.shared.configure(with: animation)
                 guard let messg = msg else { return }
                 let message = Message(title: messg, sender: .assistant)
                 DataManager.shared.saveNew(message)

@@ -126,6 +126,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5C0EC70E2541D612007AB744 /* Root */ = {
+			isa = PBXGroup;
+			children = (
+				5CD048DD253F1A500008662F /* RootVC.swift */,
+				5C86F17A252C7DEF0029CE50 /* DialogTextField.swift */,
+				5C4B3D04252DD4F800BDDB35 /* AudioBtn.swift */,
+				5C12BF73253EFD6A00AF9EDA /* NoConnectionView.swift */,
+				5C542420253C8C9300A35E18 /* BtnsCollectionView.swift */,
+			);
+			path = Root;
+			sourceTree = "<group>";
+		};
 		5C4B3D01252DC9C100BDDB35 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
@@ -165,10 +177,6 @@
 			children = (
 				5C63AB7B2527834500814CF7 /* DialogVC.swift */,
 				5C63AB7E2527851C00814CF7 /* DialogCell.swift */,
-				5C86F17A252C7DEF0029CE50 /* DialogTextField.swift */,
-				5C542420253C8C9300A35E18 /* BtnsCollectionView.swift */,
-				5C4B3D04252DD4F800BDDB35 /* AudioBtn.swift */,
-				5C12BF73253EFD6A00AF9EDA /* NoConnectionView.swift */,
 			);
 			path = DialogView;
 			sourceTree = "<group>";
@@ -275,7 +283,7 @@
 		5CFBDEAB25262706005D8057 /* SOVA */ = {
 			isa = PBXGroup;
 			children = (
-				5CD048DD253F1A500008662F /* RootVC.swift */,
+				5C0EC70E2541D612007AB744 /* Root */,
 				5CD048E1253F38D00008662F /* AnimateVc */,
 				5C63AB7A2527832E00814CF7 /* DialogView */,
 				5C63AB592527789F00814CF7 /* Settings */,

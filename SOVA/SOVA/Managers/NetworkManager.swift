@@ -99,8 +99,7 @@ struct NetworkManager{
                   let resultDict = json["result"] as? [String: Any],
                   let text = resultDict["text"] as? [String: Any],
                   let value = text["value"] as? String else { completion(nil, nil, "Server answer is wrong".localized); return }
-                //                        let apiResponse = try JSONDecoder().decode(MovieApiResponse.self, from: responseData)
-                //                        completion(apiResponse.movies,nil)
+   
             let animation = resultDict["animation"] as? [String: Any]
             let type = animation?["type"] as? Int
             completion(value,type,nil)
@@ -174,10 +173,10 @@ enum AnimationType: Int{
     case hi = 1
     case no
     case yes
-    case startIdle
     case idle
-    case stopIdle
     case idk
+    case startIdle
+    case stopIdle
     
     var videoPath: String {
         switch self {
@@ -196,7 +195,6 @@ enum AnimationType: Int{
         case .idk:
             return "idk"
         }
-        return ""
     }
 }
 

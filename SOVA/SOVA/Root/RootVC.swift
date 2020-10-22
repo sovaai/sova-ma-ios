@@ -77,7 +77,12 @@ class PageViewController: UIPageViewController{
     private var dilogVc: DialogViewController = DialogViewController.shared
     private var animateVC: AnimateVC = AnimateVC.shared
     
-    private var curentVC: UIViewController = DialogViewController.shared
+    private var curentVC: UIViewController = DialogViewController.shared {
+        didSet{
+            self.dilogVc.isActive = self.curentVC is DialogViewController
+            self.animateVC.isActive = self.curentVC is AnimateVC
+        }
+    }
     
     private var nextVC: UIViewController {
         get{
