@@ -23,7 +23,7 @@ class AnimateVC: UIViewController{
     
     private let player = AVQueuePlayer()
     
-    
+    public var isActive: Bool = false
     //MARK: Timer
     private var timer: Timer!
     private var isAssistantWaiting = false
@@ -66,6 +66,7 @@ class AnimateVC: UIViewController{
     
     override func viewWillDisappear(_ animated: Bool) {
         self.timer.invalidate()
+        self.player.removeAllItems()
     }
     
     //----------------------------------------------------------------------------------------------------------------
@@ -73,6 +74,7 @@ class AnimateVC: UIViewController{
     //----------------------------------------------------------------------------------------------------------------
     
     public func configure(with value: Int?) {
+        guard self.isActive else { return }
         guard value != nil, let type = AnimationType(rawValue: value!) else { self.showSimpleAlert(title: "Some error in animate".localized); return }
         guard type != .idle else { self.playVideoIdle(); return }
         self.playVideo(name: type.videoPath, wakeup: true)
@@ -83,12 +85,14 @@ class AnimateVC: UIViewController{
     //----------------------------------------------------------------------------------------------------------------
     
     fileprivate func playVideoIdle() {
+        guard self.isActive else { return }
         guard !self.isAssistantWaiting else { self.playVideo(name: AnimationType.idle.videoPath, wakeup: false); return }
         self.playVideo(name: AnimationType.startIdle.videoPath, wakeup: false)
         self.isAssistantWaiting = true
     }
     
     public func playVideo(name: String, wakeup: Bool) {
+        guard self.isActive else { return }
         if wakeup && self.isAssistantWaiting, let path = Bundle.main.path(forResource: AnimationType.stopIdle.videoPath, ofType:"mp4") {
             let asset = AVURLAsset(url: URL(fileURLWithPath: path))
             let item = AVPlayerItem(asset: asset)
@@ -103,6 +107,7 @@ class AnimateVC: UIViewController{
     }
     
     private func playAssistant(item: AVPlayerItem?) {
+        guard self.isActive else { return }
         guard let item = item else { self.showSimpleAlert(title: "Video play error".localized); return }
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.onVideoItemEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: item)
