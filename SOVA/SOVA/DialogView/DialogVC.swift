@@ -22,7 +22,12 @@ class DialogViewController: UIViewController{
         return cv
     }()
     
-    public var isActive: Bool = false
+    public var isActive: Bool = false {
+        didSet{
+            guard self.isActive else{ return }
+            self.collectionView.reloadData()
+        }
+    }
     
     internal private(set) var bottomCollectionView: NSLayoutConstraint? = nil
     
