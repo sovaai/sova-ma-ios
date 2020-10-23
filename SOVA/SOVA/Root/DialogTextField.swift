@@ -48,7 +48,7 @@ class DialogTextField: UIView{
         self.textView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 17).isActive = true
         self.textView.rightAnchor.constraint(equalTo: self.sendMessageBtn.leftAnchor, constant: -17).isActive = true
         
-        self.textView.text = "Напишите сообщение…"
+        self.textView.text = "Напишите сообщение…".localized
         self.textView.textColor = UIColor(named: "Colors/headerColor") ?? UIColor(r: 15, g: 31, b: 72, a: 0.2)
         self.textView.font = UIFont.systemFont(ofSize: 16)
         self.textView.isEditable = true
@@ -76,7 +76,7 @@ class DialogTextField: UIView{
         
     @objc func sendMesg(){
         guard let text = self.textView.text, !text.isEmpty else { return }
-        self.textView.text = "Напишите сообщение…"
+        self.textView.text = "Напишите сообщение…".localized
         self.textView.textColor = UIColor(named: "Colors/headerColor") ?? UIColor(r: 15, g: 31, b: 72, a: 0.2)
         self.sendMessageBtn.isHidden = true
         let message = Message(title: text, sender: .user)
@@ -105,7 +105,7 @@ extension DialogTextField: UITextViewDelegate{
             textView.textColor = UIColor(named: "Colors/textColor") ?? UIColor.black
             self.sendMessageBtn.isHidden = false
         }else if range == NSRange(location: 0, length: 1) , text.isEmpty {
-            textView.text = "Напишите сообщение…"
+            textView.text = "Напишите сообщение…".localized
             textView.textColor = UIColor(named: "Colors/headerColor") ?? UIColor(r: 15, g: 31, b: 72, a: 0.2)
             self.sendMessageBtn.isHidden = true
             return false

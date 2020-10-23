@@ -35,7 +35,7 @@ class AnimateVC: UIViewController{
         label.translatesAutoresizingMaskIntoConstraints = false
         label.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
         label.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        label.text = "У данного ассисента нет анимации"
+        label.text = "У данного ассисента нет анимации".localized
         label.textColor = .black
         
         return label
@@ -133,7 +133,7 @@ class AnimateVC: UIViewController{
     
     private func playAssistant(item: AVPlayerItem?,_ wakeUp: Bool = false) {
         guard self.isActive || wakeUp else { return }
-        guard let item = item else { self.showSimpleAlert(title: "Video play error".localized); return }
+        guard let item = item else { self.showSimpleAlert(title: "Ошибка проигрывания видео".localized); return }
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.onVideoItemEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: item)
         

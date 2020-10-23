@@ -209,8 +209,25 @@ extension PageViewController: UIPageViewControllerDataSource{
 
 extension PageViewController: UIPageViewControllerDelegate{
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+        if previousViewControllers[0] is DialogViewController{
+            self.keyboardBtn.tintColor = UIColor(named: "Colors/textColor")
+            self.settingsBtn.tintColor = UIColor(named: "Colors/textColor")
+        }else{
+            self.keyboardBtn.tintColor = UIColor.black
+            self.settingsBtn.tintColor = UIColor.black
+        }
         guard completed else { return }
         self.curentVC = self.nextVC
+    }
+    
+    func pageViewController(_ pageViewController: UIPageViewController, willTransitionTo pendingViewControllers: [UIViewController]) {
+        if pendingViewControllers[0] is DialogViewController{
+            self.keyboardBtn.tintColor = UIColor(named: "Colors/textColor")
+            self.settingsBtn.tintColor = UIColor(named: "Colors/textColor")
+        }else{
+            self.keyboardBtn.tintColor = UIColor.black
+            self.settingsBtn.tintColor = UIColor.black
+        }
     }
 }
 
