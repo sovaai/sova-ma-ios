@@ -19,7 +19,7 @@ struct MessageList: Codable{
         guard let encoded = try? encoder.encode(self) else { return }
         UserDefaults.standard.setValue(encoded, forKey: self.id)
         NotificationCenter.default.post(name: NSNotification.Name.init("MessagesUpdate"), object: nil, userInfo: ["Id": self.id])
-        guard var assistant: Assitant = DataManager.shared.get(by: self.assistantId),
+        guard var assistant: Assitant = DataManager.shared.getAssistant(by: self.assistantId),
               assistant.messageListId.contains(where: {$0 == self.id}) == false else { return }
         assistant.messageListId.append(self.id)
         assistant.save()
@@ -45,7 +45,7 @@ struct Message: Codable {
         let encoder = JSONEncoder()
         guard let encoded = try? encoder.encode(self) else { return }
         UserDefaults.standard.setValue(encoded, forKey: self.id)
-        guard var assistant: Assitant = DataManager.shared.get(by: self.assistantId),
+        guard var assistant: Assitant = DataManager.shared.getAssistant(by: self.assistantId),
               assistant.messageListId.contains(where: {$0 == self.id}) == false else { return }
         assistant.messageListId.append(self.id)
         assistant.save()

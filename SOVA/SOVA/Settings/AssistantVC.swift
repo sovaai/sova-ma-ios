@@ -56,23 +56,6 @@ class AssistantVC: UIViewController{
         self.tableView.dataSource = self
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        let cells = self.tableView.visibleCells
-        for cell in cells where cell is TextFieldCell{
-            let cell = cell as? TextFieldCell
-            switch cell?.type {
-            case .name:
-                cell?.value = "Элиза"
-            case .token:
-                cell?.value = "ae83a6cc-8c54-4123-9fbe-1a4c9a8720d2"
-            case .url:
-                cell?.value = "https://biz.nanosemantics.ru/api/bat/nkd/json/"
-            default:
-                return
-            }
-        }
-    }
     
     @objc func activationWordOn(){
         
@@ -83,6 +66,7 @@ class AssistantVC: UIViewController{
     }
     
     @objc func saveModel(){
+        
         var name: String = ""; var urlString: String = ""; var token: String = ""
         for i in 0...3{
             guard let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: i)) as? TextFieldCell else { continue }
@@ -99,10 +83,23 @@ class AssistantVC: UIViewController{
             }
         }
         
+        if self.model == nil{
+            let sameAssistant = DataManager.shared.assistantsId.filter{
+                guard let assistant: Assitant = DataManager.shared.getAssistant(by: $0) else { return false }
+                return assistant.uuid.string == token
+            }
+            guard sameAssistant.isEmpty else { self.showSimpleAlert(title: "Такой ассистент уже есть".localized); return }
+        }
         
         guard let url = URL(string: urlString) else {self.showSimpleAlert(title: "Неправильный адрес API URL".localized, message: "Проверьте введенные данные".localized); return}
         guard let uuid = UUID(uuidString: token) else {self.showSimpleAlert(title: "Неправильный UUID".localized, message: "Проверьте введенные данные".localized); return  }
         
+        if var model = self.model, model.url == url, model.uuid == uuid  {
+            model.name = name
+            DataManager.shared.saveAssistant(model)
+            self.close()
+            return
+        }
         NetworkManager.shared.initAssistant(uuid: uuid.string, cuid: nil, context: nil, url: url) { [weak self] (cuid, error) in
             guard let self = self else { return }
             guard let cuidStr =  cuid, let cuid = UUID(uuidString: cuidStr), error == nil else { self.showSimpleAlert(title: error); return }
@@ -173,7 +170,7 @@ extension AssistantVC: UITableViewDataSource, UITableViewDelegate{
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard indexPath.section == 4 else { return }
+        guard indexPath.section == 4, self.model?.uuid.string != "b03822f6-362d-478b-978b-bed603602d0e" else { return }
         let alert = UIAlertController(title: "Подтвердение удаления".localized, message: "Нажмите на кнопку Удалить для пожтверждения удаления аккаунта".localized, preferredStyle: .alert)
         let delete = UIAlertAction(title: "Удалить".localized, style: .destructive) { (_) in
             guard let model = self.model else { return }

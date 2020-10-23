@@ -20,7 +20,7 @@ class SettingsVC: UIViewController{
     
     private var model : [Assitant] {
         get{
-            return DataManager.shared.assistantsId.compactMap{DataManager.shared.get(by: $0)}
+            return DataManager.shared.assistantsId.compactMap{DataManager.shared.getAssistant(by: $0)}
         }
     }
     
@@ -211,8 +211,10 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        guard indexPath.section == 0 else { return false}
-        return indexPath.row < self.model.count
+        guard indexPath.section == 0,
+              indexPath.row < self.model.count,
+              self.model[indexPath.row].uuid.string != "b03822f6-362d-478b-978b-bed603602d0e" else { return false}
+        return true
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
@@ -235,9 +237,6 @@ extension SettingsVC: MFMailComposeViewControllerDelegate{
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         self.mailComposer.dismiss(animated: true, completion: nil)
     }
-    
-    
-    
 }
 
 

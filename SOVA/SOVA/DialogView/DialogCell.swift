@@ -132,7 +132,7 @@ class AnimationCell: UICollectionViewCell {
         self.backgroundImageView.translatesAutoresizingMaskIntoConstraints = false
         self.backgroundImageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 8).isActive = true
         self.backgroundImageView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-        self.backgroundImageView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 16).isActive = true
+        self.backgroundImageView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -16).isActive = true
         self.backgroundImageView.widthAnchor.constraint(equalToConstant: 60).isActive = true
         self.backgroundImageView.image = UIImage(named: "Menu/Bundle")?.allowTinted
         self.backgroundImageView.tintColor = UIColor(named: "Colors/assisTantColor")
@@ -169,6 +169,11 @@ class AnimationCell: UICollectionViewCell {
         self.rightView.leftAnchor.constraint(equalTo: self.centralView.rightAnchor, constant: 3).isActive = true
         
         self.rightView.backgroundColor = UIColor(named: "Colors/assistantTextColor")?.withAlphaComponent(0.4)
+        
+        self.layoutIfNeeded()
+                self.centralView.layer.cornerRadius = self.centralView.frame.height / 2
+                self.leftView.layer.cornerRadius = self.leftView.frame.height / 2
+                self.rightView.layer.cornerRadius = self.rightView.frame.height / 2
     }
     
     required init?(coder: NSCoder) {
@@ -177,10 +182,8 @@ class AnimationCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
-        self.centralView.layer.cornerRadius = self.centralView.frame.height / 2
-        self.leftView.layer.cornerRadius = self.leftView.frame.height / 2
-        self.rightView.layer.cornerRadius = self.rightView.frame.height / 2
+        self.backgroundImageView.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
+
     }
     
     private func stopAnimate(){
@@ -189,31 +192,31 @@ class AnimationCell: UICollectionViewCell {
     
     private func startAnimate(){
         guard self.isAnimateStart else { return }
-//        UIView.animate(withDuration: 0.5) {
-//            self.heightConstrints[2].constant = 4
-//            self.heightConstrints[0].constant = 5
-//            self.rightView.backgroundColor = UIColor(named: "Colors/assistantTextColor")?.withAlphaComponent(0.4)
-//            self.leftView.backgroundColor = UIColor(named: "Colors/assistantTextColor")
-//            self.layoutIfNeeded()
-//        } completion: { (_) in
-//            UIView.animate(withDuration: 0.5) {
-//                self.heightConstrints[0].constant = 4
-//                self.heightConstrints[1].constant = 5
-//                self.leftView.backgroundColor = UIColor(named: "Colors/assistantTextColor")?.withAlphaComponent(0.4)
-//                self.centralView.backgroundColor = UIColor(named: "Colors/assistantTextColor")
-//                self.layoutIfNeeded()
-//            } completion: { (_) in
-//                UIView.animate(withDuration: 0.5) {
-//                    self.heightConstrints[1].constant = 4
-//                    self.heightConstrints[2].constant = 5
-//                    self.centralView.backgroundColor = UIColor(named: "Colors/assistantTextColor")?.withAlphaComponent(0.4)
-//                    self.rightView.backgroundColor = UIColor(named: "Colors/assistantTextColor")
-//                    self.layoutIfNeeded()
-//                } completion: { (_) in
-//                    self.startAnimate()
-//                }
-//            }
-//        }
+        UIView.animate(withDuration: 0.5) {
+            self.heightConstrints[2].constant = 4
+            self.heightConstrints[0].constant = 5
+            self.rightView.backgroundColor = UIColor(named: "Colors/assistantTextColor")?.withAlphaComponent(0.4)
+            self.leftView.backgroundColor = UIColor(named: "Colors/assistantTextColor")
+            self.layoutIfNeeded()
+        } completion: { (_) in
+            UIView.animate(withDuration: 0.5) {
+                self.heightConstrints[0].constant = 4
+                self.heightConstrints[1].constant = 5
+                self.leftView.backgroundColor = UIColor(named: "Colors/assistantTextColor")?.withAlphaComponent(0.4)
+                self.centralView.backgroundColor = UIColor(named: "Colors/assistantTextColor")
+                self.layoutIfNeeded()
+            } completion: { (_) in
+                UIView.animate(withDuration: 0.5) {
+                    self.heightConstrints[1].constant = 4
+                    self.heightConstrints[2].constant = 5
+                    self.centralView.backgroundColor = UIColor(named: "Colors/assistantTextColor")?.withAlphaComponent(0.4)
+                    self.rightView.backgroundColor = UIColor(named: "Colors/assistantTextColor")
+                    self.layoutIfNeeded()
+                } completion: { (_) in
+                    self.startAnimate()
+                }
+            }
+        }
     }
 }
 

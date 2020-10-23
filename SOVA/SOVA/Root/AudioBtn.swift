@@ -65,19 +65,20 @@ class AudioBtn: UIView{
     
     private func animate(_ view: UIView){
         
-//        UIView.animate(withDuration: 1.5, delay: 0, options: .curveLinear) {
-//            view.frame.size.height = 94
-//            view.frame.size.width = 94
-//            view.layer.cornerRadius = 94 / 2
-//            view.layer.borderColor = UIColor(r: 252, g: 45, b: 129, a: 0.1).cgColor
-//            view.center = self.btn.center
-//        } completion: { (_) in
-//            view.frame = CGRect(x: 0, y: 0, width: 60, height: 60)
-//            view.center = self.btn.center
-//            view.layer.cornerRadius = view.frame.height / 2
-//            view.layer.borderColor = UIColor(r: 252, g: 45, b: 129, a: 1.0).cgColor
-//            self.animate(view)
-//        }
+        UIView.animate(withDuration: 1.5, delay: 0, options: .curveLinear) {
+            view.frame.size.height = 94
+            view.frame.size.width = 94
+            view.layer.cornerRadius = 94 / 2
+            view.layer.borderColor = UIColor(r: 252, g: 45, b: 129, a: 0.1).cgColor
+            view.center = self.btn.center
+        } completion: { (_) in
+            view.frame = CGRect(x: 0, y: 0, width: 60, height: 60)
+            view.center = self.btn.center
+            view.layer.cornerRadius = view.frame.height / 2
+            view.layer.borderColor = UIColor(r: 252, g: 45, b: 129, a: 1.0).cgColor
+            self.animate(view)
+            self.layer.removeAllAnimations()
+        }
     }
     
     required init?(coder: NSCoder) {

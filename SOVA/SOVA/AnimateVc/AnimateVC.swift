@@ -20,10 +20,27 @@ class AnimateVC: UIViewController{
     
     //MARK: Player
     private lazy var playerView = VideoPlayerView()
-    
     private let player = AVQueuePlayer()
+    public var isActive: Bool = false {
+        didSet{
+            guard self.isActive, DataManager.shared.currentAssistants.uuid.string != "b03822f6-362d-478b-978b-bed603602d0e" else {self.errorLabel.isHidden = true; return }
+            self.isActive = false
+            self.errorLabel.isHidden = false
+        }
+    }
     
-    public var isActive: Bool = false
+    private lazy var errorLabel: UILabel = {
+        let label = UILabel()
+        self.view.addSubview(label)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
+        label.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        label.text = "У данного ассисента нет анимации"
+        label.textColor = .black
+        
+        return label
+    }()
+    
     //MARK: Timer
     private var timer: Timer!
     private var isAssistantWaiting = false
@@ -124,7 +141,6 @@ class AnimateVC: UIViewController{
     }
     
     @objc private func onVideoItemEnd(notification: Notification?) {
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: notification?.object)
         guard self.player.items().count != 1 else { self.player.pause(); return }
         self.player.advanceToNextItem()
     }

@@ -120,6 +120,7 @@ class PageViewController: UIPageViewController{
         self.delegate = self
         self.navigationController?.navigationBar.isHidden = true
         self.setViewControllers([self.dilogVc], direction: .forward, animated: true, completion: nil)
+        self.curentVC = self.dilogVc
         
         self.view.addSubview(self.recordingBtn)
         self.recordingBtn.translatesAutoresizingMaskIntoConstraints = false
@@ -211,13 +212,12 @@ extension PageViewController: UIPageViewControllerDelegate{
         guard completed else { return }
         self.curentVC = self.nextVC
     }
-
 }
 
 
 extension PageViewController: AudioErrorDelegate{
-    func audioErrorMessage(title: String) {
-        self.showSimpleAlert(title: title)
+    func audioErrorMessage(title: String, message: String?) {
+        self.showSimpleAlert(title: title, message: message)
     }
     
     func allowAlert() {

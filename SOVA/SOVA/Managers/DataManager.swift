@@ -25,9 +25,9 @@ class DataManager{
             guard self._currentAssistants == nil else {
                 return self._currentAssistants!
             }
-            guard let assistantId = UserDefaults.standard.value(forKey: "currentAssistantsId") as? String, let assitant: Assitant =  self.get(by: assistantId) else {
+            guard let assistantId = UserDefaults.standard.value(forKey: "currentAssistantsId") as? String, let assitant: Assitant =  self.getAssistant(by: assistantId) else {
                 //поставить дефолтного бота
-                if let first = self.assistantsId.first, let assitant: Assitant = self.get(by: first){
+                if let first = self.assistantsId.first, let assitant: Assitant = self.getAssistant(by: first){
                     self._currentAssistants = assitant
                     return self._currentAssistants!
                 }
@@ -60,7 +60,7 @@ class DataManager{
     
     private var _messageList: [MessageList]? = nil
     
-    public func get(by id: String) -> Assitant?{
+    public func getAssistant(by id: String) -> Assitant?{
         let decoder = JSONDecoder()
         guard let assitantData = UserDefaults.standard.object(forKey: id) as? Data,
               let assitant = try? decoder.decode(Assitant.self, from: assitantData) else { return nil }
@@ -166,7 +166,7 @@ class DataManager{
     
     func deleteAll(){
         for id in self.assistantsId  {
-            guard let assistant: Assitant = self.get(by: id) else { continue }
+            guard let assistant: Assitant = self.getAssistant(by: id) else { continue }
             self.deleteAssistant(assistant)
         }
     }
