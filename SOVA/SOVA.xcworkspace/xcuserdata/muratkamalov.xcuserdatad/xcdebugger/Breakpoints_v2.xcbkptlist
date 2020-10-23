@@ -148,7 +148,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "120"
             endingLineNumber = "120"
-            landmarkName = "numberOfSections(in:)"
+            landmarkName = "speechState(state:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -162,9 +162,9 @@
             filePath = "SOVA/AnimateVc/AnimateVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "106"
-            endingLineNumber = "106"
-            landmarkName = "playVideo(name:wakeup:)"
+            startingLineNumber = "115"
+            endingLineNumber = "115"
+            landmarkName = "playVideoIdle()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -180,7 +180,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "51"
             endingLineNumber = "51"
-            landmarkName = "viewDidLoad()"
+            landmarkName = "initTimer()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -194,8 +194,24 @@
             filePath = "SOVA/AnimateVc/AnimateVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "96"
-            endingLineNumber = "96"
+            startingLineNumber = "105"
+            endingLineNumber = "105"
+            landmarkName = "configure(with:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3B5F01E2-B5AE-40B1-9BC3-2E224BAB89BA"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SOVA/AnimateVc/AnimateVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "128"
+            endingLineNumber = "128"
             landmarkName = "playVideo(name:wakeup:)"
             landmarkType = "7">
          </BreakpointContent>
