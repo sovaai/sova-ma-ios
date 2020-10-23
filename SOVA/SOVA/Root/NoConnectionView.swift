@@ -31,7 +31,7 @@ class NoInternetConnectionView: UIView{
         
         label.font = UIFont.systemFont(ofSize: 20)
         label.textColor = UIColor(r: 21,g: 31,b: 73,a: 0.5)
-        label.text = "No Internet Connection".localized
+        label.text = "Нет интернет соединения".localized
         
         return label
     }()

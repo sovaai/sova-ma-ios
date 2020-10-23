@@ -47,7 +47,7 @@ struct NetworkManager{
                        completion: @escaping (_ cuid: String? ,_ error: String?)->()){
         self.router.request(.initChat(uuid: uuid, cuid: cuid, context: context), mainURL: url) { data, response, error in
             
-            guard error == nil else { completion(nil, "Please check your network connection."); return }
+            guard error == nil else { completion(nil, "Проверьте интернет соединение".localized); return }
             
             guard let response = response as? HTTPURLResponse else { return }
             
@@ -67,7 +67,7 @@ struct NetworkManager{
             
             guard let json = responseData.jsonDictionary,
                   let resultDict = json["result"] as? [String: Any],
-                  let cuid = resultDict["cuid"] as? String else { completion(nil, "Server answer is wrong".localized); return }
+                  let cuid = resultDict["cuid"] as? String else { completion(nil, "Неверный ответ сервера".localized); return }
                 //                        let apiResponse = try JSONDecoder().decode(MovieApiResponse.self, from: responseData)
                 //                        completion(apiResponse.movies,nil)
             completion(cuid,nil)
@@ -77,7 +77,7 @@ struct NetworkManager{
     func sendMessage(cuid: String, message: String, context: [String: Any]? = nil, completion: @escaping (_ answer: String?,_ animation: Int?, _ error: String?)->()) {
         self.router.request(.request(cuid: cuid, text: message, context: context)) { data, response, error in
             
-            guard error == nil else { completion(nil, nil, "Please check your network connection."); return }
+            guard error == nil else { completion(nil, nil, "Проверьте интернет соединение".localized); return }
             
             guard let response = response as? HTTPURLResponse else { return }
             
@@ -98,7 +98,7 @@ struct NetworkManager{
             guard let json = responseData.jsonDictionary,
                   let resultDict = json["result"] as? [String: Any],
                   let text = resultDict["text"] as? [String: Any],
-                  let value = text["value"] as? String else { completion(nil, nil, "Server answer is wrong".localized); return }
+                  let value = text["value"] as? String else { completion(nil, nil, "Неверный ответ сервера".localized); return }
    
             let animation = resultDict["animation"] as? [String: Any]
             let type = animation?["type"] as? Int
@@ -109,7 +109,7 @@ struct NetworkManager{
     
     func sendEvent(cuid: String, euid: EventType, context: [String: Any]? = nil, completion: @escaping (_ answer: String?, _ error: String?) -> ()){
         self.router.request(.event(cuid: cuid, euid: euid.rawValue, context: context)) { (data, response, error) in
-            guard error == nil else { completion(nil, "Please check your network connection."); return }
+            guard error == nil else { completion(nil, "Проверьте интернет соединение".localized); return }
             
             guard let response = response as? HTTPURLResponse else { return }
             
@@ -130,7 +130,7 @@ struct NetworkManager{
             guard let json = responseData.jsonDictionary,
                   let resultDict = json["result"] as? [String: Any],
                   let text = resultDict["text"] as? [String: Any],
-                  let value = text["value"] as? String else { completion(nil, "Server answer is wrong".localized); return }
+                  let value = text["value"] as? String else { completion(nil, "Неверный ответ сервера".localized); return }
                 //                        let apiResponse = try JSONDecoder().decode(MovieApiResponse.self, from: responseData)
                 //                        completion(apiResponse.movies,nil)
             completion(value,nil)
@@ -154,12 +154,12 @@ struct NetworkManager{
 
 enum NetworkResponse:String {
     case success = ""
-    case authenticationError = "You need to be authenticated first."
-    case badRequest = "Bad request"
-    case outdated = "The url you requested is outdated."
-    case failed = "Network request failed."
-    case noData = "Response returned with no data to decode."
-    case unableToDecode = "We could not decode the response."
+    case authenticationError =  "You need to be authenticated first."
+    case badRequest =           "Bad request"
+    case outdated =             "The url you requested is outdated."
+    case failed =                "Network request failed."
+    case noData =               "Response returned with no data to decode."
+    case unableToDecode =       "We could not decode the response."
 }
 
 

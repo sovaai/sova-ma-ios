@@ -158,7 +158,7 @@ class AudioManager: NSObject{
 
 extension AudioManager: AVAudioPlayerDelegate{
     func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: Error?) {
-        self.errorDelegate?.audioErrorMessage(title: error?.localizedDescription ?? "Some error".localized, message: nil)
+        self.errorDelegate?.audioErrorMessage(title: error?.localizedDescription ?? "Что-то пошло не так".localized, message: nil)
     }
     
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {

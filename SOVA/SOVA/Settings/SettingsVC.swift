@@ -112,12 +112,12 @@ class SettingsVC: UIViewController{
     }
     
     func sendEmail(fileURL: URL) {
-        guard MFMailComposeViewController.canSendMail() else { self.showSimpleAlert(title: "Can send email".localized); return }
+        guard MFMailComposeViewController.canSendMail() else { self.showSimpleAlert(title: "Неполучается открывать почтовый клиент".localized); return }
         self.mailComposer = MFMailComposeViewController()
         self.mailComposer.mailComposeDelegate = self
         self.mailComposer.setSubject("Logs")
         
-        guard let fileData = try? Data(contentsOf: fileURL) else { self.showSimpleAlert(title: "Не получается выгрузить".localized); return }
+        guard let fileData = try? Data(contentsOf: fileURL) else { self.showSimpleAlert(title: "Не получается загрузить логи".localized); return }
         self.mailComposer.addAttachmentData(fileData, mimeType: ".txt", fileName: "Logs")
     
         self.present(mailComposer, animated: true, completion: nil)
@@ -218,12 +218,12 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let deleteAction = UIContextualAction(style: .destructive, title: "Delete".localized) { (_, _, _) in
+        let deleteAction = UIContextualAction(style: .destructive, title: "Удалить".localized) { (_, _, _) in
             DataManager.shared.deleteAssistant(self.model[indexPath.row])
             self.tableView.reloadData()
         }
         
-        let editAction = UIContextualAction(style: .normal, title: "Edit".localized) { (_, _, _) in
+        let editAction = UIContextualAction(style: .normal, title: "Изменить".localized) { (_, _, _) in
             AssistantVC.show(with: self.model[indexPath.row], in: self.navigationController!)
         }
         
@@ -242,10 +242,10 @@ extension SettingsVC: MFMailComposeViewControllerDelegate{
 
 enum UserSettings: String, CaseIterable{
     case language = "Язык приложения"
-    case theme = "Темная тема"
-    case cashe = "Очистить историю и кеш"
-    case logs = "Отправить логи"
-    case support = "Техподдержка"
+    case theme =    "Темная тема"
+    case cashe =    "Очистить историю и кеш"
+    case logs =     "Отправить логи"
+    case support =  "Техподдержка"
     case aboutApp = "О приложении"
     
     

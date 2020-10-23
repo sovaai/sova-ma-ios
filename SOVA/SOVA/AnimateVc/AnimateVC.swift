@@ -35,7 +35,7 @@ class AnimateVC: UIViewController{
         label.translatesAutoresizingMaskIntoConstraints = false
         label.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
         label.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        label.text = "У данного ассисента нет анимации"
+        label.text = "У данного ассисента нет анимации".localized
         label.textColor = .black
         
         return label
@@ -75,14 +75,23 @@ class AnimateVC: UIViewController{
         self.initTimer()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         self.playVideo(name: AnimationType.hi.videoPath, wakeup: true)
-        self.timer.fire()
-        
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.timer.fire()
+    }
+
     override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
         self.timer.invalidate()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
         self.player.removeAllItems()
     }
     
@@ -94,7 +103,7 @@ class AnimateVC: UIViewController{
         guard self.isActive else { return }
         guard value != nil, let type = AnimationType(rawValue: value!) else { self.showSimpleAlert(title: "Some error in animate".localized); return }
         guard type != .idle else { self.playVideoIdle(); return }
-        self.playVideo(name: type.videoPath, wakeup: true)
+        self.playVideo(name: type.videoPath, wakeup: false)
     }
     
     //----------------------------------------------------------------------------------------------------------------
@@ -109,7 +118,6 @@ class AnimateVC: UIViewController{
     }
     
     public func playVideo(name: String, wakeup: Bool) {
-        guard self.isActive else { return }
         if wakeup && self.isAssistantWaiting, let path = Bundle.main.path(forResource: AnimationType.stopIdle.videoPath, ofType:"mp4") {
             let asset = AVURLAsset(url: URL(fileURLWithPath: path))
             let item = AVPlayerItem(asset: asset)
@@ -120,12 +128,12 @@ class AnimateVC: UIViewController{
         guard let path = Bundle.main.path(forResource: name, ofType:"mp4") else { return }
         let asset = AVURLAsset(url: URL(fileURLWithPath: path))
         let item = AVPlayerItem(asset: asset)
-        self.playAssistant(item: item)
+        self.playAssistant(item: item, wakeup)
     }
     
-    private func playAssistant(item: AVPlayerItem?) {
-        guard self.isActive else { return }
-        guard let item = item else { self.showSimpleAlert(title: "Video play error".localized); return }
+    private func playAssistant(item: AVPlayerItem?,_ wakeUp: Bool = false) {
+        guard self.isActive || wakeUp else { return }
+        guard let item = item else { self.showSimpleAlert(title: "Ошибка проигрывания видео".localized); return }
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.onVideoItemEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: item)
         
