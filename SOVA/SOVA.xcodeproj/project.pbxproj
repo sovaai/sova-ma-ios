@@ -23,6 +23,7 @@
 		5C6E4F3B2534A142008CCA3C /* TTS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6E4F3A2534A142008CCA3C /* TTS.swift */; };
 		5C6E4F422535C718008CCA3C /* About.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6E4F412535C718008CCA3C /* About.swift */; };
 		5C78C48125349A5A001BC8C1 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 5C78C48025349A5A001BC8C1 /* Podfile */; };
+		5C80B1C52542EC1800BA4AB2 /* SupportCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80B1C42542EC1800BA4AB2 /* SupportCell.swift */; };
 		5C86F17B252C7DEF0029CE50 /* DialogTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C86F17A252C7DEF0029CE50 /* DialogTextField.swift */; };
 		5C86F17F252C99F80029CE50 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C86F17E252C99F70029CE50 /* Date.swift */; };
 		5C99C69625271C2A0056260F /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C99C69525271C2A0056260F /* SettingsVC.swift */; };
@@ -76,6 +77,7 @@
 		5C6E4F3A2534A142008CCA3C /* TTS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TTS.swift; sourceTree = "<group>"; };
 		5C6E4F412535C718008CCA3C /* About.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = About.swift; sourceTree = "<group>"; };
 		5C78C48025349A5A001BC8C1 /* Podfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; };
+		5C80B1C42542EC1800BA4AB2 /* SupportCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportCell.swift; sourceTree = "<group>"; };
 		5C86F17A252C7DEF0029CE50 /* DialogTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogTextField.swift; sourceTree = "<group>"; };
 		5C86F17E252C99F70029CE50 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		5C99C69525271C2A0056260F /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
@@ -177,6 +179,7 @@
 			children = (
 				5C63AB7B2527834500814CF7 /* DialogVC.swift */,
 				5C63AB7E2527851C00814CF7 /* DialogCell.swift */,
+				5C80B1C42542EC1800BA4AB2 /* SupportCell.swift */,
 			);
 			path = DialogView;
 			sourceTree = "<group>";
@@ -451,6 +454,7 @@
 				5C12BF74253EFD6A00AF9EDA /* NoConnectionView.swift in Sources */,
 				5C6E4F422535C718008CCA3C /* About.swift in Sources */,
 				5C63AB7F2527851C00814CF7 /* DialogCell.swift in Sources */,
+				5C80B1C52542EC1800BA4AB2 /* SupportCell.swift in Sources */,
 				5C99C6A8252752CD0056260F /* ViewController.swift in Sources */,
 				5C86F17B252C7DEF0029CE50 /* DialogTextField.swift in Sources */,
 				5C99C69E252721CD0056260F /* Cashes.swift in Sources */,
@@ -613,7 +617,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = 23DGPC99H2;
 				INFOPLIST_FILE = SOVA/project/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -636,7 +640,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = 23DGPC99H2;
 				INFOPLIST_FILE = SOVA/project/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
