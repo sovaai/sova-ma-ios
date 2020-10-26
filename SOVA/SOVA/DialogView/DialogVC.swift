@@ -11,34 +11,25 @@ class DialogViewController: UIViewController{
     
     static var shared = DialogViewController()
     
-    private lazy var collectionView: UICollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.scrollDirection = .vertical
-        flowLayout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        cv.isPagingEnabled = true
-        cv.showsVerticalScrollIndicator = false
-        cv.showsHorizontalScrollIndicator = false
-        return cv
-    }()
+    private lazy var tableView: UITableView =   UITableView(frame: .zero, style: .grouped)
     
     public var isActive: Bool = false {
         didSet{
             guard self.isActive else{ return }
-            self.collectionView.reloadData()
+            self.tableView.reloadData()
         }
     }
     
     internal private(set) var bottomCollectionView: NSLayoutConstraint? = nil
     
     private var messageList = DataManager.shared.messageList //Array(DataManager.shared.currentAssistants.messageList.reversed()).sorted{$0.date > $1.date}
-        
+    
     internal var isSpeechRegonizing: Bool = false
     
     
     private var animateComplition: (() -> ())? = nil
     
-//    private var btnsCollectionView = BtnsCollectonView()
+    //    private var btnsCollectionView = BtnsCollectonView()
     
     private var dateFormatter: DateFormatter {
         let df = DateFormatter()
@@ -59,7 +50,7 @@ class DialogViewController: UIViewController{
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.isHidden = true
-        self.collectionView.scrollToItem(at: IndexPath(row: self.messageList.last?.messages.count ?? 0, section: self.messageList.count), at: .bottom, animated: true)
+        self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .bottom, animated: false)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -70,32 +61,35 @@ class DialogViewController: UIViewController{
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.init("MessagesUpdate"), object: nil)
     }
-
+    
     
     private func uiSetUp(){
         self.view.backgroundColor = UIColor(named: "Colors/mainbacground")
         
-        self.view.addSubview(self.collectionView)
-//        self.view.addSubview(self.btnsCollectionView)
-
-        self.collectionView.translatesAutoresizingMaskIntoConstraints = false
-        self.collectionView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
-        self.collectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-        self.collectionView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
-        self.bottomCollectionView = self.collectionView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -70)
+        self.view.addSubview(self.tableView)
+        //        self.view.addSubview(self.btnsCollectionView)
+        
+        self.tableView.translatesAutoresizingMaskIntoConstraints = false
+        self.tableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
+        self.tableView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
+        self.tableView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
+        self.bottomCollectionView = self.tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -70)
+        
         self.bottomCollectionView?.isActive = true
         
-        self.collectionView.backgroundColor = UIColor(named: "Colors/mainbacground")
+        self.tableView.backgroundColor = UIColor(named: "Colors/mainbacground")
         
-        self.collectionView.register(DialogCell.self, forCellWithReuseIdentifier: "dialogCell")
-        self.collectionView.register(SimpleCell.self, forCellWithReuseIdentifier: "header")
-        self.collectionView.register(AnimationCell.self, forCellWithReuseIdentifier: "animationCell")
+        self.tableView.register(DialogCell.self, forCellReuseIdentifier: "dialogCell")
+        self.tableView.register(SimpleCell.self, forCellReuseIdentifier: "header")
+        self.tableView.register(AnimationCell.self, forCellReuseIdentifier: "animationCell")
         
-        self.collectionView.delegate = self
-        self.collectionView.dataSource = self
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
         
-        self.collectionView.transform = CGAffineTransform.init(rotationAngle: (-(CGFloat)(Double.pi)))
-        
+        self.tableView.transform = CGAffineTransform.init(rotationAngle: (-(CGFloat)(Double.pi)))
+        self.tableView.separatorStyle = .none
+        self.tableView.allowsSelection = false
+        self.tableView.showsVerticalScrollIndicator = false
     }
     
     @objc func reloadData(notification: Notification){
@@ -103,10 +97,10 @@ class DialogViewController: UIViewController{
         DispatchQueue.main.async {
             if DataManager.shared.messageList.count == 0 || self.messageList.count == 0 || self.messageList[0].id != DataManager.shared.messageList[0].id {
                 self.messageList = DataManager.shared.messageList
-                self.collectionView.reloadData()
+                self.tableView.reloadData()
             }else{
                 self.messageList = DataManager.shared.messageList
-                self.collectionView.reloadSections(IndexSet(0...0))
+                self.tableView.insertRows(at: [IndexPath(row: self.isSpeechRegonizing ? 1 : 0, section: 0)], with: .automatic)
             }
         }
     }
@@ -115,35 +109,38 @@ class DialogViewController: UIViewController{
         guard self.isActive else { return }
         DispatchQueue.main.async {
             self.isSpeechRegonizing = state != .stop
-            self.collectionView.reloadSections(IndexSet(0...0))
-            guard state == .stop else { return }
-            self.animateComplition?()
+            if self.isSpeechRegonizing{
+                self.tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
+            }else{
+                self.animateComplition?()
+                self.tableView.deleteRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
+            }
         }
     }
 }
 
-extension DialogViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
+extension DialogViewController: UITableViewDelegate, UITableViewDataSource{
+    func numberOfSections(in tableView: UITableView) -> Int {
         return self.messageList.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.messageList[section].messages.count + 1 + (self.isSpeechRegonizing ? (section == 0 ? 1 : 0) : 0)
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard indexPath != IndexPath(row: 0, section: 0) || !self.isSpeechRegonizing else {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "animationCell", for: indexPath) as? AnimationCell  else { return UICollectionViewCell() }
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "animationCell", for: indexPath) as? AnimationCell  else { return UITableViewCell() }
             cell.isAnimateStart = true
             self.animateComplition = { cell.isAnimateStart = false }
             return cell
         }
         guard self.messageList[indexPath.section].messages.count + (self.isSpeechRegonizing && indexPath.section == 0 ? 1 : 0) != indexPath.row else {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "header", for: indexPath) as? SimpleCell  else { return UICollectionViewCell() }
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "header", for: indexPath) as? SimpleCell  else { return UITableViewCell() }
             cell.title = self.dateFormatter.string(from: self.messageList[indexPath.section].date)
             return cell
         }
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "dialogCell", for: indexPath) as? DialogCell else { return UICollectionViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "dialogCell", for: indexPath) as? DialogCell else { return UITableViewCell() }
         let messages = self.messageList[indexPath.section].messages
         let message = messages[messages.count - indexPath.row - 1 - (self.isSpeechRegonizing && indexPath.section == 0 ? -1 : 0)]
         let indent: CGFloat
@@ -157,11 +154,6 @@ extension DialogViewController: UICollectionViewDelegate, UICollectionViewDataSo
         return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        return CGSize(width: self.view.frame.width, height: 44)
-    }
- 
 }
 
 

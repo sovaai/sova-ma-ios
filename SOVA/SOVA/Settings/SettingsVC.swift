@@ -18,6 +18,12 @@ class SettingsVC: UIViewController{
         vc.pushViewController(SettingsVC(), animated: true)
     }
     
+    //----------------------------------------------------------------------------------------------------------------
+    
+    //MARK: Support variables
+    
+    //----------------------------------------------------------------------------------------------------------------
+    
     private var model : [Assitant] {
         get{
             return DataManager.shared.assistantsId.compactMap{DataManager.shared.getAssistant(by: $0)}
@@ -33,6 +39,12 @@ class SettingsVC: UIViewController{
     
     private var mailComposer = MFMailComposeViewController()
     
+    //----------------------------------------------------------------------------------------------------------------
+    
+    //MARK: Table view variables
+    
+    //----------------------------------------------------------------------------------------------------------------
+    
     private var selectedAssistant = IndexPath(){
         didSet{
             let oldCell = self.tableView.cellForRow(at: oldValue)
@@ -46,7 +58,12 @@ class SettingsVC: UIViewController{
     
     private var tableView: UITableView = UITableView(frame: .zero, style: .grouped)
     
+    //----------------------------------------------------------------------------------------------------------------
+    
     //MARK: VC life cycle
+    
+    //----------------------------------------------------------------------------------------------------------------
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -57,8 +74,7 @@ class SettingsVC: UIViewController{
         
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: self.cellId)
         
-        let isDarkTheme = UserDefaults.standard.value(forKey: "DarkTheme") as? Bool ?? (UIScreen.main.traitCollection.userInterfaceStyle == .dark)
-        if isDarkTheme{
+        if UIScreen.main.traitCollection.userInterfaceStyle == .dark{
             self.tableView.backgroundColor = UIColor(named: "Colors/settingsBackground")
         }
         
@@ -76,14 +92,12 @@ class SettingsVC: UIViewController{
         self.tableView.delegate = self
         self.tableView.dataSource = self
     }
+      
+    //----------------------------------------------------------------------------------------------------------------
     
-    @objc func changeTheme(){
-        let isDarkTheme = UserDefaults.standard.value(forKey: "DarkTheme") as? Bool ?? (UIScreen.main.traitCollection.userInterfaceStyle == .dark)
-
-        UserDefaults.standard.setValue(!isDarkTheme, forKey: "DarkTheme")
-        UIApplication.shared.override(isDarkTheme ? .dark : .light)
-
-    }
+    //MARK: Logs
+    
+    //----------------------------------------------------------------------------------------------------------------
     
     func createLog(){
         let messageListId = DataManager.shared.currentAssistants.messageListId
@@ -105,13 +119,13 @@ class SettingsVC: UIViewController{
             try FileManager.default.createDirectory(atPath: writePath.path, withIntermediateDirectories: true)
             let file = writePath.appendingPathComponent(fileNamed + ".txt")
             try text.write(to: file, atomically: false, encoding: String.Encoding.utf8)
-            self.sendEmail(fileURL: file)
+            self.sendLogsl(fileURL: file)
         }catch{
             self.showSimpleAlert(title: "Не получается сохранть файл".localized)
         }
     }
     
-    func sendEmail(fileURL: URL) {
+    func sendLogsl(fileURL: URL) {
         guard MFMailComposeViewController.canSendMail() else { self.showSimpleAlert(title: "Неполучается открывать почтовый клиент".localized); return }
         self.mailComposer = MFMailComposeViewController()
         self.mailComposer.mailComposeDelegate = self
@@ -121,18 +135,46 @@ class SettingsVC: UIViewController{
         self.mailComposer.addAttachmentData(fileData, mimeType: ".txt", fileName: "Logs")
     
         self.present(mailComposer, animated: true, completion: nil)
-        
     }
+    
+    //----------------------------------------------------------------------------------------------------------------
+    
+    //MARK: Support
+    
+    //----------------------------------------------------------------------------------------------------------------
+    
+    func sendSupport(){
+        guard MFMailComposeViewController.canSendMail() else { self.showSimpleAlert(title: "Неполучается открывать почтовый клиент".localized); return }
+        self.mailComposer = MFMailComposeViewController()
+        self.mailComposer.mailComposeDelegate = self
+        let email = "support@sova.ai"
+        self.mailComposer.setToRecipients([email])
+        
+        self.present(mailComposer, animated: true, completion: nil)
+    }
+    
+    //----------------------------------------------------------------------------------------------------------------
     
 }
 
+
+//----------------------------------------------------------------------------------------------------------------
+//MARK:Table view delegates
+//----------------------------------------------------------------------------------------------------------------
 extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
+    
+    //----------------------------------------------------------------------------------------------------------------
+    
+    //MARK: TableView Configure
+    
+    //----------------------------------------------------------------------------------------------------------------
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == 0 ? self.model.count + 1 : 6
+        return section == 0 ? self.model.count + 1 : UserSettings.allCases.count
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -159,26 +201,22 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
         }
         
         //Configure setings's cell
-        cell.textLabel?.text = UserSettings.allCases[indexPath.row].rawValue.localized
-        guard indexPath.row != 0 else {
+        cell.textLabel?.text = UserSettings.allCases[indexPath.row].string.localized
+        guard UserSettings(rawValue: indexPath.row) != .language else {
             cell.accessoryType = .disclosureIndicator
             cell.accessibilityLabel = Language.userValue
         
             return cell
         }
         
-        guard indexPath.row != 1 else {
-            let switchView = UISwitch(frame: .zero)
-            let isDarkTheme = UserDefaults.standard.value(forKey: "DarkTheme") as? Bool ?? (UIScreen.main.traitCollection.userInterfaceStyle == .dark)
-            switchView.setOn(isDarkTheme, animated: true)
-            switchView.tag = indexPath.row // for detect which row switch Changed
-            switchView.addTarget(self, action: #selector(self.changeTheme), for: .valueChanged)
-            cell.accessoryView = switchView
-            return cell
-        }
-        
         return cell
     }
+    
+    //----------------------------------------------------------------------------------------------------------------
+    
+    //MARK: TableView Actions
+    
+    //----------------------------------------------------------------------------------------------------------------
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0{
@@ -199,9 +237,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
             case .logs:
                 self.createLog()
             case .support:
-                let email = "support@sova.ai" 
-                guard let url = URL(string: "mailto:\(email)") else { self.showSimpleAlert(title: "Упс, что-то пошло не так".localized); return}
-                    UIApplication.shared.open(url)
+                self.sendSupport()
             case .aboutApp:
                 AboutVC.show(parent: self.navigationController!)
             default:
@@ -231,8 +267,13 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
         
         return swipeAction
     }
+    
+    //----------------------------------------------------------------------------------------------------------------
 }
 
+//----------------------------------------------------------------------------------------------------------------
+//MARK: Email
+//----------------------------------------------------------------------------------------------------------------
 extension SettingsVC: MFMailComposeViewControllerDelegate{
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         self.mailComposer.dismiss(animated: true, completion: nil)
@@ -240,13 +281,30 @@ extension SettingsVC: MFMailComposeViewControllerDelegate{
 }
 
 
-enum UserSettings: String, CaseIterable{
-    case language = "Язык приложения"
-    case theme =    "Темная тема"
-    case cashe =    "Очистить историю и кеш"
-    case logs =     "Отправить логи"
-    case support =  "Техподдержка"
-    case aboutApp = "О приложении"
+//----------------------------------------------------------------------------------------------------------------
+
+//MARK: UserEnam
+
+//----------------------------------------------------------------------------------------------------------------
+enum UserSettings: Int, CaseIterable{
+    case language = 0
+    case cashe = 1
+    case logs = 2
+    case support = 3
+    case aboutApp = 4
     
-    
+    var string: String {
+        switch self {
+        case .language:
+            return "Язык приложения"
+        case .cashe:
+            return "Очистить историю и кеш"
+        case .logs:
+            return "Отправить логи"
+        case .support:
+            return "Техподдержка"
+        case .aboutApp:
+            return "О приложении"
+        }
+    }
 }

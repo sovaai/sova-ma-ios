@@ -9,7 +9,7 @@ import UIKit
 import Foundation
 
 //MARK: DialogCell
-class DialogCell: UICollectionViewCell{
+class DialogCell: UITableViewCell{
     
     private(set) lazy var messageLabel: InteractiveLinkLabel = {
         let label = InteractiveLinkLabel()
@@ -47,11 +47,16 @@ class DialogCell: UICollectionViewCell{
         }
     }
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.setUp()
-        
     }
+    
+//    override init(frame: CGRect) {
+//        super.init(frame: frame)
+//        self.setUp()
+//        
+//    }
     
     fileprivate func setUp(){
         self.contentView.addSubview(messageBackground)
@@ -78,6 +83,8 @@ class DialogCell: UICollectionViewCell{
         self.messageLabel.topAnchor.constraint(equalTo: messageBackground.topAnchor, constant: 16).isActive = true
         self.messageLabel.bottomAnchor.constraint(equalTo: messageBackground.bottomAnchor, constant: -16).isActive = true
         self.messageLabel.leftAnchor.constraint(equalTo: messageBackground.leftAnchor, constant: 16).isActive = true
+        
+        self.messageLabel.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
     }
     
     func configure(with message: Message, and indent: CGFloat){
@@ -95,10 +102,6 @@ class DialogCell: UICollectionViewCell{
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        self.messageLabel.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
-    }
 }
 
 //MARK: InteractiveLinkLabel
