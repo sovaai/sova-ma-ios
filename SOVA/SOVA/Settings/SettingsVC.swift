@@ -18,6 +18,12 @@ class SettingsVC: UIViewController{
         vc.pushViewController(SettingsVC(), animated: true)
     }
     
+    //----------------------------------------------------------------------------------------------------------------
+    
+    //MARK: Support variables
+    
+    //----------------------------------------------------------------------------------------------------------------
+    
     private var model : [Assitant] {
         get{
             return DataManager.shared.assistantsId.compactMap{DataManager.shared.getAssistant(by: $0)}
@@ -33,6 +39,12 @@ class SettingsVC: UIViewController{
     
     private var mailComposer = MFMailComposeViewController()
     
+    //----------------------------------------------------------------------------------------------------------------
+    
+    //MARK: Table view variables
+    
+    //----------------------------------------------------------------------------------------------------------------
+    
     private var selectedAssistant = IndexPath(){
         didSet{
             let oldCell = self.tableView.cellForRow(at: oldValue)
@@ -46,7 +58,12 @@ class SettingsVC: UIViewController{
     
     private var tableView: UITableView = UITableView(frame: .zero, style: .grouped)
     
+    //----------------------------------------------------------------------------------------------------------------
+    
     //MARK: VC life cycle
+    
+    //----------------------------------------------------------------------------------------------------------------
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -75,7 +92,13 @@ class SettingsVC: UIViewController{
         self.tableView.delegate = self
         self.tableView.dataSource = self
     }
-        
+      
+    //----------------------------------------------------------------------------------------------------------------
+    
+    //MARK: Logs
+    
+    //----------------------------------------------------------------------------------------------------------------
+    
     func createLog(){
         let messageListId = DataManager.shared.currentAssistants.messageListId
         var text: String = ""
@@ -114,6 +137,12 @@ class SettingsVC: UIViewController{
         self.present(mailComposer, animated: true, completion: nil)
     }
     
+    //----------------------------------------------------------------------------------------------------------------
+    
+    //MARK: Support
+    
+    //----------------------------------------------------------------------------------------------------------------
+    
     func sendSupport(){
         guard MFMailComposeViewController.canSendMail() else { self.showSimpleAlert(title: "Неполучается открывать почтовый клиент".localized); return }
         self.mailComposer = MFMailComposeViewController()
@@ -124,9 +153,22 @@ class SettingsVC: UIViewController{
         self.present(mailComposer, animated: true, completion: nil)
     }
     
+    //----------------------------------------------------------------------------------------------------------------
+    
 }
 
+
+//----------------------------------------------------------------------------------------------------------------
+//MARK:Table view delegates
+//----------------------------------------------------------------------------------------------------------------
 extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
+    
+    //----------------------------------------------------------------------------------------------------------------
+    
+    //MARK: TableView Configure
+    
+    //----------------------------------------------------------------------------------------------------------------
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
@@ -170,6 +212,12 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
         return cell
     }
     
+    //----------------------------------------------------------------------------------------------------------------
+    
+    //MARK: TableView Actions
+    
+    //----------------------------------------------------------------------------------------------------------------
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0{
             guard indexPath.row < self.model.count else { AssistantVC.show(with: nil, in: self.navigationController!); return }
@@ -190,9 +238,6 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                 self.createLog()
             case .support:
                 self.sendSupport()
-//                let email = "support@sova.ai"
-//                guard let url = URL(string: "mailto:\(email)") else { self.showSimpleAlert(title: "Упс, что-то пошло не так".localized); return}
-//                    UIApplication.shared.open(url)
             case .aboutApp:
                 AboutVC.show(parent: self.navigationController!)
             default:
@@ -222,8 +267,13 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
         
         return swipeAction
     }
+    
+    //----------------------------------------------------------------------------------------------------------------
 }
 
+//----------------------------------------------------------------------------------------------------------------
+//MARK: Email
+//----------------------------------------------------------------------------------------------------------------
 extension SettingsVC: MFMailComposeViewControllerDelegate{
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         self.mailComposer.dismiss(animated: true, completion: nil)
@@ -231,6 +281,11 @@ extension SettingsVC: MFMailComposeViewControllerDelegate{
 }
 
 
+//----------------------------------------------------------------------------------------------------------------
+
+//MARK: UserEnam
+
+//----------------------------------------------------------------------------------------------------------------
 enum UserSettings: Int, CaseIterable{
     case language = 0
     case cashe = 1
