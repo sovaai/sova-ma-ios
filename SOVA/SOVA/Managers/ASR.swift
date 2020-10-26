@@ -20,7 +20,7 @@ class ASR {
     }
     
     struct Request {
-//        let model_type: String = "ASR"
+        let model_type: String = "ASR"
         
         let audio: Data
         
