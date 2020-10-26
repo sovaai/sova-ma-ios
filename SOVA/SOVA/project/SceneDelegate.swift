@@ -26,8 +26,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         self.window?.rootViewController = navigationViewController
         self.window?.makeKeyAndVisible()
         self.window?.windowScene = windowScene
-        guard let isDarkTheme = UserDefaults.standard.value(forKey: "DarkTheme") as? Bool else { return }
-        self.window?.overrideUserInterfaceStyle = isDarkTheme ? .dark : .light
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

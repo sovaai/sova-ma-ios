@@ -16,7 +16,6 @@ class DialogViewController: UIViewController{
         flowLayout.scrollDirection = .vertical
         flowLayout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         let cv = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        cv.isPagingEnabled = true
         cv.showsVerticalScrollIndicator = false
         cv.showsHorizontalScrollIndicator = false
         return cv

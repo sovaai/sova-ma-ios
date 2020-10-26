@@ -121,7 +121,7 @@ class AssistantVC: UIViewController{
 
 extension AssistantVC: UITableViewDataSource, UITableViewDelegate{
     func numberOfSections(in tableView: UITableView) -> Int {
-        return self.model != nil ? 5 : 4
+        return AssistantStateField.allCases.count + (self.model != nil ? 1 : 0)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { 1 }
@@ -324,6 +324,16 @@ class TextFieldCell: UITableViewCell, UITextFieldDelegate, UITextPasteDelegate{
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    override func canPaste(_ itemProviders: [NSItemProvider]) -> Bool {
+        return true
+    }
+    
+    func textPasteConfigurationSupporting(_ textPasteConfigurationSupporting: UITextPasteConfigurationSupporting, shouldAnimatePasteOf attributedString: NSAttributedString, to textRange: UITextRange) -> Bool {
+        return true
+    }
+    
+    
 }
 
 enum AssistantState{
@@ -335,7 +345,7 @@ enum AssistantStateField: Int, CaseIterable {
     case name = 0
     case url
     case token
-    case word
+//    case word
     
     var keyboard: UIKeyboardType{
         switch self {
@@ -366,7 +376,7 @@ enum AssistantStateField: Int, CaseIterable {
         case .name: return "Имя".localized
         case .url: return "API URL".localized
         case .token: return "ТОКЕН".localized
-        case .word: return "Активационное слово".localized
+//        case .word: return "Активационное слово".localized
         }
     }
 }

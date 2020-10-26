@@ -14,8 +14,8 @@
             filePath = "SOVA/Settings/SettingsVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "238"
-            endingLineNumber = "238"
+            startingLineNumber = "229"
+            endingLineNumber = "229"
             landmarkName = "mailComposeController(_:didFinishWith:error:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -66,8 +66,8 @@
             filePath = "SOVA/Settings/AssistantVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "70"
-            endingLineNumber = "70"
+            startingLineNumber = "82"
+            endingLineNumber = "82"
             landmarkName = "saveModel()"
             landmarkType = "7">
          </BreakpointContent>
@@ -82,8 +82,8 @@
             filePath = "SOVA/Settings/AssistantVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "97"
-            endingLineNumber = "97"
+            startingLineNumber = "109"
+            endingLineNumber = "109"
             landmarkName = "saveModel()"
             landmarkType = "7">
          </BreakpointContent>
@@ -114,8 +114,8 @@
             filePath = "SOVA/Settings/AssistantVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "88"
-            endingLineNumber = "88"
+            startingLineNumber = "100"
+            endingLineNumber = "100"
             landmarkName = "saveModel()"
             landmarkType = "7">
          </BreakpointContent>
@@ -130,10 +130,42 @@
             filePath = "SOVA/Settings/AssistantVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "91"
-            endingLineNumber = "91"
+            startingLineNumber = "103"
+            endingLineNumber = "103"
             landmarkName = "saveModel()"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "A1F79293-BE2E-4979-9BD3-243F6C97F8DD - 198d2ea248395260"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "SOVA.AssistantVC.saveModel() -&gt; ()"
+                  moduleName = "SOVA"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/muratkamalov/Desktop/ios/SOVA/SOVA/Settings/AssistantVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "103"
+                  endingLineNumber = "103"
+                  offsetFromSymbolStart = "4098">
+               </Location>
+               <Location
+                  uuid = "A1F79293-BE2E-4979-9BD3-243F6C97F8DD - fc9ac3216e8042b6"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "function signature specialization &lt;Arg[3] = Value Promoted from Box&gt; of closure #2 (Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.String&gt;) -&gt; () in SOVA.AssistantVC.saveModel() -&gt; ()"
+                  moduleName = "SOVA"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/muratkamalov/Desktop/ios/SOVA/SOVA/Settings/AssistantVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "103"
+                  endingLineNumber = "103"
+                  offsetFromSymbolStart = "496">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -146,8 +178,8 @@
             filePath = "SOVA/DialogView/DialogVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "120"
-            endingLineNumber = "120"
+            startingLineNumber = "119"
+            endingLineNumber = "119"
             landmarkName = "speechState(state:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -213,6 +245,22 @@
             startingLineNumber = "128"
             endingLineNumber = "128"
             landmarkName = "playVideo(name:wakeup:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "8B6C0844-5C33-42EF-A39D-B8EA0097A3C8"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SOVA/Managers/AudioManager.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "105"
+            endingLineNumber = "105"
+            landmarkName = "finishRecording(is:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

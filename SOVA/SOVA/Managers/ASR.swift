@@ -12,17 +12,22 @@ import Foundation
 import Alamofire
 
 class ASR {
-    let ASR_API_URL = "https://asr.ashmanov.org/asr/"
+    var ASR_API_URL: String {
+        get{
+            let lang = Locale.current.languageCode
+            return lang == "en" ? "https://asr-en.ashmanov.org/asr/" : "https://asr.ashmanov.org/asr/"
+        }
+    }
     
     struct Request {
-        let model_type: String = "ASR"
+//        let model_type: String = "ASR"
         
         let audio: Data
         
         var multipartFormData: MultipartFormData {
             get {
                 let mpData = MultipartFormData()
-                mpData.append(audio, withName: "audio_blob", fileName: "1.wav", mimeType: "audio/wav")
+                mpData.append(self.audio, withName: "audio_blob", fileName: "1.wav", mimeType: "audio/wav")
                 return mpData
             }
         }
@@ -54,7 +59,7 @@ class ASR {
             requestModifier: { $0.timeoutInterval = 30 }
         )
         .responseJSON(queue: DispatchQueue(label: "speech", qos: .utility)) { responce in
-            guard responce.error == nil else { completion(nil, nil); return }
+            guard responce.error == nil else { completion(nil, responce.error?.localizedDescription); return }
             //            let resp = ResponceMain(from: responce.value as! Decoder)
             //            completion(Data(base64Encoded: resp.response_audio))
         }
