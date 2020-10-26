@@ -11,6 +11,19 @@ class AudioBtn: UIView{
     private var btn = UIButton()
     private var animateView = UIView()
     
+    private var state: AudioState = .stop {
+        didSet{
+            self.btn.backgroundColor = state == .start ? UIColor(r: 252, g: 45, b: 129, a: 1.0) :  UIColor(named: "Colors/mainbacground")
+            self.btn.tintColor = state == .start ?  UIColor(named: "Colors/mainbacground") : UIColor(r: 252, g: 45, b: 129, a: 1.0)
+            guard state == .stop else { self.startAnimate(); return }
+            self.subviews.forEach{
+                guard !($0 is UIButton) else { return }
+                $0.layer.removeAllAnimations()
+                $0.removeFromSuperview()
+            }
+        }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.addSubview(self.btn)
@@ -38,14 +51,7 @@ class AudioBtn: UIView{
     }
     
     public func audioState(is state: AudioState){
-        self.btn.backgroundColor = state == .start ? UIColor(r: 252, g: 45, b: 129, a: 1.0) :  UIColor(named: "Colors/mainbacground")
-        self.btn.tintColor = state == .start ?  UIColor(named: "Colors/mainbacground") : UIColor(r: 252, g: 45, b: 129, a: 1.0)
-        guard state == .stop else { self.startAnimate(); return }
-        self.subviews.forEach{
-            guard !($0 is UIButton) else { return }
-            $0.layer.removeAllAnimations()
-            $0.removeFromSuperview()
-        }
+        self.state = state
     }
     
     private func startAnimate(){
@@ -64,7 +70,7 @@ class AudioBtn: UIView{
     }
     
     private func animate(_ view: UIView){
-        
+        guard self.state == .start else { return }
         UIView.animate(withDuration: 1.5, delay: 0, options: .curveLinear) {
             view.frame.size.height = 94
             view.frame.size.width = 94

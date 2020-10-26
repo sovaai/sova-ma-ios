@@ -49,16 +49,15 @@ class DialogCell: UITableViewCell{
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        guard reuseIdentifier != nil, let sender = WhosMessage(rawValue: reuseIdentifier!) else { return }
+        self.messageLabel.textColor = sender.messageColor
+        
         self.setUp()
     }
-    
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//        self.setUp()
-//        
-//    }
-    
+        
     fileprivate func setUp(){
+        self.backgroundColor = UIColor(named: "Colors/mainbacground")
+        
         self.contentView.addSubview(messageBackground)
         self.topConstrint = self.messageBackground.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8)
         self.topConstrint.isActive = true
@@ -125,34 +124,11 @@ class InteractiveLinkLabel: UILabel {
     
     public var message: Message = Message(title: ""){
         didSet{
-            self.textColor = message.sender.messageColor
-self.text = message.title.html2String
-            guard self.message.title != self.message.title.html2String else {self.text = message.title.html2String; return }
-
-            let muttableAttributedString = NSMutableAttributedString(string: message.title.html2String, attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 15), NSAttributedString.Key.foregroundColor: message.sender.messageColor])
-
-            guard let att = message.title.html2AttributedString else { self.text = message.title.html2String; return }
-            let wholeRange = NSRange((att.string.startIndex...), in: att.string)
-            att.enumerateAttribute(.link, in: wholeRange, options: []) { (value, range, pointee) in
-                guard value != nil else { return }
-                muttableAttributedString.addAttributes([NSAttributedString.Key.foregroundColor : UIColor.blue], range: range)
-                self.attributedText = muttableAttributedString
-            }
-
-            self.attributedText = muttableAttributedString
-            self.ranges.removeAll()
-            let ranges = self.checkUserLinks(firstText: self.message.title.html2String, text: self.message.title)
-            for range in ranges{
-                let rangeVal = NSRange(range, in: self.message.title.html2String)
-                muttableAttributedString.addAttributes([NSAttributedString.Key.foregroundColor : UIColor.blue], range: rangeVal)
-                let text = self.message.title.html2String[range]
-                self.ranges[rangeVal] = String(text)
-                self.attributedText = muttableAttributedString
-            }
+            self.text = message.title.html2String
         }
     }
     
-    func checkUserLinks(firstText: String, text: String, ranges: [Range<String.Index>] = [] ) -> [Range<String.Index>]{
+    private func checkUserLinks(firstText: String, text: String, ranges: [Range<String.Index>] = [] ) -> [Range<String.Index>]{
         
         guard let low = text.range(of: "<userlink>")?.upperBound,
               let upper = text.range(of: "</userlink>")?.lowerBound,
@@ -163,6 +139,31 @@ self.text = message.title.html2String
             rangeArray.append(range)
         }
         return self.checkUserLinks(firstText: firstText,text: String(text[upperforRemove...]), ranges: rangeArray)
+    }
+    
+    public func addLinks(){
+        guard self.message.title != self.message.title.html2String else {self.text = message.title.html2String; return }
+
+        let muttableAttributedString = NSMutableAttributedString(string: message.title.html2String, attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 15), NSAttributedString.Key.foregroundColor: message.sender.messageColor])
+
+        guard let att = message.title.html2AttributedString else { self.text = message.title.html2String; return }
+        let wholeRange = NSRange((att.string.startIndex...), in: att.string)
+        att.enumerateAttribute(.link, in: wholeRange, options: []) { (value, range, pointee) in
+            guard value != nil else { return }
+            muttableAttributedString.addAttributes([NSAttributedString.Key.foregroundColor : UIColor.blue], range: range)
+            self.attributedText = muttableAttributedString
+        }
+
+        self.attributedText = muttableAttributedString
+        self.ranges.removeAll()
+        let ranges = self.checkUserLinks(firstText: self.message.title.html2String, text: self.message.title)
+        for range in ranges{
+            let rangeVal = NSRange(range, in: self.message.title.html2String)
+            muttableAttributedString.addAttributes([NSAttributedString.Key.foregroundColor : UIColor.blue], range: rangeVal)
+            let text = self.message.title.html2String[range]
+            self.ranges[rangeVal] = String(text)
+            self.attributedText = muttableAttributedString
+        }
     }
     
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {

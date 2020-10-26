@@ -31,6 +31,8 @@ class AnimationCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.backgroundColor = UIColor(named: "Colors/mainbacground")
+        
         self.heightAnchor.constraint(equalToConstant: 44).isActive = true
         
         self.addSubview(self.backgroundImageView)
@@ -137,6 +139,7 @@ extension DialogViewController{
         override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
             super.init(style: style, reuseIdentifier: reuseIdentifier)
             
+            self.backgroundColor = UIColor(named: "Colors/mainbacground")
             self.heightAnchor.constraint(equalToConstant: 64).isActive = true
             
             self.addSubview(self.label)

@@ -25,7 +25,7 @@ class DialogViewController: UIViewController{
     private var messageList = DataManager.shared.messageList //Array(DataManager.shared.currentAssistants.messageList.reversed()).sorted{$0.date > $1.date}
     
     internal var isSpeechRegonizing: Bool = false
-    
+    private var isScrolling: Bool = false
     
     private var animateComplition: (() -> ())? = nil
     
@@ -77,19 +77,20 @@ class DialogViewController: UIViewController{
         
         self.bottomCollectionView?.isActive = true
         
-        self.tableView.backgroundColor = UIColor(named: "Colors/mainbacground")
-        
-        self.tableView.register(DialogCell.self, forCellReuseIdentifier: "dialogCell")
+        self.tableView.register(DialogCell.self, forCellReuseIdentifier: WhosMessage.user.rawValue)
+        self.tableView.register(DialogCell.self, forCellReuseIdentifier: WhosMessage.assistant.rawValue)
         self.tableView.register(SimpleCell.self, forCellReuseIdentifier: "header")
         self.tableView.register(AnimationCell.self, forCellReuseIdentifier: "animationCell")
         
         self.tableView.delegate = self
         self.tableView.dataSource = self
         
-        self.tableView.transform = CGAffineTransform.init(rotationAngle: (-(CGFloat)(Double.pi)))
+        self.tableView.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
         self.tableView.separatorStyle = .none
         self.tableView.allowsSelection = false
         self.tableView.showsVerticalScrollIndicator = false
+        
+        self.tableView.backgroundColor = UIColor(named: "Colors/mainbacground")
     }
     
     @objc func reloadData(notification: Notification){
@@ -140,9 +141,10 @@ extension DialogViewController: UITableViewDelegate, UITableViewDataSource{
             cell.title = self.dateFormatter.string(from: self.messageList[indexPath.section].date)
             return cell
         }
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "dialogCell", for: indexPath) as? DialogCell else { return UITableViewCell() }
+        
         let messages = self.messageList[indexPath.section].messages
         let message = messages[messages.count - indexPath.row - 1 - (self.isSpeechRegonizing && indexPath.section == 0 ? -1 : 0)]
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: message.sender.rawValue, for: indexPath) as? DialogCell else { return UITableViewCell() }
         let indent: CGFloat
         if indexPath.row >= messages.count - 1{
             indent = 8
@@ -152,6 +154,23 @@ extension DialogViewController: UITableViewDelegate, UITableViewDataSource{
         }
         cell.configure(with: message, and: indent)
         return cell
+    }
+        
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        self.isScrolling = true
+    }
+    
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        self.isScrolling = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            guard let self = self, !self.isScrolling else { return }
+            let cells = self.tableView.visibleCells
+            cells.forEach{($0 as? DialogCell)?.messageLabel.addLinks()}
+        }
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        print(decelerate)
     }
     
 }
