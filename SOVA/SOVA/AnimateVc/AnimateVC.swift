@@ -101,7 +101,9 @@ class AnimateVC: UIViewController{
     
     public func configure(with value: Int?) {
         guard self.isActive else { return }
-        guard value != nil, let type = AnimationType(rawValue: value!) else { self.showSimpleAlert(title: "Some error in animate".localized); return }
+        guard value != nil, let type = AnimationType(rawValue: value!) else {
+            self.showSimpleAlert(title: "Some error in animate".localized);
+            return }
         guard type != .idle else { self.playVideoIdle(); return }
         self.playVideo(name: type.videoPath, wakeup: false)
     }

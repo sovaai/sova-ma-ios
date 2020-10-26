@@ -8,7 +8,7 @@
 import UIKit
 
 //MARK: AnimationCell
-class AnimationCell: UICollectionViewCell {
+class AnimationCell: UITableViewCell {
     
     private lazy var centralView = UIView()
     private lazy var rightView = UIView()
@@ -29,8 +29,8 @@ class AnimationCell: UICollectionViewCell {
         }
     }
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.heightAnchor.constraint(equalToConstant: 44).isActive = true
         
         self.addSubview(self.backgroundImageView)
@@ -76,19 +76,16 @@ class AnimationCell: UICollectionViewCell {
         self.rightView.backgroundColor = UIColor(named: "Colors/assistantTextColor")?.withAlphaComponent(0.4)
         
         self.layoutIfNeeded()
-                self.centralView.layer.cornerRadius = self.centralView.frame.height / 2
-                self.leftView.layer.cornerRadius = self.leftView.frame.height / 2
-                self.rightView.layer.cornerRadius = self.rightView.frame.height / 2
+        self.centralView.layer.cornerRadius = self.centralView.frame.height / 2
+        self.leftView.layer.cornerRadius = self.leftView.frame.height / 2
+        self.rightView.layer.cornerRadius = self.rightView.frame.height / 2
+        
+        self.backgroundImageView.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
     }
+    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        self.backgroundImageView.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
-
     }
     
     private func stopAnimate(){
@@ -127,7 +124,7 @@ class AnimationCell: UICollectionViewCell {
 
 //MARK: SimpleCell
 extension DialogViewController{
-    class SimpleCell: UICollectionViewCell{
+    class SimpleCell: UITableViewCell{
         
         private var label = UILabel()
         
@@ -137,8 +134,8 @@ extension DialogViewController{
             }
         }
         
-        override init(frame: CGRect) {
-            super.init(frame: frame)
+        override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+            super.init(style: style, reuseIdentifier: reuseIdentifier)
             
             self.heightAnchor.constraint(equalToConstant: 64).isActive = true
             
@@ -154,6 +151,6 @@ extension DialogViewController{
         required init?(coder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
-
+        
     }
 }

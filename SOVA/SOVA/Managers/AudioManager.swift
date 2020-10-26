@@ -142,10 +142,10 @@ class AudioManager: NSObject{
                 return
             }
             let message = Message(title: messg, sender: .assistant)
-            DataManager.shared.saveNew(message)
-            AnimateVC.shared.configure(with: animation)
             self.playSpeech(with: messg)
             self.recordDelegate?.speechState(state: .stop)
+            DataManager.shared.saveNew(message)
+            AnimateVC.shared.configure(with: animation)
         }
     }
     
