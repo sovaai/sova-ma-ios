@@ -147,16 +147,13 @@ extension DialogViewController{
             self.label.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
             self.label.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
             self.label.textColor = UIColor(named: "Colors/headerColor") ?? UIColor(r: 21, g: 31, b: 73, a: 0.3)
+            self.label.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
             self.label.font = UIFont.systemFont(ofSize: 12)
         }
         
         required init?(coder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
-        
-        override func layoutSubviews() {
-            super.layoutSubviews()
-            self.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
-        }
+
     }
 }
