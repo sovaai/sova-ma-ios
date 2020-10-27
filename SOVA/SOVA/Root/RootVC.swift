@@ -35,7 +35,7 @@ class PageViewController: UIPageViewController{
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
         tf.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-        tf.heightAnchor.constraint(greaterThanOrEqualToConstant: 50).isActive = true
+        tf.heightAnchor.constraint(equalToConstant: 50).isActive = true
         self.textFieldBottomConstant =  tf.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0)
         self.textFieldBottomConstant?.isActive = true
         tf.isHidden = true

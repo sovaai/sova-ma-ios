@@ -50,7 +50,7 @@ class DialogViewController: UIViewController{
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.isHidden = true
-        self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .bottom, animated: false)
+        self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
     }
     
     override func viewDidDisappear(_ animated: Bool) {

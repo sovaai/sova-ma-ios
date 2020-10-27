@@ -23,54 +23,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "6CDB407B-9899-4DC8-9F1F-7F05D9C96E59"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SOVA/DialogView/DialogVC.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "114"
-            endingLineNumber = "114"
-            landmarkName = "speechState(state:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "03C3A5CC-18EC-4CC0-9ED8-978FBF4FC0D1"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SOVA/DialogView/DialogVC.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "134"
-            endingLineNumber = "134"
-            landmarkName = "tableView(_:cellForRowAt:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "484B2894-4C91-4882-8F17-7BBC18309ABD"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SOVA/DialogView/DialogVC.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "116"
-            endingLineNumber = "116"
-            landmarkName = "speechState(state:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "D2657310-0942-4ED6-A43A-CFF184671D03"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
@@ -148,7 +100,7 @@
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "F913CF73-A6ED-4DBA-9D9F-73D5B1B0B5FA - 23a23e3492575467"
+                  uuid = "F913CF73-A6ED-4DBA-9D9F-73D5B1B0B5FA - 23a23e34925754d9"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -158,12 +110,12 @@
                   urlString = "file:///Users/muratkamalov/Desktop/ios/SOVA/SOVA/DialogView/SupportCell.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "97"
-                  endingLineNumber = "97"
-                  offsetFromSymbolStart = "100">
+                  startingLineNumber = "99"
+                  endingLineNumber = "99"
+                  offsetFromSymbolStart = "83">
                </Location>
                <Location
-                  uuid = "F913CF73-A6ED-4DBA-9D9F-73D5B1B0B5FA - ba81493607b34a0e"
+                  uuid = "F913CF73-A6ED-4DBA-9D9F-73D5B1B0B5FA - ba81493607b34af0"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -173,9 +125,9 @@
                   urlString = "file:///Users/muratkamalov/Desktop/ios/SOVA/SOVA/DialogView/SupportCell.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "98"
-                  endingLineNumber = "98"
-                  offsetFromSymbolStart = "24">
+                  startingLineNumber = "100"
+                  endingLineNumber = "100"
+                  offsetFromSymbolStart = "44">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -196,7 +148,7 @@
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "20E1B339-9C3C-4E56-A24F-520DF6947D96 - 7f5486400e51598b"
+                  uuid = "20E1B339-9C3C-4E56-A24F-520DF6947D96 - 7f5486400e5159c9"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -206,12 +158,12 @@
                   urlString = "file:///Users/muratkamalov/Desktop/ios/SOVA/SOVA/DialogView/SupportCell.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "104"
-                  endingLineNumber = "104"
-                  offsetFromSymbolStart = "52">
+                  startingLineNumber = "106"
+                  endingLineNumber = "106"
+                  offsetFromSymbolStart = "23">
                </Location>
                <Location
-                  uuid = "20E1B339-9C3C-4E56-A24F-520DF6947D96 - 951127dd353db964"
+                  uuid = "20E1B339-9C3C-4E56-A24F-520DF6947D96 - 951127dd353db9aa"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -221,9 +173,9 @@
                   urlString = "file:///Users/muratkamalov/Desktop/ios/SOVA/SOVA/DialogView/SupportCell.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "105"
-                  endingLineNumber = "105"
-                  offsetFromSymbolStart = "24">
+                  startingLineNumber = "107"
+                  endingLineNumber = "107"
+                  offsetFromSymbolStart = "44">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -244,7 +196,7 @@
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "DAF235BD-CB90-40D4-8CAB-80EE0E95AD85 - 93ff27c9ff82a8bf"
+                  uuid = "DAF235BD-CB90-40D4-8CAB-80EE0E95AD85 - 93ff27c9ff82a8fd"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -254,12 +206,12 @@
                   urlString = "file:///Users/muratkamalov/Desktop/ios/SOVA/SOVA/DialogView/SupportCell.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "111"
-                  endingLineNumber = "111"
-                  offsetFromSymbolStart = "52">
+                  startingLineNumber = "113"
+                  endingLineNumber = "113"
+                  offsetFromSymbolStart = "23">
                </Location>
                <Location
-                  uuid = "DAF235BD-CB90-40D4-8CAB-80EE0E95AD85 - f2ba438c6c54762e"
+                  uuid = "DAF235BD-CB90-40D4-8CAB-80EE0E95AD85 - f2ba438c6c54766c"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -269,9 +221,9 @@
                   urlString = "file:///Users/muratkamalov/Desktop/ios/SOVA/SOVA/DialogView/SupportCell.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "112"
-                  endingLineNumber = "112"
-                  offsetFromSymbolStart = "24">
+                  startingLineNumber = "114"
+                  endingLineNumber = "114"
+                  offsetFromSymbolStart = "44">
                </Location>
             </Locations>
          </BreakpointContent>
