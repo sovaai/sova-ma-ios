@@ -11,6 +11,12 @@ import Foundation
 //MARK: DialogCell
 class DialogCell: UITableViewCell{
     
+    //----------------------------------------------------------------------------------------------------------------
+    
+    //MARK: UI
+    
+    //----------------------------------------------------------------------------------------------------------------
+    
     private(set) lazy var messageLabel: InteractiveLinkLabel = {
         let label = InteractiveLinkLabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -27,6 +33,14 @@ class DialogCell: UITableViewCell{
         return backgroundView
     }()
     
+    fileprivate var bottomLine = UIView()
+    
+    //----------------------------------------------------------------------------------------------------------------
+    
+    //MARK: Constraint
+    
+    //----------------------------------------------------------------------------------------------------------------
+    
     fileprivate var leftConstraint: NSLayoutConstraint!
     fileprivate var rightConstraint: NSLayoutConstraint!
     fileprivate var topConstrint: NSLayoutConstraint!
@@ -34,7 +48,11 @@ class DialogCell: UITableViewCell{
     fileprivate var rightLabelConstrint: NSLayoutConstraint!
     fileprivate var leftLabelContraint: NSLayoutConstraint!
     
-    fileprivate var bottomLine = UIView()
+    //----------------------------------------------------------------------------------------------------------------
+    
+    //MARK: Another
+    
+    //----------------------------------------------------------------------------------------------------------------
     
     public var url: URL? = nil
     
@@ -47,12 +65,22 @@ class DialogCell: UITableViewCell{
         }
     }
     
+    //----------------------------------------------------------------------------------------------------------------
+    
+    //MARK: Init
+    
+    //----------------------------------------------------------------------------------------------------------------
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         guard reuseIdentifier != nil, let sender = WhosMessage(rawValue: reuseIdentifier!) else { return }
         self.messageLabel.textColor = sender.messageColor
         
         self.setUp()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
         
     fileprivate func setUp(){
@@ -86,6 +114,12 @@ class DialogCell: UITableViewCell{
         self.messageLabel.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
     }
     
+    //----------------------------------------------------------------------------------------------------------------
+    
+    //MARK: Configure
+    
+    //----------------------------------------------------------------------------------------------------------------
+    
     func configure(with message: Message, and indent: CGFloat){
         self.sender = message.sender
         
@@ -97,14 +131,21 @@ class DialogCell: UITableViewCell{
         self.messageLabel.message = message
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
 }
 
+//----------------------------------------------------------------------------------------------------------------
+
 //MARK: InteractiveLinkLabel
+
+//----------------------------------------------------------------------------------------------------------------
+
 class InteractiveLinkLabel: UILabel {
+    
+    //----------------------------------------------------------------------------------------------------------------
+
+    //MARK: Init
+
+    //----------------------------------------------------------------------------------------------------------------
     
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)!
@@ -119,6 +160,12 @@ class InteractiveLinkLabel: UILabel {
     private func configure() {
         self.isUserInteractionEnabled = true
     }
+    
+    //----------------------------------------------------------------------------------------------------------------
+
+    //MARK: Title setUp
+
+    //----------------------------------------------------------------------------------------------------------------
     
     private var ranges: [NSRange : String] = [:]
     
@@ -165,6 +212,12 @@ class InteractiveLinkLabel: UILabel {
             self.attributedText = muttableAttributedString
         }
     }
+    
+    //----------------------------------------------------------------------------------------------------------------
+
+    //MARK: Touch
+
+    //----------------------------------------------------------------------------------------------------------------
     
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         guard self.text != nil else { return false}

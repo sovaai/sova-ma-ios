@@ -9,9 +9,19 @@ import UIKit
 
 class DialogViewController: UIViewController{
     
+    //----------------------------------------------------------------------------------------------------------------
+    
+    //MARK: Init
+    
+    //----------------------------------------------------------------------------------------------------------------
+    
     static var shared = DialogViewController()
     
-    private lazy var tableView: UITableView =   UITableView(frame: .zero, style: .grouped)
+    //----------------------------------------------------------------------------------------------------------------
+    
+    //MARK: State
+    
+    //----------------------------------------------------------------------------------------------------------------
     
     public var isActive: Bool = false {
         didSet{
@@ -20,16 +30,29 @@ class DialogViewController: UIViewController{
         }
     }
     
-    internal private(set) var bottomCollectionView: NSLayoutConstraint? = nil
-    
-    private var messageList = DataManager.shared.messageList //Array(DataManager.shared.currentAssistants.messageList.reversed()).sorted{$0.date > $1.date}
-    
     internal var isSpeechRegonizing: Bool = false
     private var isScrolling: Bool = false
     
     private var animateComplition: (() -> ())? = nil
     
+    //----------------------------------------------------------------------------------------------------------------
+    
+    //MARK: UI
+    
+    //----------------------------------------------------------------------------------------------------------------
+    
+    private lazy var tableView: UITableView =   UITableView(frame: .zero, style: .grouped)
+    internal private(set) var bottomCollectionView: NSLayoutConstraint? = nil
+    
     //    private var btnsCollectionView = BtnsCollectonView()
+    
+    //----------------------------------------------------------------------------------------------------------------
+    
+    //MARK: Model
+    
+    //----------------------------------------------------------------------------------------------------------------
+    
+    private var messageList = DataManager.shared.messageList //Array(DataManager.shared.currentAssistants.messageList.reversed()).sorted{$0.date > $1.date}
     
     private var dateFormatter: DateFormatter {
         let df = DateFormatter()
@@ -38,6 +61,11 @@ class DialogViewController: UIViewController{
         return df
     }
     
+    //----------------------------------------------------------------------------------------------------------------
+    
+    //MARK: VC's life cycle
+    
+    //----------------------------------------------------------------------------------------------------------------
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -94,6 +122,12 @@ class DialogViewController: UIViewController{
         self.tableView.backgroundColor = UIColor(named: "Colors/mainbacground")
     }
     
+    //----------------------------------------------------------------------------------------------------------------
+    
+    //MARK: objct func
+    
+    //----------------------------------------------------------------------------------------------------------------
+    
     @objc func reloadData(notification: Notification){
         guard self.isActive else { return }
         DispatchQueue.main.async {
@@ -120,6 +154,13 @@ class DialogViewController: UIViewController{
         }
     }
 }
+
+
+//----------------------------------------------------------------------------------------------------------------
+
+//MARK: TableView Delegate
+
+//----------------------------------------------------------------------------------------------------------------
 
 extension DialogViewController: UITableViewDelegate, UITableViewDataSource{
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -156,7 +197,13 @@ extension DialogViewController: UITableViewDelegate, UITableViewDataSource{
         cell.configure(with: message, and: indent)
         return cell
     }
-        
+      
+    //----------------------------------------------------------------------------------------------------------------
+    
+    //MARK: Scroll Delegate
+    
+    //----------------------------------------------------------------------------------------------------------------
+    
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         self.isScrolling = true
     }
@@ -169,11 +216,7 @@ extension DialogViewController: UITableViewDelegate, UITableViewDataSource{
             cells.forEach{($0 as? DialogCell)?.messageLabel.addLinks()}
         }
     }
-    
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        print(decelerate)
-    }
-    
+
 }
 
 

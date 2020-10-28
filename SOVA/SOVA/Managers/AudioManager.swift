@@ -8,6 +8,13 @@
 import AVFoundation
 import AVKit
 
+//----------------------------------------------------------------------------------------------------------------
+
+//MARK: Protocols
+
+//----------------------------------------------------------------------------------------------------------------
+
+
 protocol AudioErrorDelegate: class, AVAudioRecorderDelegate{
     func audioErrorMessage(title: String, message: String?)
     func allowAlert() // “Разрешите доступ к микрофону”
@@ -23,7 +30,22 @@ extension AudioRecordingDelegate{
     func speechState(state: AudioState) {}
 }
 
+//----------------------------------------------------------------------------------------------------------------
+
+//MARK: Audio Manager
+
+//----------------------------------------------------------------------------------------------------------------
+
+
 class AudioManager: NSObject{
+    
+    //----------------------------------------------------------------------------------------------------------------
+
+    //MARK: sesstion state
+
+    //----------------------------------------------------------------------------------------------------------------
+    
+    
     private lazy var recordingSession: AVAudioSession = {
         let session = AVAudioSession.sharedInstance()
         do{
@@ -50,6 +72,12 @@ class AudioManager: NSObject{
             }
         }
     }
+    //----------------------------------------------------------------------------------------------------------------
+
+    //MARK: Dalagete
+
+    //----------------------------------------------------------------------------------------------------------------
+    
     
     public weak var errorDelegate: AudioErrorDelegate? = nil
     public weak var recordDelegate: AudioRecordingDelegate? = nil
@@ -63,6 +91,13 @@ class AudioManager: NSObject{
         let url = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first?.appendingPathComponent("userRecording.m4a")
         return url
     }()
+    
+    //----------------------------------------------------------------------------------------------------------------
+
+    //MARK: Recording ation state
+
+    //----------------------------------------------------------------------------------------------------------------
+    
     
     private func startRecoding(){
         self.recordingSession.requestRecordPermission { [weak self] allowed in
@@ -134,6 +169,13 @@ class AudioManager: NSObject{
         }
     }
     
+    //----------------------------------------------------------------------------------------------------------------
+
+    //MARK: send msg Audio
+
+    //----------------------------------------------------------------------------------------------------------------
+    
+    
     private func sendMessageFromAudio(text: String){
         NetworkManager.shared.sendMessage(cuid: DataManager.shared.currentAssistants.cuid.string, message: text) { (msg,animation, error)  in
             guard error == nil, let messg = msg else {
@@ -155,6 +197,13 @@ class AudioManager: NSObject{
         self.audioRecorder?.delegate = self
     }
 }
+
+//----------------------------------------------------------------------------------------------------------------
+
+//MARK: Audio delegate
+
+//----------------------------------------------------------------------------------------------------------------
+
 
 extension AudioManager: AVAudioPlayerDelegate{
     func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: Error?) {

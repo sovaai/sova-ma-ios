@@ -10,6 +10,12 @@ import Network
 
 class PageViewController: UIPageViewController{
     
+    //----------------------------------------------------------------------------------------------------------------
+    
+    //MARK: Init
+    
+    //----------------------------------------------------------------------------------------------------------------
+    
     static var shared = PageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: [UIPageViewController.OptionsKey.interPageSpacing : 0])
     
     private override init(transitionStyle style: UIPageViewController.TransitionStyle, navigationOrientation: UIPageViewController.NavigationOrientation, options: [UIPageViewController.OptionsKey : Any]? = nil) {
@@ -20,13 +26,22 @@ class PageViewController: UIPageViewController{
         fatalError("init(coder:) has not been implemented")
     }
     
+    //----------------------------------------------------------------------------------------------------------------
+    
     //MARK: Buttons
+    
+    //----------------------------------------------------------------------------------------------------------------
+    
     private var settingsBtn = UIButton()
     private var recordingBtn = AudioBtn()
     private var keyboardBtn = UIButton()
     
+    //----------------------------------------------------------------------------------------------------------------
     
     //MARK: TextField
+    
+    //----------------------------------------------------------------------------------------------------------------
+    
     private var textFieldBottomConstant: NSLayoutConstraint? = nil
     
     private lazy var textField: DialogTextField = {
@@ -46,8 +61,12 @@ class PageViewController: UIPageViewController{
         return tf
     }()
     
+    //----------------------------------------------------------------------------------------------------------------
     
     //MARK: Connection
+    
+    //----------------------------------------------------------------------------------------------------------------
+    
     private lazy var intetnetView: NoInternetConnectionView = {
        let view = NoInternetConnectionView()
         self.view.addSubview(view)
@@ -70,10 +89,21 @@ class PageViewController: UIPageViewController{
         }
     }
     
+    //----------------------------------------------------------------------------------------------------------------
+    
     //MARK: Managers
+    
+    //----------------------------------------------------------------------------------------------------------------
+    
     private var audioManager = AudioManager()
     
-    //MARK: VC
+    
+    //----------------------------------------------------------------------------------------------------------------
+    
+    //MARK: VC model
+    
+    //----------------------------------------------------------------------------------------------------------------
+    
     private var dilogVc: DialogViewController = DialogViewController.shared
     private var animateVC: AnimateVC = AnimateVC.shared
     
@@ -90,8 +120,12 @@ class PageViewController: UIPageViewController{
         }
     }
     
+    //----------------------------------------------------------------------------------------------------------------
     
     //MARK: VC's lifecycle
+    
+    //----------------------------------------------------------------------------------------------------------------
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -154,8 +188,11 @@ class PageViewController: UIPageViewController{
         self.keyboardBtn.addTarget(self, action: #selector(self.keyboardAction(sender:)), for: .touchUpInside)
     }
     
+    //----------------------------------------------------------------------------------------------------------------
     
     //MARK: Btn actions
+    
+    //----------------------------------------------------------------------------------------------------------------
     
     @objc func recodingAction(){
         self.audioManager.isRecording = !self.audioManager.isRecording
@@ -188,6 +225,11 @@ class PageViewController: UIPageViewController{
         
 }
 
+//----------------------------------------------------------------------------------------------------------------
+
+//MARK: Page Data source
+
+//----------------------------------------------------------------------------------------------------------------
 extension PageViewController: UIPageViewControllerDataSource{
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         return self.nextVc()
@@ -232,6 +274,11 @@ extension PageViewController: UIPageViewControllerDelegate{
 }
 
 
+//----------------------------------------------------------------------------------------------------------------
+
+//MARK: Audio error
+
+//----------------------------------------------------------------------------------------------------------------
 extension PageViewController: AudioErrorDelegate{
     func audioErrorMessage(title: String, message: String?) {
         self.showSimpleAlert(title: title, message: message)
@@ -253,6 +300,11 @@ extension PageViewController: AudioErrorDelegate{
     
 }
 
+//----------------------------------------------------------------------------------------------------------------
+
+//MARK: Auido record
+
+//----------------------------------------------------------------------------------------------------------------
 extension PageViewController: AudioRecordingDelegate{
     func speechState(state: AudioState) {
         DispatchQueue.main.async {
