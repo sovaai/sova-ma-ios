@@ -167,49 +167,23 @@ class InteractiveLinkLabel: UILabel {
 
     //----------------------------------------------------------------------------------------------------------------
     
-    private var ranges: [NSRange : String] = [:]
-    
-    public var message: Message = Message(title: ""){
+    public var message: Message = Message(text: ""){
         didSet{
-            self.text = message.title.html2String
-        }
-    }
-    
-    private func checkUserLinks(firstText: String, text: String, ranges: [Range<String.Index>] = [] ) -> [Range<String.Index>]{
-        
-        guard let low = text.range(of: "<userlink>")?.upperBound,
-              let upper = text.range(of: "</userlink>")?.lowerBound,
-              let upperforRemove = text.range(of: "</userlink>")?.upperBound else { return ranges}
-        let textBtn = text[low..<upper]
-        var rangeArray = ranges
-        if let range = firstText.range(of: textBtn) {
-            rangeArray.append(range)
-        }
-        return self.checkUserLinks(firstText: firstText,text: String(text[upperforRemove...]), ranges: rangeArray)
-    }
-    
-    public func addLinks(){
-        guard self.message.title != self.message.title.html2String else {self.text = message.title.html2String; return }
+            self.text = self.message.title ?? self.message.text.html2String
+            
+            guard self.message.title == nil, self.message.sender != .user, !self.message.ranges.isEmpty else { return }
+            guard self.message.text != self.message.text.html2String else {
+                self.message.title = self.message.text
+                self.message.save()
+                return
+            }
+                    
+            let muttableAttributedString = NSMutableAttributedString(string: message.text.html2String, attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 15), NSAttributedString.Key.foregroundColor: message.sender.messageColor])
 
-        let muttableAttributedString = NSMutableAttributedString(string: message.title.html2String, attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 15), NSAttributedString.Key.foregroundColor: message.sender.messageColor])
-
-        guard let att = message.title.html2AttributedString else { self.text = message.title.html2String; return }
-        let wholeRange = NSRange((att.string.startIndex...), in: att.string)
-        att.enumerateAttribute(.link, in: wholeRange, options: []) { (value, range, pointee) in
-            guard value != nil else { return }
-            muttableAttributedString.addAttributes([NSAttributedString.Key.foregroundColor : UIColor.blue], range: range)
-            self.attributedText = muttableAttributedString
-        }
-
-        self.attributedText = muttableAttributedString
-        self.ranges.removeAll()
-        let ranges = self.checkUserLinks(firstText: self.message.title.html2String, text: self.message.title)
-        for range in ranges{
-            let rangeVal = NSRange(range, in: self.message.title.html2String)
-            muttableAttributedString.addAttributes([NSAttributedString.Key.foregroundColor : UIColor.blue], range: rangeVal)
-            let text = self.message.title.html2String[range]
-            self.ranges[rangeVal] = String(text)
-            self.attributedText = muttableAttributedString
+            for range in self.message.ranges.keys{
+                muttableAttributedString.addAttributes([NSAttributedString.Key.foregroundColor : UIColor.blue], range: range)
+                self.attributedText = muttableAttributedString
+            }
         }
     }
     
@@ -220,7 +194,7 @@ class InteractiveLinkLabel: UILabel {
     //----------------------------------------------------------------------------------------------------------------
     
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        guard self.text != nil else { return false}
+        guard event?.type == .touches, self.text != nil else { return false}
         
         let superBool = super.point(inside: point, with: event)
         
@@ -249,7 +223,6 @@ class InteractiveLinkLabel: UILabel {
         // work out which character was tapped
         var characterIndex = layoutManager.characterIndex(for: locationOfTouchInTextContainer, in: textContainer, fractionOfDistanceBetweenInsertionPoints: nil)
         
-        let attributeName = NSAttributedString.Key.link
         characterIndex += characterIndex == 0 ? 0 : -1
         // work out how many characters are in the string up to and including the line tapped, to ensure we are not off the end of the character string
         let lineTapped = Int(ceil(locationOfTouchInLabel.y / font.lineHeight)) 
@@ -258,28 +231,23 @@ class InteractiveLinkLabel: UILabel {
         
         guard characterIndex < charsInLineTapped else {return false}
         
-        for range in self.ranges{
+        for range in self.message.ranges{
             guard range.key.contains(characterIndex) else { continue }
-            let message = Message(title: range.value, sender: .user)
+            if let url = URL(string: range.value) {
+                UIApplication.shared.open(url)
+                break
+            }
+            let message = Message(text: range.value, sender: .user)
             DataManager.shared.saveNew(message)
             NetworkManager.shared.sendMessage(cuid: DataManager.shared.currentAssistants.cuid.string, message: range.value) { (msg,animation, error) in
                 guard error == nil else { return }
                 AnimateVC.shared.configure(with: animation)
                 guard let messg = msg else { return }
-                let message = Message(title: messg, sender: .assistant)
+                let message = Message(text: messg, sender: .assistant)
                 DataManager.shared.saveNew(message)
             }
+            break
         }
-        
-        let attributeValue = self.message.title.html2AttributedString!.attribute(attributeName, at: characterIndex, effectiveRange: nil)
-        
-        guard let value = attributeValue as? URL  else { return false }
-        var fakeURLString = value.absoluteString
-        guard let range = fakeURLString.range(of: "http") else{ return false}
-        let startIndex = range.lowerBound
-        fakeURLString.removeSubrange(..<startIndex)
-        guard let url = URL(string: fakeURLString) else { return false}
-        UIApplication.shared.open(url)
         
         return superBool
         

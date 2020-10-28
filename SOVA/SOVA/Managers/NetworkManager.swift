@@ -26,7 +26,7 @@ struct NetworkManager{
             assist.waitCount += 1
             DataManager.shared.saveAssistant(assist)
             DataManager.shared.currentAssistants.save()
-            let msg = Message(title: answer!, sender: .assistant)
+            let msg = Message(text: answer!)
             DataManager.shared.saveNew(msg)
         }
     })

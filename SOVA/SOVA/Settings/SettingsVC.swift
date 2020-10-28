@@ -106,7 +106,7 @@ class SettingsVC: UIViewController{
             guard let ms: MessageList = DataManager.shared.get(by: id) else { continue }
             text += self.dateFormatter.string(from: ms.date) + "\n"
             for message in ms.messages{
-                text += message.sender.rawValue + ":" + message.title + "\n"
+                text += message.sender.rawValue + ":" + message.text + "\n"
             }
         }
         self.write(text: text, to: "Logs")

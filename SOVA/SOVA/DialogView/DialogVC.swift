@@ -31,7 +31,6 @@ class DialogViewController: UIViewController{
     }
     
     internal var isSpeechRegonizing: Bool = false
-    private var isScrolling: Bool = false
     
     private var animateComplition: (() -> ())? = nil
     
@@ -130,13 +129,20 @@ class DialogViewController: UIViewController{
     
     @objc func reloadData(notification: Notification){
         guard self.isActive else { return }
-        DispatchQueue.main.async {
-            if DataManager.shared.messageList.count == 0 || self.messageList.count == 0 || self.messageList[0].id != DataManager.shared.messageList[0].id {
-                self.messageList = DataManager.shared.messageList
+        
+        if DataManager.shared.messageList.count == 0 || self.messageList.count == 0 || self.messageList[0].id != DataManager.shared.messageList[0].id {
+            self.messageList = DataManager.shared.messageList
+            DispatchQueue.main.async {
                 self.tableView.reloadData()
-            }else{
-                self.messageList = DataManager.shared.messageList
-                self.tableView.insertRows(at: [IndexPath(row: self.isSpeechRegonizing ? 1 : 0, section: 0)], with: .automatic)
+            }
+        }else{
+            self.messageList = DataManager.shared.messageList
+            DispatchQueue.main.async {
+                var animation: UITableView.RowAnimation = .automatic
+                if let lastList = self.messageList.last, let last = lastList.messages.last {
+                    animation = last.sender == .assistant ? .right : .left
+                }
+                self.tableView.insertRows(at: [IndexPath(row: self.isSpeechRegonizing ? 1 : 0, section: 0)], with: animation)
             }
         }
     }
@@ -197,26 +203,7 @@ extension DialogViewController: UITableViewDelegate, UITableViewDataSource{
         cell.configure(with: message, and: indent)
         return cell
     }
-      
-    //----------------------------------------------------------------------------------------------------------------
     
-    //MARK: Scroll Delegate
-    
-    //----------------------------------------------------------------------------------------------------------------
-    
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        self.isScrolling = true
-    }
-    
-    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        self.isScrolling = false
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            guard let self = self, !self.isScrolling else { return }
-            let cells = self.tableView.visibleCells
-            cells.forEach{($0 as? DialogCell)?.messageLabel.addLinks()}
-        }
-    }
-
 }
 
 

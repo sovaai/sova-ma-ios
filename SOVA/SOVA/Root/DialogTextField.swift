@@ -79,7 +79,7 @@ class DialogTextField: UIView{
         self.textView.text = "Напишите сообщение…".localized
         self.textView.textColor = UIColor(named: "Colors/headerColor") ?? UIColor(r: 15, g: 31, b: 72, a: 0.2)
         self.sendMessageBtn.isHidden = true
-        let message = Message(title: text, sender: .user)
+        let message = Message(text: text, sender: .user)
         DataManager.shared.saveNew(message)
         NetworkManager.shared.sendMessage(cuid: DataManager.shared.currentAssistants.cuid.string, message: text) { (msg, animation, error) in
             guard error == nil else { return }
@@ -87,7 +87,7 @@ class DialogTextField: UIView{
             AnimateVC.shared.configure(with: animation)
             
             guard let messg = msg else { return }
-            let message = Message(title: messg, sender: .assistant)
+            let message = Message(text: messg, sender: .assistant)
             DataManager.shared.saveNew(message)
         }
     }

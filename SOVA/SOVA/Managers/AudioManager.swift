@@ -141,7 +141,7 @@ class AudioManager: NSObject{
                     self.recordDelegate?.speechState(state: .stop)
                     return
                 }
-                let message = Message(title: text, sender: .user)
+                let message = Message(text: text, sender: .user)
                 DataManager.shared.saveNew(message)
                 self.sendMessageFromAudio(text: text)
             }
@@ -183,7 +183,7 @@ class AudioManager: NSObject{
                 self.recordDelegate?.speechState(state: .stop)
                 return
             }
-            let message = Message(title: messg, sender: .assistant)
+            let message = Message(text: messg, sender: .assistant)
             self.playSpeech(with: messg)
             self.recordDelegate?.speechState(state: .stop)
             DataManager.shared.saveNew(message)

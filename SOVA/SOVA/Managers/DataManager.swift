@@ -76,7 +76,7 @@ class DataManager{
     
     public func saveNew(_ message: Message){
         DispatchQueue.global(qos: .userInteractive).async {
-            guard !message.title.isEmpty else { return }
+            guard !message.text.isEmpty else { return }
             var ml: MessageList
             if self.messageList.isEmpty == false, self.messageList[0].date.asInt == message.date.asInt {
                 ml = self.messageList[0]
@@ -137,7 +137,7 @@ class DataManager{
         let context = ["context": ["count": 3]]
         NetworkManager.shared.sendEvent(cuid: assistant.cuid.string, euid: .ready, context: context) { (answer, error) in
             guard answer != nil, error == nil else { return }
-            let msg = Message(title: answer!, sender: .assistant)
+            let msg = Message(text: answer!, sender: .assistant)
             self.saveNew(msg)
         }
     }
