@@ -50,6 +50,7 @@ class DialogViewController: UIViewController{
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.isHidden = true
+        guard !self.messageList.isEmpty, !self.messageList[0].messages.isEmpty else { return }
         self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
     }
     
