@@ -77,6 +77,7 @@ class DialogViewController: UIViewController{
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.isHidden = true
+        self.bottomCollectionView?.constant = -70
         guard !self.messageList.isEmpty, !self.messageList[0].messages.isEmpty else { return }
         self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
     }
@@ -128,18 +129,19 @@ class DialogViewController: UIViewController{
     //----------------------------------------------------------------------------------------------------------------
     
     @objc func reloadData(notification: Notification){
-        guard self.isActive else { return }
+        guard self.isActive, let list = notification.userInfo?["list"] as? [MessageList] else { return }
         
         if DataManager.shared.messageList.count == 0 || self.messageList.count == 0 || self.messageList[0].id != DataManager.shared.messageList[0].id {
-            self.messageList = DataManager.shared.messageList
             DispatchQueue.main.async {
+                self.messageList = list
                 self.tableView.reloadData()
+                
             }
         }else{
-            self.messageList = DataManager.shared.messageList
             DispatchQueue.main.async {
+                self.messageList = list
                 var animation: UITableView.RowAnimation = .automatic
-                if let lastList = self.messageList.last, let last = lastList.messages.last {
+                if let firstList = self.messageList.first, let last = firstList.messages.last {
                     animation = last.sender == .assistant ? .right : .left
                 }
                 self.tableView.insertRows(at: [IndexPath(row: self.isSpeechRegonizing ? 1 : 0, section: 0)], with: animation)
@@ -151,7 +153,7 @@ class DialogViewController: UIViewController{
         guard self.isActive else { return }
         DispatchQueue.main.async {
             self.isSpeechRegonizing = state != .stop
-            if self.isSpeechRegonizing{
+            if state == .start{
                 self.tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
             }else{
                 self.animateComplition?()

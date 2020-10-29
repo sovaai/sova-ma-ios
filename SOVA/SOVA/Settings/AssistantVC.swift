@@ -151,7 +151,7 @@ extension AssistantVC: UITableViewDataSource, UITableViewDelegate{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { 1 }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard indexPath.section != 4 else {
+        guard indexPath.section < AssistantStateField.allCases.count else {
             let cell = tableView.dequeueReusableCell(withIdentifier: self.cellId)!
             cell.textLabel?.textAlignment = .center
             cell.textLabel?.text = "Удалить".localized
@@ -189,7 +189,7 @@ extension AssistantVC: UITableViewDataSource, UITableViewDelegate{
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        guard section != 4 else { return ""}
+        guard section < AssistantStateField.allCases.count else { return ""}
         return AssistantStateField.allCases[section].header
     }
     

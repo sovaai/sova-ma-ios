@@ -14,8 +14,8 @@ import Alamofire
 class ASR {
     var ASR_API_URL: String {
         get{
-            let lang = Locale.current.languageCode
-            return lang == "en" ? "https://asr-en.ashmanov.org/asr/" : "https://asr.ashmanov.org/asr/"
+            let lang = Locale.preferredLanguages[0]
+            return lang != "ru-RU" ? "https://asr-en.ashmanov.org/asr/" : "https://asr.ashmanov.org/asr/"
         }
     }
     

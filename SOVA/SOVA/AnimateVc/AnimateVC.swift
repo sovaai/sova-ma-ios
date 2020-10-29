@@ -77,6 +77,9 @@ class AnimateVC: UIViewController{
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        guard self.isActive, DataManager.shared.currentAssistants.uuid.string != "b03822f6-362d-478b-978b-bed603602d0e" else {self.errorLabel.isHidden = true; return }
+        self.isActive = false
+        self.errorLabel.isHidden = false
         self.playVideo(name: AnimationType.hi.videoPath, wakeup: true)
     }
     
@@ -101,9 +104,7 @@ class AnimateVC: UIViewController{
     
     public func configure(with value: Int?) {
         guard self.isActive else { return }
-        guard value != nil, let type = AnimationType(rawValue: value!) else {
-            self.showSimpleAlert(title: "Some error in animate".localized);
-            return }
+        guard value != nil, let type = AnimationType(rawValue: value!) else { print(value ?? -100, "error in animation"); return }
         guard type != .idle else { self.playVideoIdle(); return }
         self.playVideo(name: type.videoPath, wakeup: false)
     }
