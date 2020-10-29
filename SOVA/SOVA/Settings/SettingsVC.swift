@@ -178,7 +178,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return section != 1 ? "Аккаунт".localized : "Подключить еще".localized
+        return section != 1 ? "Аккаунт".localized : "Другое".localized
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -202,12 +202,12 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
         
         //Configure setings's cell
         cell.textLabel?.text = UserSettings.allCases[indexPath.row].string.localized
-        guard UserSettings(rawValue: indexPath.row) != .language else {
-            cell.accessoryType = .disclosureIndicator
-            cell.accessibilityLabel = Language.userValue
-        
-            return cell
-        }
+//        guard UserSettings(rawValue: indexPath.row) != .language else {
+//            cell.accessoryType = .disclosureIndicator
+//            cell.accessibilityLabel = Language.userValue
+//        
+//            return cell
+//        }
         
         return cell
     }
@@ -287,7 +287,7 @@ extension SettingsVC: MFMailComposeViewControllerDelegate{
 
 //----------------------------------------------------------------------------------------------------------------
 enum UserSettings: Int, CaseIterable{
-    case language = 0
+//    case language = 0
     case cashe = 1
     case logs = 2
     case support = 3
@@ -295,8 +295,8 @@ enum UserSettings: Int, CaseIterable{
     
     var string: String {
         switch self {
-        case .language:
-            return "Язык приложения"
+//        case .language:
+//            return "Язык приложения"
         case .cashe:
             return "Очистить историю и кеш"
         case .logs:

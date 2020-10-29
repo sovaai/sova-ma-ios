@@ -76,7 +76,10 @@ class DataManager{
     
     public func saveNew(_ message: Message){
         DispatchQueue.global(qos: .userInteractive).sync {
-            guard !message.text.isEmpty, self.messageList[0].messages.last?.text != message.text else { return }
+            guard !message.text.isEmpty else { return }
+            if !self.messageList.isEmpty{
+                guard self.messageList[0].messages.last?.text != message.text else { return }
+            }
             var ml: MessageList
             if self.messageList.isEmpty == false, self.messageList[0].date.asInt == message.date.asInt {
                 ml = self.messageList[0]
