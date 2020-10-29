@@ -150,7 +150,7 @@ class SettingsVC: UIViewController{
         let email = "support@sova.ai"
         self.mailComposer.setToRecipients([email])
         
-        self.present(mailComposer, animated: true, completion: nil)
+        self.present(self.mailComposer, animated: true, completion: nil)
     }
     
     //----------------------------------------------------------------------------------------------------------------
@@ -229,6 +229,10 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                 let alert = UIAlertController(title: "Подтверждение удаления?".localized, message: "Вы уверены что хотите все удалить?", preferredStyle: .alert)
                 let delete = UIAlertAction(title: "Удалить все", style: .destructive) { (_) in
                     DataManager.shared.deleteAll()
+                    DispatchQueue.main.async {
+                        self.navigationController?.popViewController(animated: true)
+                        self.dismiss(animated: true, completion: nil)
+                    }
                 }
                 let cancel = UIAlertAction(title: "Неее, не надо", style: .cancel)
                 alert.addAction(cancel)
@@ -240,8 +244,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                 self.sendSupport()
             case .aboutApp:
                 AboutVC.show(parent: self.navigationController!)
-            default:
-                break
+            
             }
         }
     }

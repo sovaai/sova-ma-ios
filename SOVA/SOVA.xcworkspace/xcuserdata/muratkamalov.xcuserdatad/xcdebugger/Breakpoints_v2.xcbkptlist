@@ -17,7 +17,7 @@
             startingLineNumber = "122"
             endingLineNumber = "122"
             landmarkName = "checkAnotherAssistant(_:)"
-            landmarkType = "9">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -33,198 +33,6 @@
             startingLineNumber = "139"
             endingLineNumber = "139"
             landmarkName = "saveAssistant(_:)"
-            landmarkType = "9">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "17A32E60-313F-4588-B810-42D9E6AB1C0B"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SOVA/Managers/DataManager.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "150"
-            endingLineNumber = "150"
-            landmarkName = "deleteAssistant(_:)"
-            landmarkType = "9">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "F913CF73-A6ED-4DBA-9D9F-73D5B1B0B5FA"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SOVA/DialogView/SupportCell.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "104"
-            endingLineNumber = "104"
-            landmarkName = "startAnimate()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "F913CF73-A6ED-4DBA-9D9F-73D5B1B0B5FA - 23a23e349257537c"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SOVA.AnimationCell.(startAnimate in _E830E849B63CBCF8AB1FA35628D0530F)() -&gt; ()"
-                  moduleName = "SOVA"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/muratkamalov/Desktop/ios/SOVA/SOVA/DialogView/SupportCell.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "104"
-                  endingLineNumber = "104"
-                  offsetFromSymbolStart = "100">
-               </Location>
-               <Location
-                  uuid = "F913CF73-A6ED-4DBA-9D9F-73D5B1B0B5FA - ba81493607b34d17"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; () in SOVA.AnimationCell.(startAnimate in _E830E849B63CBCF8AB1FA35628D0530F)() -&gt; ()"
-                  moduleName = "SOVA"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/muratkamalov/Desktop/ios/SOVA/SOVA/DialogView/SupportCell.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "105"
-                  endingLineNumber = "105"
-                  offsetFromSymbolStart = "24">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "20E1B339-9C3C-4E56-A24F-520DF6947D96"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SOVA/DialogView/SupportCell.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "111"
-            endingLineNumber = "111"
-            landmarkName = "startAnimate()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "20E1B339-9C3C-4E56-A24F-520DF6947D96 - 7f5486400e5158a2"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 (Swift.Bool) -&gt; () in SOVA.AnimationCell.(startAnimate in _E830E849B63CBCF8AB1FA35628D0530F)() -&gt; ()"
-                  moduleName = "SOVA"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/muratkamalov/Desktop/ios/SOVA/SOVA/DialogView/SupportCell.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "111"
-                  endingLineNumber = "111"
-                  offsetFromSymbolStart = "52">
-               </Location>
-               <Location
-                  uuid = "20E1B339-9C3C-4E56-A24F-520DF6947D96 - 951127dd353db80f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; () in closure #2 (Swift.Bool) -&gt; () in SOVA.AnimationCell.(startAnimate in _E830E849B63CBCF8AB1FA35628D0530F)() -&gt; ()"
-                  moduleName = "SOVA"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/muratkamalov/Desktop/ios/SOVA/SOVA/DialogView/SupportCell.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "112"
-                  endingLineNumber = "112"
-                  offsetFromSymbolStart = "24">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "DAF235BD-CB90-40D4-8CAB-80EE0E95AD85"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SOVA/DialogView/SupportCell.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "118"
-            endingLineNumber = "118"
-            landmarkName = "startAnimate()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "DAF235BD-CB90-40D4-8CAB-80EE0E95AD85 - 93ff27c9ff82a840"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 (Swift.Bool) -&gt; () in closure #2 (Swift.Bool) -&gt; () in SOVA.AnimationCell.(startAnimate in _E830E849B63CBCF8AB1FA35628D0530F)() -&gt; ()"
-                  moduleName = "SOVA"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/muratkamalov/Desktop/ios/SOVA/SOVA/DialogView/SupportCell.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "118"
-                  endingLineNumber = "118"
-                  offsetFromSymbolStart = "52">
-               </Location>
-               <Location
-                  uuid = "DAF235BD-CB90-40D4-8CAB-80EE0E95AD85 - f2ba438c6c547517"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; () in closure #2 (Swift.Bool) -&gt; () in closure #2 (Swift.Bool) -&gt; () in SOVA.AnimationCell.(startAnimate in _E830E849B63CBCF8AB1FA35628D0530F)() -&gt; ()"
-                  moduleName = "SOVA"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/muratkamalov/Desktop/ios/SOVA/SOVA/DialogView/SupportCell.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "119"
-                  endingLineNumber = "119"
-                  offsetFromSymbolStart = "24">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "1AEE6639-315E-46B3-A937-8F83A47F786D"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SOVA/DialogView/SupportCell.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "125"
-            endingLineNumber = "125"
-            landmarkName = "startAnimate()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "9348A174-6A37-465E-A30A-71DE1A954213"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SOVA/DialogView/SupportCell.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "99"
-            endingLineNumber = "99"
-            landmarkName = "stopAnimate()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -263,30 +71,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "7B1DBDFE-5BDB-4475-863E-36979C4FA7A6"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "Yes"
-            filePath = "SOVA/DialogView/DialogVC.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "147"
-            endingLineNumber = "147"
-            landmarkName = "reloadData(notification:)"
-            landmarkType = "7">
-            <Actions>
-               <BreakpointActionProxy
-                  ActionExtensionID = "Xcode.BreakpointAction.DebuggerCommand">
-                  <ActionContent
-                     consoleCommand = "po list[0].messages.count + 1 ">
-                  </ActionContent>
-               </BreakpointActionProxy>
-            </Actions>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "3DB53706-BEC7-4E42-BA94-099086C4604A"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
@@ -306,6 +90,54 @@
                   </ActionContent>
                </BreakpointActionProxy>
             </Actions>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "7777330D-4FA5-4898-B5BD-B3DC348994A5"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SOVA/Managers/AudioManager.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "157"
+            endingLineNumber = "157"
+            landmarkName = "playSpeech(with:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B575FB83-45D8-4C81-AF29-BE65B58F8E27"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SOVA/Managers/AudioManager.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "216"
+            endingLineNumber = "216"
+            landmarkName = "audioPlayerDidFinishPlaying(_:successfully:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "90AB6106-EAD8-4B5B-9521-361CC62CAF97"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SOVA/Managers/AudioManager.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "170"
+            endingLineNumber = "170"
+            landmarkName = "playSpeech(with:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

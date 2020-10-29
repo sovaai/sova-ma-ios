@@ -129,15 +129,15 @@ class DialogViewController: UIViewController{
     //----------------------------------------------------------------------------------------------------------------
     
     @objc func reloadData(notification: Notification){
-        guard self.isActive, let list = notification.userInfo?["list"] as? [MessageList] else { return }
+        guard self.isActive else { return }
         
         if DataManager.shared.messageList.count == 0 || self.messageList.count == 0 || self.messageList[0].id != DataManager.shared.messageList[0].id {
             DispatchQueue.main.async {
-                self.messageList = list
+                self.messageList = DataManager.shared.messageList
                 self.tableView.reloadData()
                 
             }
-        }else{
+        }else if let list = notification.userInfo?["list"] as? [MessageList]{
             DispatchQueue.main.async {
                 self.messageList = list
                 var animation: UITableView.RowAnimation = .automatic

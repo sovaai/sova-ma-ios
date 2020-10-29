@@ -15,7 +15,7 @@ import AVKit
 //----------------------------------------------------------------------------------------------------------------
 
 
-protocol AudioErrorDelegate: class, AVAudioRecorderDelegate{
+protocol AudioErrorDelegate: class{
     func audioErrorMessage(title: String, message: String?)
     func allowAlert() // “Разрешите доступ к микрофону”
 }
@@ -163,8 +163,10 @@ class AudioManager: NSObject{
             do{
                 self.player = try AVAudioPlayer(data: dataAudio)
             }catch{
+                self.playItem.removeFirst()
                 print(error)
             }
+            self.player?.delegate = self
             self.player?.play()
         }
     }
@@ -193,9 +195,9 @@ class AudioManager: NSObject{
     
     override init() {
         super.init()
-        self.player?.delegate = self
         self.audioRecorder?.delegate = self
     }
+    
 }
 
 //----------------------------------------------------------------------------------------------------------------
@@ -216,6 +218,7 @@ extension AudioManager: AVAudioPlayerDelegate{
         guard let dataAudio = self.playItem.first else { return }
         do{
             self.player = try AVAudioPlayer(data: dataAudio)
+            self.player?.delegate = self
             self.player?.play()
         }catch{
             print(error)
