@@ -95,7 +95,7 @@ class PageViewController: UIPageViewController{
     
     //----------------------------------------------------------------------------------------------------------------
     
-    private var audioManager = AudioManager()
+    public private(set) var audioManager = AudioManager()
     
     
     //----------------------------------------------------------------------------------------------------------------

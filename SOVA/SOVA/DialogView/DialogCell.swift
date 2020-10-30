@@ -245,6 +245,7 @@ class InteractiveLinkLabel: UILabel {
                 guard let messg = msg else { return }
                 let message = Message(text: messg, sender: .assistant)
                 DataManager.shared.saveNew(message)
+                PageViewController.shared.audioManager.playSpeech(with: messg)
             }
             break
         }

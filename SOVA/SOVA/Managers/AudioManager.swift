@@ -119,6 +119,8 @@ class AudioManager: NSObject{
                 self.audioRecorder = try AVAudioRecorder(url: url, settings: settings)
                 self.audioRecorder?.record()
                 self.recordDelegate?.recording(state: .start)
+                self.playItem.removeAll()
+                self.player?.stop()
             }catch{
                 self.errorDelegate?.audioErrorMessage(title: "Не удается начать запись".localized, message: error.localizedDescription)
             }
@@ -193,8 +195,8 @@ class AudioManager: NSObject{
         }
     }
     
-    @objc func stopPlay(notification: Notification){
-        guard let list = notification.userInfo?["list"] as? [MessageList],
+    @objc func stopPlay(notification: Notification? = nil){
+        guard let nt = notification, let list = nt.userInfo?["list"] as? [MessageList],
               let firstList = list.first,
               let last = firstList.messages.last,
               last.sender != .assistant else { return }
