@@ -193,9 +193,20 @@ class AudioManager: NSObject{
         }
     }
     
+    @objc func stopPlay(notification: Notification){
+        guard let list = notification.userInfo?["list"] as? [MessageList],
+              let firstList = list.first,
+              let last = firstList.messages.last,
+              last.sender != .assistant else { return }
+
+        self.playItem.removeAll()
+        self.player?.stop()
+    }
+    
     override init() {
         super.init()
         self.audioRecorder?.delegate = self
+        NotificationCenter.default.addObserver(self, selector: #selector(self.stopPlay), name: NSNotification.Name.init("MessagesUpdate"), object: nil)
     }
     
 }

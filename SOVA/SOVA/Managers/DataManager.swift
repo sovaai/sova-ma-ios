@@ -54,7 +54,7 @@ class DataManager{
             guard self._messageList == nil else { return self._messageList!}
             self._messageList = self.currentAssistants.messageListId.compactMap{self.get(by: $0)}
             self._messageList?.sort{$0.date > $1.date}
-            return self._messageList!
+            return self._messageList ?? []
         }
     }
     
@@ -170,8 +170,14 @@ class DataManager{
     func deleteAll(){
         for id in self.assistantsId  {
             guard let assistant: Assitant = self.getAssistant(by: id) else { continue }
-            self.deleteAssistant(assistant)
+            for id in assistant.messageListId {
+                guard let list = self.get(by: id) else { continue }
+                list.messages.forEach{$0.delete()}
+                list.delete()
+            }
         }
+        self._messageList = nil
+        NotificationCenter.default.post(name: NSNotification.Name.init("MessagesUpdate"), object: nil, userInfo: nil)
     }
     
     private init(){}

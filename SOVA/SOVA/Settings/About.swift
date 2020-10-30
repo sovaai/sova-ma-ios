@@ -8,8 +8,7 @@
 import UIKit
 
 class AboutVC: UIViewController{
-    private var label = UILabel()
-    private var textFiled = UILabel()
+    private var textFiled = UITextView()
     
     static func show(parent: UINavigationController){
         parent.pushViewController(AboutVC(), animated: true)
@@ -20,33 +19,30 @@ class AboutVC: UIViewController{
         self.title = "О приложении".localized
         
         self.view.backgroundColor =  UIColor(named: "Colors/mainbacground")
-        
-        self.view.addSubview(self.label)
-        self.label.translatesAutoresizingMaskIntoConstraints = false
-        self.label.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 26).isActive = true
-        self.label.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16).isActive = true
-        
-        self.label.text = "SOVA Mobile App".localized
-        self.label.font = UIFont.systemFont(ofSize: 15)
-        self.label.textColor = UIColor(named: "Colors/textColor")
-        
+       
         self.view.addSubview(self.textFiled)
         self.textFiled.translatesAutoresizingMaskIntoConstraints = false
-        self.textFiled.topAnchor.constraint(equalTo: self.label.bottomAnchor, constant: 16).isActive = true
+        self.textFiled.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 26).isActive = true
         self.textFiled.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16).isActive = true
         self.textFiled.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -16).isActive = true
-//        self.textFiled.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        self.textFiled.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         
         self.textFiled.font = UIFont.systemFont(ofSize: 15)
         self.textFiled.textColor = UIColor(named: "Colors/textColor")
-        self.textFiled.numberOfLines = 0
-        self.textFiled.lineBreakMode = .byWordWrapping
-//        self.textFiled.allowsEditingTextAttributes = false
-//        self.textFiled.isEditable = false
+        self.textFiled.allowsEditingTextAttributes = false
+        self.textFiled.isEditable = false
         self.textFiled.backgroundColor = UIColor(named: "Colors/mainbacground")
         
+        let string = "SOVA Mobile Application\n\n\nПриложение для iOS и Android посредством которого Пользователь получает возможность делать голосовые и текстовые запросы к виртуальным ассистентам, созданным с помощью программного обеспечения SOVA. Подробная информация о SOVA и наших продуктах доступна на сайт SOVA.ai.\n\nSOVA Mobile Application распространяется под лицензией Apache License 2.0. Ознакомиться с исходным кодом приложения можно в нашем репозитории на GitHub.\n\nПолитика конфиденциальности[].\n\nВерсия приложения 1.0.0\n\n© 2020 Virtual Assistant, LLC | SOVA.ai".localized
         
-        self.textFiled.text = "Для современного мира сплочённость команды профессионалов требует определения и уточнения кластеризации усилий. Для современного мира укрепление и развитие внутренней структуры позволяет оценить значение новых принципов формирования материально-технической и кадровой базы. Имеется спорная точка зрения, гласящая примерно следующее: диаграммы связей объективно рассмотрены соответствующими инстанциями. Прежде всего, социально-экономическое развитие предоставляет широкие возможности для поэтапного и.".localized
+        let attributedString = NSMutableAttributedString(string: string)
+        guard let url = URL(string: "http://www.apache.org/licenses/LICENSE-2.0"), let url1 = URL(string: "https://dev.sova.ai/static/288a1f7b0e04cb0df492ddfb58b8e114/Policy.pdf") else { return }
+
+        
+        attributedString.setAttributes([.link: url], range: NSMakeRange(353, 18))
+        attributedString.setAttributes([.link: url1], range: NSMakeRange(452, 28))
+        
+        self.textFiled.attributedText = attributedString
     }
 }
 
