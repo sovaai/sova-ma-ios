@@ -134,6 +134,7 @@ class DialogViewController: UIViewController{
         
         if DataManager.shared.messageList.count == 0 ||
             (notification.userInfo?["list"] as? [MessageList])?.count == 0 ||
+            (notification.userInfo?["list"] as? [MessageList])?[0].messages.count ?? 0 <= 1 ||
             (notification.userInfo?["list"] as? [MessageList])?[0].id != DataManager.shared.messageList[0].id {
             DispatchQueue.main.async {
                 self.messageList = DataManager.shared.messageList

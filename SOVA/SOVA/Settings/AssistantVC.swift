@@ -194,7 +194,7 @@ extension AssistantVC: UITableViewDataSource, UITableViewDelegate{
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard indexPath.section == 4, self.model?.uuid.string != "b03822f6-362d-478b-978b-bed603602d0e" else { return }
+        guard indexPath.section == 4, self.model?.uuid.string != "ae83a6cc-8c54-4123-9fbe-1a4c9a8720d2" else { return }
         let alert = UIAlertController(title: "Подтвердение удаления".localized, message: "Нажмите на кнопку Удалить для пожтверждения удаления аккаунта".localized, preferredStyle: .alert)
         let delete = UIAlertAction(title: "Удалить".localized, style: .destructive) { (_) in
             guard let model = self.model else { return }

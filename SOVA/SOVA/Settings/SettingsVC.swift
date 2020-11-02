@@ -252,7 +252,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         guard indexPath.section == 0,
               indexPath.row < self.model.count,
-              self.model[indexPath.row].uuid.string != "b03822f6-362d-478b-978b-bed603602d0e" else { return false}
+              self.model[indexPath.row].uuid.string != "ae83a6cc-8c54-4123-9fbe-1a4c9a8720d2" else { return false}
         return true
     }
     
