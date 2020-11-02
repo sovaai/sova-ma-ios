@@ -25,6 +25,7 @@ class DialogViewController: UIViewController{
     
     public var isActive: Bool = false {
         didSet{
+            PageViewController.shared.textField.backgroundColor = UIColor(named: "Colors/mainbacground")
             guard self.isActive else{ return }
             self.tableView.reloadData()
         }
@@ -131,7 +132,9 @@ class DialogViewController: UIViewController{
     @objc func reloadData(notification: Notification){
         guard self.isActive else { return }
         
-        if DataManager.shared.messageList.count == 0 || self.messageList.count == 0 || self.messageList[0].id != DataManager.shared.messageList[0].id {
+        if DataManager.shared.messageList.count == 0 ||
+            (notification.userInfo?["list"] as? [MessageList])?.count == 0 ||
+            (notification.userInfo?["list"] as? [MessageList])?[0].id != DataManager.shared.messageList[0].id {
             DispatchQueue.main.async {
                 self.messageList = DataManager.shared.messageList
                 self.tableView.reloadData()

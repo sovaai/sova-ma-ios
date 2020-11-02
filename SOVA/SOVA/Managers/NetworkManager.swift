@@ -102,6 +102,14 @@ struct NetworkManager{
    
             let animation = resultDict["animation"] as? [String: Any]
             let type = animation?["type"] as? Int
+            if type != nil, !DataManager.shared.currentAssistants.wordActive,
+               DataManager.shared.currentAssistants.cuid.string == cuid,
+               var assistant = DataManager.shared.getAssistant(by: DataManager.shared.currentAssistants.id) {
+                assistant.wordActive = true
+                DataManager.shared.saveAssistant(assistant)
+                DataManager.shared.reloadCurrentAssistant()
+            }
+            
             completion(value,type,nil)
             self.checkBtns(text: value)
         }

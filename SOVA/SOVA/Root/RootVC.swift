@@ -32,9 +32,9 @@ class PageViewController: UIPageViewController{
     
     //----------------------------------------------------------------------------------------------------------------
     
-    private var settingsBtn = UIButton()
-    private var recordingBtn = AudioBtn()
-    private var keyboardBtn = UIButton()
+    private(set) var settingsBtn = UIButton()
+    private(set) var recordingBtn = AudioBtn()
+    private(set) var keyboardBtn = UIButton()
     
     //----------------------------------------------------------------------------------------------------------------
     
@@ -44,7 +44,7 @@ class PageViewController: UIPageViewController{
     
     private var textFieldBottomConstant: NSLayoutConstraint? = nil
     
-    private lazy var textField: DialogTextField = {
+    private(set) lazy var textField: DialogTextField = {
         let tf = DialogTextField()
         self.view.addSubview(tf)
         tf.translatesAutoresizingMaskIntoConstraints = false

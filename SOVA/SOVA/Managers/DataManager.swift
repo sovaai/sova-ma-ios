@@ -114,6 +114,10 @@ class DataManager{
         self._assitantsId = UserDefaults.standard.value(forKey: "assistantsIds") as? [String] ?? []
     }
     
+    public func reloadCurrentAssistant(){
+        self._currentAssistants = nil
+    }
+    
     public func checkAnotherAssistant(_ id: String){
         guard self.currentAssistants.id != id else { return }
         UserDefaults.standard.setValue(id, forKey: "currentAssistantsId")

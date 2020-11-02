@@ -296,7 +296,8 @@ class TextFieldCell: UITableViewCell, UITextFieldDelegate, UITextPasteDelegate{
     
     
     @objc func past(){
-        let alert = UIAlertController(title: "Вставить из буфера".localized, message: nil, preferredStyle: .actionSheet)
+        let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
+        let alert = UIAlertController(title: "Вставить из буфера".localized, message: nil, preferredStyle: style)
         alert.addAction(UIAlertAction(title: "Вставить".localized, style: .default, handler: { (_) in
             self.textField.text = UIPasteboard.general.string
             self.delegate?.nextEditingFiled(type: self.type)
@@ -322,7 +323,8 @@ class TextFieldCell: UITableViewCell, UITextFieldDelegate, UITextPasteDelegate{
         self.textField.selectAll(nil)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             guard self.textField.text == "https://" || self.textField.text == "Введите uuid".localized else { return }
-            let alert = UIAlertController(title: "Вставить из буфера".localized, message: nil, preferredStyle: .actionSheet)
+            let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
+            let alert = UIAlertController(title: "Вставить из буфера".localized, message: nil, preferredStyle: style)
             alert.addAction(UIAlertAction(title: "Вставить".localized, style: .default, handler: { (_) in
                 self.textField.text = UIPasteboard.general.string
                 self.delegate?.nextEditingFiled(type: self.type)

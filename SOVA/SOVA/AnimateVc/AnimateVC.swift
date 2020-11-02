@@ -23,7 +23,11 @@ class AnimateVC: UIViewController{
     private let player = AVQueuePlayer()
     public var isActive: Bool = false {
         didSet{
-            guard self.isActive, DataManager.shared.currentAssistants.uuid.string != "b03822f6-362d-478b-978b-bed603602d0e" else {self.errorLabel.isHidden = true; return }
+            PageViewController.shared.keyboardBtn.tintColor = self.isActive ? UIColor.black :  UIColor(named: "Colors/textColor")
+            PageViewController.shared.settingsBtn.tintColor = self.isActive ? UIColor.black :  UIColor(named: "Colors/textColor")
+            PageViewController.shared.textField.backgroundColor = self.isActive ? UIColor.white : UIColor(named: "Colors/mainbacground")
+            
+            guard !DataManager.shared.currentAssistants.wordActive else {self.errorLabel.isHidden = true; return }
             self.isActive = false
             self.errorLabel.isHidden = false
         }
@@ -77,9 +81,12 @@ class AnimateVC: UIViewController{
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        guard self.isActive, DataManager.shared.currentAssistants.uuid.string != "b03822f6-362d-478b-978b-bed603602d0e" else {self.errorLabel.isHidden = true; return }
-        self.isActive = false
-        self.errorLabel.isHidden = false
+        guard DataManager.shared.currentAssistants.wordActive else {
+            self.errorLabel.isHidden = false
+            self.isActive = false
+            return
+        }
+        self.errorLabel.isHidden = true
         self.playVideo(name: AnimationType.hi.videoPath, wakeup: true)
     }
     
