@@ -12,7 +12,10 @@ Functionality:
 **Currently the application support only Russian language.**
 
 
-Find ready for use app in [AppStore](https://apps.apple.com/ru/app/sova-mobile-app/id1534358607).
+Find ready for use app in [AppStore](https://apps.apple.com/ru/app/sova-mobile-app/id1534358607). 
+
+
+Looking for Andoird app? Please visit [sova-ma-android repo](https://github.com/sovaai/sova-ma-android).
 
 # Licenses
 
